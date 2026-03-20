@@ -17,8 +17,10 @@ public class Jeu extends Thread{
 
         plateau.setMachine(5, 10, new Mine());
         plateau.setMachine(5, 5, new Poubelle());
-        plateau.setGisement(5,11,"C-C-C-C-");
-        plateau.setGisement(10,10,"CrC-C-C-");
+
+        //attention si on met '-' ou une autre couleur sa marche pas
+        plateau.setGisement(5,11,"CyCrCbCr");
+        plateau.setGisement(5,10,"CbCbCbCb");
 
         start();
 

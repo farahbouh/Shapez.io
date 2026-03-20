@@ -30,6 +30,7 @@ public class Plateau extends Observable implements Runnable {
         return grilleCases;
     }
 
+    //return case d'a côté
     public Case getCase(Case source, Direction d) {
         
         Point p = map.get(source);
@@ -49,7 +50,7 @@ public class Plateau extends Observable implements Runnable {
         }
 
     }
-
+   //pour poser des machines sur le plateau
     public void setMachine(int x, int y, Machine m) {
         Point p = new Point(x, y);
         if(caseALaPosition(p).getMachine() == null) {
@@ -58,7 +59,8 @@ public class Plateau extends Observable implements Runnable {
             notifyObservers();
         }
     }
-
+//pour poser des gisement sur le plateau
+// le string est de 8lettre pour les 4petites formes de chaque côté + leurs couleurs
     public void setGisement(int x, int y, String code) {
         Point p = new Point(x, y);
 

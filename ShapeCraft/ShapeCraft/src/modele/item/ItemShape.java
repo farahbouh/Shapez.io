@@ -30,7 +30,6 @@ public class ItemShape extends Item {
      *            str.length multiple de 4
      */
     public ItemShape(String str) {
-
         tabSubShapes = new SubShape[str.length()/2 ];
         tabColors = new Color[str.length()/2];
 
@@ -44,7 +43,13 @@ public class ItemShape extends Item {
 
             switch (str.charAt((i*2 + 1))) {
                 case 'r' : tabColors[i] = Color.Red; break;
-                case 'b' : tabColors[i] = Color.White; break;
+                case 'b' : tabColors[i] = Color.Blue; break;
+                case 'w' : tabColors[i] = Color.White; break;
+                case 'y' : tabColors[i] = Color.Yellow; break;
+                case 'g' : tabColors[i] = Color.Green; break;
+                case 'p' : tabColors[i] = Color.Purple; break;
+                case 'c' : tabColors[i] = Color.Cyan; break;
+
                 case '-' : tabColors[i] = null; break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + str.charAt((i + 1)*2));
@@ -53,6 +58,12 @@ public class ItemShape extends Item {
 
         }
 
+    }
+
+    //on crée une copie
+    public ItemShape(ItemShape item){
+        this.tabColors = item.tabColors;
+        this.tabSubShapes = item.tabSubShapes;
     }
 
 

@@ -64,7 +64,9 @@ public class ImagePanel extends JPanel {
 
             for (int i = 0; i < 4; i++) {
 
-                    SubShape ss = tabS[i];
+                SubShape ss = tabS[i];
+                modele.item.Color cc = tabC[i];
+
 
                     if (ss != SubShape.None) {
 
@@ -75,6 +77,26 @@ public class ImagePanel extends JPanel {
                             case modele.item.Color.White:
                                 g.setColor(Color.WHITE);
                                 break;
+                            case modele.item.Color.Blue:
+                                g.setColor(Color.BLUE);
+                                break;
+                            case modele.item.Color.Cyan:
+                                g.setColor(Color.CYAN);
+                                break;
+                            case modele.item.Color.Green:
+                                g.setColor(Color.GREEN);
+                                break;
+                            case modele.item.Color.Purple:
+                                g.setColor(new Color(128, 0, 128));
+                                break;
+                            case modele.item.Color.Yellow:
+                                g.setColor(Color.YELLOW);
+                                break;
+                            default:
+                                //si on donne aucune couleur alors c'est noir
+                                g.setColor(Color.BLACK);
+                                break;
+
                             // TODO autres couleurs
                         }
 

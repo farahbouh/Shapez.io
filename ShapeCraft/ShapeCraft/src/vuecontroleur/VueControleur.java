@@ -136,6 +136,7 @@ public class VueControleur extends JFrame implements Observer {
                 tabIP[x][y].setBackground((Image) null);
 
                 tabIP[x][y].setFront(null);
+                tabIP[x][y].setShape(null);
 
                 Case c = plateau.getCases()[x][y];
 
@@ -162,11 +163,16 @@ public class VueControleur extends JFrame implements Observer {
                     }
 
 
-                } if (m == null) {
-                    if(g != null) {
-                        tabIP[x][y].setBackground(icotestpourgisement);
+                }
+                // On n'affiche le gisement que s'il n'y a pas de machine par-dessus
+                else if (g != null) {
+
+                    // on prend le string du gisement pour le dessiner
+                    if (g instanceof ItemShape) {
+                        tabIP[x][y].setShape((ItemShape) g);
                     }
                 }
+
 
 
 
