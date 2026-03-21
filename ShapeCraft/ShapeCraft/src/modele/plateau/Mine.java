@@ -15,7 +15,7 @@ public class Mine extends Machine {
 
         if (new Random().nextInt(4) == 0) {
             if (gisement instanceof ItemShape) {
-                ItemShape copie = new ItemShape((ItemShape) gisement);
+                ItemShape copie = new ItemShape(((ItemShape) gisement).getCode());
                 current.add(copie);
             }
         }

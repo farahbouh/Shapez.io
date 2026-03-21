@@ -1,10 +1,6 @@
 package modele.jeu;
 
-import modele.plateau.Mine;
-import modele.plateau.Plateau;
-import modele.plateau.Poubelle;
-import modele.plateau.Tapis;
-import modele.item.ItemShape;
+import modele.plateau.*;
 
 public class Jeu extends Thread{
     private Plateau plateau;
@@ -16,7 +12,7 @@ public class Jeu extends Thread{
         plateau = new Plateau();
 
         plateau.setMachine(5, 10, new Mine());
-        plateau.setMachine(5, 5, new Poubelle());
+        plateau.setHub(6,5,new HubMain());
 
         //attention si on met '-' ou une autre couleur sa marche pas
         plateau.setGisement(5,11,"CyCrCbCr");

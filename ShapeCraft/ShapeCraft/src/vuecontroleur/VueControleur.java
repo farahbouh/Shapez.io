@@ -31,7 +31,7 @@ public class VueControleur extends JFrame implements Observer {
     private Image icoTapisDroite;
     private Image icoPoubelle;
     private Image icoMine;
-    private Image icotestpourgisement;
+    private Image icoHub;
 
     private JComponent grilleIP;
 
@@ -60,9 +60,9 @@ public class VueControleur extends JFrame implements Observer {
 
         icoRouge = new ImageIcon("./data/sprites/colors/blue.png").getImage();
         icoTapisDroite = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
-        icotestpourgisement = new ImageIcon("./data/sprites/colors/red.png").getImage();
         icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
         icoMine = new ImageIcon("./data/sprites/buildings/miner.png").getImage();
+        icoHub = new ImageIcon("./data/sprites/buildings/hub.png").getImage();
 
     }
 
@@ -151,6 +151,10 @@ public class VueControleur extends JFrame implements Observer {
                         tabIP[x][y].setBackground(icoPoubelle);
                     } else if (m instanceof Mine) {
                         tabIP[x][y].setBackground(icoMine);
+                    } else if (m instanceof HubMain) {
+                        tabIP[x][y].setBackground(icoHub);
+                    } else if (m instanceof HubWorker) {
+                        tabIP[x][y].setBackground(icoHub);
                     }
 
                     Item current = m.getCurrent();

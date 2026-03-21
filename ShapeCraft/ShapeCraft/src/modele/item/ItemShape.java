@@ -3,6 +3,12 @@ package modele.item;
 public class ItemShape extends Item {
     private SubShape[] tabSubShapes;
     private Color[] tabColors;
+    private String code; //permet de collecter plus facilement les items
+
+    public String getCode() {
+        return code;
+    }
+
     public enum Layer {one, two, three};
 
     public SubShape[] getSubShapes(Layer l) {
@@ -30,6 +36,7 @@ public class ItemShape extends Item {
      *            str.length multiple de 4
      */
     public ItemShape(String str) {
+        this.code = str;
         tabSubShapes = new SubShape[str.length()/2 ];
         tabColors = new Color[str.length()/2];
 

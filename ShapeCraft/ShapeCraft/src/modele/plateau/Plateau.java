@@ -59,6 +59,52 @@ public class Plateau extends Observable implements Runnable {
             notifyObservers();
         }
     }
+        public void setHub(int x, int y, HubMain hm) {
+            boolean peut_etre_construit = true;
+            int taille =  3;
+            // on verifie qu'il y a rien autour avant de poser
+            for (int i = 0; i < taille; i++) {
+                for (int z = 0; z < taille; z++) {
+                    int posX = x + (i - 1);
+                    int posY = y + (z - 1);
+
+                    // On vérifie qu'on ne dépasse pas la taille de la grille
+                    if (posX < 0 || posX >= SIZE_X || posY < 0 || posY >= SIZE_Y) {
+                        peut_etre_construit = false;
+                        break;
+                    }
+
+                    // On vérifie si une machine existe déjà sur chaque case
+                    if (grilleCases[posX][posY].getMachine() != null) {
+                        peut_etre_construit = false;
+                    }
+                }
+            }
+
+            // on construit le hub
+            if (peut_etre_construit) {
+                for (int i = 0; i < taille; i++) {
+                    for (int z = 0; z < taille; z++) {
+                        int posX = x + (i - 1);
+                        int posY = y + (z - 1);
+
+                        if (i == 1 && z == 1) {
+                            // position central ou on place le hubmain
+                            grilleCases[posX][posY].setMachine(hm);
+                            setChanged();
+                            notifyObservers();
+                        } else {
+                            // On place tout autour des hubworker
+                            HubWorker hw = new HubWorker(hm);
+                            grilleCases[posX][posY].setMachine(hw);
+                            setChanged();
+                            notifyObservers();
+                        }
+                    }
+                }
+
+            }
+        }
 //pour poser des gisement sur le plateau
 // le string est de 8lettre pour les 4petites formes de chaque côté + leurs couleurs
     public void setGisement(int x, int y, String code) {
