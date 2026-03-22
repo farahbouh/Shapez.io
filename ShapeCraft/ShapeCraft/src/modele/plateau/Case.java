@@ -16,7 +16,13 @@ public class Case {
     protected Item gisement; // certaines cases sont des gisements, pour placer des mines
 
 
-    public void setMachine(Machine m) {
+    public void setMachine(Machine m) { // set machine avec par defaut la direction a north
+
+        machine = m;
+        m.setCase(this);
+    }
+    public void setMachine(Machine m, Direction d) { //setmachine où on choisit nous même la direction
+        m.setD(d);
         machine = m;
         m.setCase(this);
     }

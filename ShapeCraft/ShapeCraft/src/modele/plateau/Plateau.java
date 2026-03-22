@@ -59,6 +59,15 @@ public class Plateau extends Observable implements Runnable {
             notifyObservers();
         }
     }
+    public void setMachine(int x, int y, Machine m, Direction d) {
+        Point p = new Point(x, y);
+        if(caseALaPosition(p).getMachine() == null) {
+            grilleCases[x][y].setMachine(m,d);
+            setChanged();
+            notifyObservers();
+        }
+    }
+
         public void setHub(int x, int y, HubMain hm) {
             boolean peut_etre_construit = true;
             int taille =  3;

@@ -8,4 +8,13 @@ public enum Direction {
         dx = _dx;
         dy = _dy;
     }
+    public Direction next() { //permet de faire tourner la direction de 90degrée quand on l'appel
+        switch (this) {
+            case North: return East;
+            case East:  return South;
+            case South: return West;
+            case West:  return North;
+            default:    return North; // de base au nord
+        }
+    }
 }

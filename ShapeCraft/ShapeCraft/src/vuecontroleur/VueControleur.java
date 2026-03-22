@@ -1,6 +1,8 @@
 package vuecontroleur;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
@@ -115,11 +117,37 @@ public class VueControleur extends JFrame implements Observer {
 
                     }
                 });
+                iP.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        switch (e.getKeyCode()) {
+                            case KeyEvent.VK_R: // Touche R pour Rotation
+                                jeu.press_r();
+                                System.out.println("change direction");
+                                break;
+
+                            case KeyEvent.VK_1: // Touche 1 pour Tapis
+                                String typeSelectionne = "Tapis";
+                                break;
+
+                            case KeyEvent.VK_2: // Touche 2 pour Mine
+                                String typeSelectionne2 = "Mine";
+                                break;
+
+                            case KeyEvent.VK_ESCAPE: // Annuler la sélection
+                                String typeSelectionne3 = "Selection";
+                                break;
+                        }
+                    }
+                });
+
+                iP.setFocusable(true); // Autorise le composant à recevoir le focus
 
 
                 grilleIP.add(iP);
             }
         }
+
         add(grilleIP);
     }
 

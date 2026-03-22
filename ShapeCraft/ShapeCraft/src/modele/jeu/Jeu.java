@@ -4,6 +4,7 @@ import modele.plateau.*;
 
 public class Jeu extends Thread{
     private Plateau plateau;
+    private Direction directionactuelle = Direction.North; // par défaut la direction est en haut
 
 
 
@@ -15,7 +16,7 @@ public class Jeu extends Thread{
         plateau.setHub(6,5,new HubMain());
 
         //attention si on met '-' ou une autre couleur sa marche pas
-        plateau.setGisement(5,11,"CyCrCbCr");
+        plateau.setGisement(5,11,"Cy--CbCr");
         plateau.setGisement(5,10,"CbCbCbCb");
 
         start();
@@ -28,9 +29,13 @@ public class Jeu extends Thread{
 
 
     public void press(int x, int y) {
-
-        plateau.setMachine(x, y, new Tapis());
+        plateau.setMachine(x, y, new Tapis(),directionactuelle);
     }
+    public void press_r(){ //si R est pressé alors on change la direction
+        directionactuelle = directionactuelle.next();
+        System.out.println(directionactuelle);
+    }
+
 
     public void slide(int x, int y) {
         plateau.setMachine(x, y, new Tapis());

@@ -16,8 +16,8 @@ public class HubMain extends Machine {
 
     @Override
     public void work() {
-        for(int i=0;i<12;i++){ // comme il y a 12 entrée possibles, dans la pire hypotese où on resoit tout sur un round, on fait 12test pour savoir si un a des items recus
-        if (!current.isEmpty()) { //on reprend current de machine et on appel que si un item vient dans le hub
+
+        while (!current.isEmpty()) { //on reprend current de machine et on appel que si un item vient dans le hub (finit la boucle tant que tout les items du tour n'ont pas été entré
             Item arrivee = current.removeFirst(); //removeFirst permet d'envoyé et de supprimer comme pop()
             if (arrivee instanceof ItemShape) {
                 String code = ((ItemShape) arrivee).getCode();
@@ -28,7 +28,7 @@ public class HubMain extends Machine {
                 System.out.println("Hub : Reçu " + code + " | Total : " + ressourceStocke.get(code));
             }
         }}
-    }
+
     @Override
     public void send() {
         // On vide send car le Hub ne renvoie pas d'items aux voisins
