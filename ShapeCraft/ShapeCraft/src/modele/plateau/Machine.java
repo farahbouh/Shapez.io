@@ -9,6 +9,7 @@ import java.util.Queue;
 public abstract class Machine implements Runnable {
     LinkedList<Item> current;
 
+
     Case c;
     Direction d = Direction.North; // par défaut, pour commencer, tout est orienté au north
 

@@ -38,7 +38,7 @@ public class Jeu extends Thread{
 
 
     public void slide(int x, int y) {
-        plateau.setMachine(x, y, new Tapis());
+        plateau.setMachine(x, y, new Tapis(),directionactuelle);
     }
 
 

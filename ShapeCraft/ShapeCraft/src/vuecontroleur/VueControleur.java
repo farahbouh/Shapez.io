@@ -30,7 +30,8 @@ public class VueControleur extends JFrame implements Observer {
     private static final int pxCase = 82; // nombre de pixel par case
     // icones affichées dans la grille
     private Image icoRouge;
-    private Image icoTapisDroite;
+    private Image icoTapisHaut;
+    private Image icoTapisGauche;
     private Image icoPoubelle;
     private Image icoMine;
     private Image icoHub;
@@ -61,7 +62,8 @@ public class VueControleur extends JFrame implements Observer {
     private void chargerLesIcones() {
 
         icoRouge = new ImageIcon("./data/sprites/colors/blue.png").getImage();
-        icoTapisDroite = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
+        icoTapisHaut = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
+        icoTapisGauche = new ImageIcon("./data/sprites/buildings/belt_left.png").getImage();
         icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
         icoMine = new ImageIcon("./data/sprites/buildings/miner.png").getImage();
         icoHub = new ImageIcon("./data/sprites/buildings/hub.png").getImage();
@@ -174,7 +176,11 @@ public class VueControleur extends JFrame implements Observer {
                 if (m != null) {
 
                     if (m instanceof Tapis) {
-                        tabIP[x][y].setBackground(icoTapisDroite);
+                        if(m.getD() == Direction.North || m.getD() == Direction.South) {
+                            tabIP[x][y].setBackground(icoTapisHaut);
+                        } else {
+                            tabIP[x][y].setBackground(icoTapisGauche);
+                        }
                     } else if (m instanceof Poubelle) {
                         tabIP[x][y].setBackground(icoPoubelle);
                     } else if (m instanceof Mine) {
