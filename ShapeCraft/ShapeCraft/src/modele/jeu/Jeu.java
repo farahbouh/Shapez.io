@@ -13,9 +13,22 @@ public class Jeu extends Thread{
         plateau = new Plateau();
 
         plateau.setMachine(5, 10, new Mine());
+        // plateau.setMachine(5, 8, new Decoupeuse(),Direction.North); ← SUPPRIME CETTE LIGNE
+
         plateau.setHub(6,5,new HubMain());
 
-        //attention si on met '-' ou une autre couleur sa marche pas
+        // Tapis entrée (pour amener à la découpeuse)
+        plateau.setMachine(5, 9, new Tapis(), Direction.North);
+
+        // Decoupeuse (garde celle-ci)
+        plateau.setMachine(5, 8, new Decoupeuse(), Direction.North);
+
+        // Tapis sortie 1 (juste au nord)
+        plateau.setMachine(5, 7, new Tapis(), Direction.North);
+
+        // Tapis sortie 2 (à côté, vers l'est)
+        plateau.setMachine(6, 7, new Tapis(), Direction.North);
+
         plateau.setGisement(5,11,"Cy--CbCr");
         plateau.setGisement(5,10,"CbCbCbCb");
 
@@ -59,6 +72,4 @@ public class Jeu extends Thread{
         }
 
     }
-
-
 }

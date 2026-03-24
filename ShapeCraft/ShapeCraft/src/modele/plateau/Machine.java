@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public abstract class Machine implements Runnable {
-    LinkedList<Item> current;
+    LinkedList<Item> current; // liste des items dans la machine
 
 
     Case c;
@@ -71,10 +71,5 @@ public abstract class Machine implements Runnable {
     public void run() {
         work();
         send();
-
-
     }
-
-
-
 }

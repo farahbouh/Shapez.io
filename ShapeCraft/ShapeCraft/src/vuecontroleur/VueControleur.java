@@ -35,7 +35,7 @@ public class VueControleur extends JFrame implements Observer {
     private Image icoPoubelle;
     private Image icoMine;
     private Image icoHub;
-
+    private Image icoDecoupeuse;
     private JComponent grilleIP;
 
     private boolean mousePressed = false; // permet de mémoriser l'état de la souris
@@ -67,7 +67,7 @@ public class VueControleur extends JFrame implements Observer {
         icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
         icoMine = new ImageIcon("./data/sprites/buildings/miner.png").getImage();
         icoHub = new ImageIcon("./data/sprites/buildings/hub.png").getImage();
-
+        icoDecoupeuse = new ImageIcon("./data/sprites/buildings/cutter.png").getImage();
     }
 
 
@@ -190,6 +190,9 @@ public class VueControleur extends JFrame implements Observer {
                     } else if (m instanceof HubWorker) {
                         tabIP[x][y].setBackground(icoHub);
                     }
+                    else if (m instanceof Decoupeuse) {
+                        tabIP[x][y].setBackground(icoDecoupeuse);
+                    }
 
                     Item current = m.getCurrent();
 
@@ -210,13 +213,6 @@ public class VueControleur extends JFrame implements Observer {
                         tabIP[x][y].setShape((ItemShape) g);
                     }
                 }
-
-
-
-
-
-
-
             }
         }
         grilleIP.repaint();

@@ -100,8 +100,48 @@ public class ItemShape extends Item {
 
     }
 
-    public ItemShape Cut() { // this et l'objet retourné correpondent au deux sorties
-        return null;
+    public ItemShape Cut() {
+        // Sauvegarder les valeurs des positions 2 et 3 AVANT modification
+        SubShape shape2 = tabSubShapes[2];
+        SubShape shape3 = tabSubShapes[3];
+        Color color2 = tabColors[2];
+        Color color3 = tabColors[3];
+
+        ItemShape reste = new ItemShape(this);  // copie temporaire
+
+        // Modifier THIS (garde droite)
+        SubShape[] bufferSubShapes = new SubShape[4];
+        bufferSubShapes[0] = tabSubShapes[0];
+        bufferSubShapes[1] = tabSubShapes[1];
+        bufferSubShapes[2] = SubShape.None;
+        bufferSubShapes[3] = SubShape.None;
+
+        Color[] bufferColors = new Color[4];
+        bufferColors[0] = tabColors[0];
+        bufferColors[1] = tabColors[1];
+        bufferColors[2] = null;
+        bufferColors[3] = null;
+
+        tabSubShapes = bufferSubShapes;
+        tabColors = bufferColors;
+
+        // Modifier RESTE (garde gauche) avec les valeurs sauvegardées
+        SubShape[] bufferSubShapesReste = new SubShape[4];
+        bufferSubShapesReste[0] = shape2;
+        bufferSubShapesReste[1] = shape3;
+        bufferSubShapesReste[2] = SubShape.None;
+        bufferSubShapesReste[3] = SubShape.None;
+
+        Color[] bufferColorsReste = new Color[4];
+        bufferColorsReste[0] = color2;
+        bufferColorsReste[1] = color3;
+        bufferColorsReste[2] = null;
+        bufferColorsReste[3] = null;
+
+        reste.tabSubShapes = bufferSubShapesReste;
+        reste.tabColors = bufferColorsReste;
+
+        return reste;
     }
 
     public void Color(Color c) {
