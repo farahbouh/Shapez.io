@@ -12,9 +12,9 @@ public class Jeu extends Thread{
     public Jeu() {
         plateau = new Plateau();
 
-        plateau.setMachine(5, 10, new Mine());
-        // plateau.setMachine(5, 8, new Decoupeuse(),Direction.North); ← SUPPRIME CETTE LIGNE
 
+        plateau.setMachine(5, 10, new Mine());
+        plateau.setMachine(5, 8, new Decoupeuse(),Direction.North);
         plateau.setHub(6,5,new HubMain());
 
         // Tapis entrée (pour amener à la découpeuse)
@@ -31,6 +31,7 @@ public class Jeu extends Thread{
 
         plateau.setGisement(5,11,"Cy--CbCr");
         plateau.setGisement(5,10,"CbCbCbCb");
+        plateau.setGisement(5,10,"SySySySy");
 
         start();
 

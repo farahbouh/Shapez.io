@@ -101,7 +101,7 @@ public class ImagePanel extends JPanel {
                         }
 
                         switch (ss) {
-                            case SubShape.Carre:
+                            case SubShape.Square:
                                 g.fillRect(xFront + (widthFront / 2) * ((i >> 1) ^ 1), yFront + (heigthFront / 2) * ((i & 1) ^ ((i >> 1) & 1)), widthFront / 2, heigthFront / 2);
                                 break;
                             // TODO autres formes

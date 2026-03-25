@@ -1,13 +1,15 @@
 package modele.plateau;
 
 public enum Direction {
-    North(0, -1), South(0, 1), East(1, 0), West(-1, 0);
+    North(0, -1), South(0, 1), East(1, 0), West(-1, 0), Bizarre(1,-1);//test pour Decoupeuse
     int dx;
     int dy;
     private Direction(int _dx, int _dy) {
         dx = _dx;
         dy = _dy;
     }
+
+
     public Direction next() { //permet de faire tourner la direction de 90degrée quand on l'appel
         switch (this) {
             case North: return East;

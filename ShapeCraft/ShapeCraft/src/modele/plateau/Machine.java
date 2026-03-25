@@ -50,7 +50,7 @@ public abstract class Machine implements Runnable {
         if (up != null) {
             Machine m = up.getMachine();
 
-            if (m != null && !current.isEmpty()) {
+            if (m != null && !current.isEmpty() && m.current.isEmpty()) {
                 Item item = current.getFirst();
                 m.current.add(item);
                 current.remove(item);
@@ -72,4 +72,5 @@ public abstract class Machine implements Runnable {
         work();
         send();
     }
+
 }

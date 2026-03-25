@@ -42,8 +42,9 @@ public class ItemShape extends Item {
 
         for (int i = 0; i < 4; i++) { // fait uniquement pour la première couche
             switch (str.charAt(i*2)) {
-                case 'C' : tabSubShapes[i] = SubShape.Carre;break;
-                case '-' : tabSubShapes[i] = SubShape.None;break;
+                case 'C' : tabSubShapes[i] = SubShape.Square; break;
+                case '-' : tabSubShapes[i] = SubShape.None; break;
+                case 'S' : tabSubShapes[i] = SubShape.Circle; break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + str.charAt(i));
             }
@@ -61,10 +62,7 @@ public class ItemShape extends Item {
                 default:
                     throw new IllegalStateException("Unexpected value: " + str.charAt((i + 1)*2));
             }
-
-
         }
-
     }
 
     //on crée une copie
