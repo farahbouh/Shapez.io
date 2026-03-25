@@ -153,6 +153,14 @@ public class Plateau extends Observable implements Runnable {
                 }
             }
         }
+        for (int x = 0; x < SIZE_X; x++) {
+            for (int y = 0; y < SIZE_Y; y++) {
+                Case c = grilleCases[x][y];
+                if (c.getMachine() != null) {
+                    c.getMachine().run2();
+                }
+            }
+        }
         setChanged();
         notifyObservers();
     }

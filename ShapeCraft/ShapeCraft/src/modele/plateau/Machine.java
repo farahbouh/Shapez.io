@@ -69,8 +69,11 @@ public abstract class Machine implements Runnable {
 
     @Override
     public void run() {
-        work();
         send();
+
+    }
+    public void run2(){
+        work();
     }
 
 }
