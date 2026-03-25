@@ -98,48 +98,23 @@ public class ItemShape extends Item {
 
     }
 
-    public ItemShape Cut() {
-        // Sauvegarder les valeurs des positions 2 et 3 AVANT modification
-        SubShape shape2 = tabSubShapes[2];
-        SubShape shape3 = tabSubShapes[3];
-        Color color2 = tabColors[2];
-        Color color3 = tabColors[3];
+    public ItemShape[] Cut() {
 
-        ItemShape reste = new ItemShape(this);  // copie temporaire
+        String codedebut = this.getCode();
+        int mid = codedebut.length() / 2;
 
-        // Modifier THIS (garde droite)
-        SubShape[] bufferSubShapes = new SubShape[4];
-        bufferSubShapes[0] = tabSubShapes[0];
-        bufferSubShapes[1] = tabSubShapes[1];
-        bufferSubShapes[2] = SubShape.None;
-        bufferSubShapes[3] = SubShape.None;
+        String firstHalf = codedebut.substring(0, mid);
+        String secondHalf = codedebut.substring(mid);
 
-        Color[] bufferColors = new Color[4];
-        bufferColors[0] = tabColors[0];
-        bufferColors[1] = tabColors[1];
-        bufferColors[2] = null;
-        bufferColors[3] = null;
+        String result1 = firstHalf + "-".repeat(mid);
+        String result2 = "-".repeat(mid) + secondHalf;
 
-        tabSubShapes = bufferSubShapes;
-        tabColors = bufferColors;
+        return new ItemShape[] {
+                new ItemShape(result1),
+                new ItemShape(result2)
+        };
 
-        // Modifier RESTE (garde gauche) avec les valeurs sauvegardées
-        SubShape[] bufferSubShapesReste = new SubShape[4];
-        bufferSubShapesReste[0] = shape2;
-        bufferSubShapesReste[1] = shape3;
-        bufferSubShapesReste[2] = SubShape.None;
-        bufferSubShapesReste[3] = SubShape.None;
 
-        Color[] bufferColorsReste = new Color[4];
-        bufferColorsReste[0] = color2;
-        bufferColorsReste[1] = color3;
-        bufferColorsReste[2] = null;
-        bufferColorsReste[3] = null;
-
-        reste.tabSubShapes = bufferSubShapesReste;
-        reste.tabColors = bufferColorsReste;
-
-        return reste;
     }
 
     public void Color(Color c) {

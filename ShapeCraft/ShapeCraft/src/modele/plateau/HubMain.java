@@ -19,7 +19,7 @@ public class HubMain extends Machine {
 
         while (!current.isEmpty()) { //on reprend current de machine et on appel que si un item vient dans le hub (finit la boucle tant que tout les items du tour n'ont pas été entré
             Item arrivee = current.removeFirst(); //removeFirst permet d'envoyé et de supprimer comme pop()
-            if (arrivee instanceof ItemShape) {
+            if (arrivee != null && arrivee instanceof ItemShape) {
                 String code = ((ItemShape) arrivee).getCode();
 
                 // On incrémente le compteur pour ce code spécifique

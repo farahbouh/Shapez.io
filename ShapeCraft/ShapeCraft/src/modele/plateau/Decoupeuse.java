@@ -15,12 +15,12 @@ public class Decoupeuse extends Machine {
     {
         Item item = getCurrent();  // getCurrent() retourne null si vide
         if (item != null && item instanceof ItemShape) {
-            ItemShape forme = (ItemShape) item;
+            ItemShape i = (ItemShape) item;
 
-            ItemShape reste = forme.Cut(); // recupere le reste de la forme
+            ItemShape[] results = i.Cut(); // recupere le reste de la forme
             current.removeFirst();
-            current.add(forme);// on ajoute la forme
-            current.add(reste);// ainsi que son reste
+            current.add(results[0]);// on ajoute la forme
+            current.add(results[1]);// ainsi que son reste
         }
 
     }
