@@ -28,7 +28,13 @@ public class Decoupeuse extends Machine {
     public void send()
     {
         Case sortie1 = c.plateau.getCase(c, Direction.North);
-        Case sortie2 = c.plateau.getCase(c,Direction.Bizarre);
+        Case sortie2 = c.plateau.getCase(sortie1,Direction.West);
+        if (sortie2 != null && !current.isEmpty()) {
+            Machine mNE = sortie2.getMachine();
+            if (mNE != null) {
+                mNE.current.add(current.removeFirst());
+            }
+        }
         if (sortie1 != null) {
             // item vers le nord
             Machine mNord = sortie1.getMachine();
@@ -37,11 +43,6 @@ public class Decoupeuse extends Machine {
             }
         }
 
-        if (sortie2 != null && !current.isEmpty()) {
-            Machine mNE = sortie2.getMachine();
-            if (mNE != null) {
-                mNE.current.add(current.removeFirst());
-            }
-        }
+
     }
 }

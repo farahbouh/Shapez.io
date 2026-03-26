@@ -149,7 +149,7 @@ public class Plateau extends Observable implements Runnable {
             for (int y = 0; y < SIZE_Y; y++) {
                 Case c = grilleCases[x][y];
                 if (c.getMachine() != null) {
-                    c.getMachine().run();
+                    c.getMachine().run2();
                 }
             }
         }
@@ -157,7 +157,7 @@ public class Plateau extends Observable implements Runnable {
             for (int y = 0; y < SIZE_Y; y++) {
                 Case c = grilleCases[x][y];
                 if (c.getMachine() != null) {
-                    c.getMachine().run2();
+                    c.getMachine().run();
                 }
             }
         }

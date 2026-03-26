@@ -12,26 +12,14 @@ public class Jeu extends Thread{
     public Jeu() {
         plateau = new Plateau();
 
+        //Pour tester Decoupeuse
+
+        plateau.setMachine(5, 8, new Decoupeuse(),Direction.North);
+        plateau.setHub(6,4,new HubMain());
+
 
         plateau.setMachine(5, 10, new Mine());
-        plateau.setMachine(5, 8, new Decoupeuse(),Direction.North);
-        plateau.setHub(6,5,new HubMain());
-
-        // Tapis entrée (pour amener à la découpeuse)
-        plateau.setMachine(5, 9, new Tapis(), Direction.North);
-
-        // Decoupeuse (garde celle-ci)
-        plateau.setMachine(5, 8, new Decoupeuse(), Direction.North);
-
-        // Tapis sortie 1 (juste au nord)
-        plateau.setMachine(5, 7, new Tapis(), Direction.North);
-
-        // Tapis sortie 2 (à côté, vers l'est)
-        plateau.setMachine(6, 7, new Tapis(), Direction.North);
-
-        //plateau.setGisement(5,10,"Cy--CbCr");
-        //plateau.setGisement(5,10,"CbCbCbCb");
-        plateau.setGisement(5,10,"SySySySy");
+        plateau.setGisement(5,10,"SySgSbSr");
 
         start();
 
