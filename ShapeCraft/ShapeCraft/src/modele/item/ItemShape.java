@@ -113,8 +113,6 @@ public class ItemShape extends Item {
                 new ItemShape(result1),
                 new ItemShape(result2)
         };
-
-
     }
 
     public void Color(Color c) {

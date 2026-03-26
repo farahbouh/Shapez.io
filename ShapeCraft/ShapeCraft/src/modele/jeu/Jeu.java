@@ -29,8 +29,8 @@ public class Jeu extends Thread{
         // Tapis sortie 2 (à côté, vers l'est)
         plateau.setMachine(6, 7, new Tapis(), Direction.North);
 
-        plateau.setGisement(5,11,"Cy--CbCr");
-        plateau.setGisement(5,10,"CbCbCbCb");
+        //plateau.setGisement(5,10,"Cy--CbCr");
+        //plateau.setGisement(5,10,"CbCbCbCb");
         plateau.setGisement(5,10,"SySySySy");
 
         start();

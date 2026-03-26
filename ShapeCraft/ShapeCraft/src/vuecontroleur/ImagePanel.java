@@ -104,6 +104,10 @@ public class ImagePanel extends JPanel {
                             case SubShape.Square:
                                 g.fillRect(xFront + (widthFront / 2) * ((i >> 1) ^ 1), yFront + (heigthFront / 2) * ((i & 1) ^ ((i >> 1) & 1)), widthFront / 2, heigthFront / 2);
                                 break;
+
+                            case SubShape.Circle:
+                                    g.fillArc(xFront, yFront, widthFront, heigthFront, (4-i) * 90, 90);
+                                    break;
                             // TODO autres formes
                         }
                     }
