@@ -124,7 +124,26 @@ public class Plateau extends Observable implements Runnable {
             notifyObservers();
 
     }
+    public void setDecoupeuse(int x, int y, Direction orientation) {
+        int x2 = x, y2 = y;
+        if (orientation == Direction.North || orientation == Direction.South) {
+            y2 = y + 1; // deux cases verticales (ex: (x,y) et (x,y+1))
+        } else {
+            x2 = x + 1; // deux cases horizontales (ex: (x,y) et (x+1,y))
+        }
+        if (x2 >= 0 && x2 < SIZE_X && y2 >= 0 && y2 < SIZE_Y &&
+                grilleCases[x][y].getMachine() == null && grilleCases[x2][y2].getMachine() == null) {
 
+            Decoupeuse decoupeuse = new Decoupeuse();
+            decoupeuse.setD(orientation);
+
+            grilleCases[x][y].setMachine(decoupeuse);
+            grilleCases[x2][y2].setMachine(decoupeuse);
+
+            setChanged();
+            notifyObservers();
+        }
+    }
 
     /**
      * Indique si p est contenu dans la grille

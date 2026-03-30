@@ -42,7 +42,9 @@ public abstract class Machine implements Runnable {
             return null;
         }
     }
-
+    public void ajouterItem(Item i) {
+        current.add(i);
+    }
     public void send() // la machine dépose un item sur sa ou ses sorties
     {
 
@@ -60,10 +62,10 @@ public abstract class Machine implements Runnable {
 
     public void work() {
 
-            if (current.size() > 0) {
+            /*if (current.size() > 0) {
                 ((ItemShape) current.get(0)).rotate();
 
-            }
+            }*/
 
     }; // action de la machine, aucune par défaut
 

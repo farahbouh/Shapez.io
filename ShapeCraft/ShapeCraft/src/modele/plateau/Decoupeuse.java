@@ -1,48 +1,63 @@
 package modele.plateau;
-import modele.item.ItemShape;
-import modele.item.Item;
 
+import modele.item.Item;
+import modele.item.ItemShape;
+import java.util.LinkedList;
 
 public class Decoupeuse extends Machine {
 
-    public void ajouterItem(Item i)
-    { //on crée cette fonction qui serra appellé par les classes esclaves
-        this.current.add(i);
+    private static final int CAPACITE_SORTIE = 1;   // une seule place par sortie
+
+    private LinkedList<Item> sortieNord = new LinkedList<>();
+    private LinkedList<Item> sortieOuest = new LinkedList<>();
+
+    // Méthode pour savoir si on peut accepter un nouvel item en entrée
+    private boolean peutAccepterEntree() {
+        return sortieNord.size() < CAPACITE_SORTIE && sortieOuest.size() < CAPACITE_SORTIE;
+    }
+    public Item getItemNord() {
+        if (sortieNord.isEmpty()) return null;
+        return sortieNord.getFirst();
     }
 
-    @Override // on ecrase le comportement de la machine
-    public void work()
-    {
-        Item item = getCurrent();  // getCurrent() retourne null si vide
-        if (item != null && item instanceof ItemShape) {
-            ItemShape i = (ItemShape) item;
-
-            ItemShape[] results = i.Cut(); // recupere le reste de la forme
-            current.removeFirst();
-            current.add(results[0]);// on ajoute la forme
-            current.add(results[1]);// ainsi que son reste
-        }
-
+    public Item getItemOuest() {
+        if (sortieOuest.isEmpty()) return null;
+        return sortieOuest.getFirst();
     }
-    @Override // on override car une seul sortie dans la class machine
-    public void send()
-    {
-        Case sortie1 = c.plateau.getCase(c, Direction.North);
-        Case sortie2 = c.plateau.getCase(sortie1,Direction.West);
-        if (sortie2 != null && !current.isEmpty()) {
-            Machine mNE = sortie2.getMachine();
-            if (mNE != null) {
-                mNE.current.add(current.removeFirst());
+    @Override
+    public void work() {
+        // On ne prend un item que s'il y a de la place dans les deux sorties
+        if (!current.isEmpty() && peutAccepterEntree()) {
+            Item item = current.removeFirst();
+            if (item instanceof ItemShape) {
+                ItemShape[] results = ((ItemShape) item).Cut();
+                sortieNord.add(results[0]);
+                sortieOuest.add(results[1]);
             }
         }
-        if (sortie1 != null) {
-            // item vers le nord
-            Machine mNord = sortie1.getMachine();
-            if (mNord != null && !current.isEmpty()) {
-                mNord.current.add(current.removeFirst());
+    }
+
+    @Override
+    public void send() {
+        // Envoi vers le Nord
+        Case caseNord = c.plateau.getCase(c, Direction.North);
+        if (caseNord != null && !sortieNord.isEmpty()) {
+            Machine machineNord = caseNord.getMachine();
+            // On vérifie que la machine cible existe et qu'elle est libre (current vide)
+            if (machineNord != null && machineNord.current.isEmpty()) {
+                Item item = sortieNord.removeFirst();
+                machineNord.current.add(item);
             }
         }
 
-
+        // Envoi vers l'Ouest
+        Case caseOuest = c.plateau.getCase(c, Direction.West);
+        if (caseOuest != null && !sortieOuest.isEmpty()) {
+            Machine machineOuest = caseOuest.getMachine();
+            if (machineOuest != null && machineOuest.current.isEmpty()) {
+                Item item = sortieOuest.removeFirst();
+                machineOuest.current.add(item);
+            }
+        }
     }
 }

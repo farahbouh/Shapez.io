@@ -192,6 +192,7 @@ public class VueControleur extends JFrame implements Observer {
                     }
                     else if (m instanceof Decoupeuse) {
                         tabIP[x][y].setBackground(icoDecoupeuse);
+
                     }
 
                     Item current = m.getCurrent();
