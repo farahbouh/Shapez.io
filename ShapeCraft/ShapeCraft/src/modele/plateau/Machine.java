@@ -71,6 +71,7 @@ public abstract class Machine implements Runnable {
 
     @Override
     public void run() {
+        work(); //delete ??
         send();
 
     }

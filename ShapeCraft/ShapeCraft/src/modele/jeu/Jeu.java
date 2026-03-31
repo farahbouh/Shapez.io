@@ -13,8 +13,7 @@ public class Jeu extends Thread{
         plateau = new Plateau();
 
         //Pour tester Decoupeuse
-        //plateau.setDecoupeuse(5, 8, Direction.North);
-        //plateau.setDecoupeuse(5, 8, Direction.North);
+
         plateau.setMachine(5, 8, new Decoupeuse(),Direction.North);
         //plateau.setHub(6,4,new HubMain());
 
