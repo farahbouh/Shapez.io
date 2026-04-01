@@ -19,4 +19,19 @@ public enum Direction {
             default:    return North; // de base au nord
         }
     }
+    public Direction inverse(){
+        switch (this) {
+            case North:
+                return South;
+            case East:
+                return West;
+            case South:
+                return North;
+            case West:
+                return East;
+            default:
+                return North;
+        }
+    }
+
 }

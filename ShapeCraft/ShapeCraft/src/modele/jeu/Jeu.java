@@ -47,7 +47,20 @@ public class Jeu extends Thread{
         plateau.setMachine(x, y, new Tapis(),directionactuelle);
     }
 
+    public void slideAvecDirection(int x, int y, Direction d) {
+        Case caseCourante = plateau.getCases()[x][y];
+        Case c = plateau.getCase(caseCourante,d.inverse()); //on prend l'ancienne case où on a posé un tapis
+        Machine m = c.getMachine();
+        if(m instanceof Tapis){
+            m.setD(d); // on modifie le la direction de sortie
+            Tapis t = (Tapis) m;
+            System.out.println(t.getDirection1()+""+t.getD());
+        }
+        plateau.setTapis(x, y, d.inverse(), d);
+        // Rappel : d est la sortie, d.inverse() est l'entrée pour un tapis droit
 
+
+    }
     public void run() {
         jouerPartie();
     }

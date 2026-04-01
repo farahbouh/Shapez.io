@@ -45,17 +45,33 @@ public abstract class Machine implements Runnable {
     public void ajouterItem(Item i) {
         current.add(i);
     }
-    public void send() // la machine dépose un item sur sa ou ses sorties
-    {
+    public void send() {
+        if (current.isEmpty()) return; // Rien à envoyer
 
-        Case up = c.plateau.getCase(c, this.d); //envoie a la case de direction d
-        if (up != null) {
-            Machine m = up.getMachine();
+        // On récupère la case devant nous selon l'orientation de la machine
+        Case destination = c.plateau.getCase(c, this.d);
 
-            if (m != null && !current.isEmpty() && m.current.isEmpty()) {
-                Item item = current.getFirst();
-                m.current.add(item);
-                current.remove(item);
+        if (destination != null) {
+            Machine m = destination.getMachine();
+
+            if (m != null && m.current.isEmpty()) { // La machine cible a de la place
+                boolean canSend = false;
+
+                if (m instanceof Tapis) {
+                    Tapis prochainTapis = (Tapis) m;
+                    // Si ma sortie (this.d) est l'opposé de son entrée, ça connecte
+                    if (prochainTapis.getDirection1() == this.d.inverse()) {
+                        canSend = true;
+                    }
+                } else {
+                    // Si c'est une autre machine (Hub, etc.), on accepte par défaut
+                    canSend = true;
+                }
+
+                if (canSend) {
+                    Item item = current.removeFirst(); // Utilise removeFirst() pour LinkedList
+                    m.current.add(item);
+                }
             }
         }
     }

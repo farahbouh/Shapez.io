@@ -38,10 +38,18 @@ public class VueControleur extends JFrame implements Observer {
     private Image icoDecoupeuse;
     private Image icoDecoupeuse4;
     private JComponent grilleIP;
+    private int lastX = -1;
+    private int lastY = -1;
 
     private boolean mousePressed = false; // permet de mémoriser l'état de la souris
 
     private ImagePanel[][] tabIP; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône background et front, suivant ce qui est présent dans le modèle)
+    private Image icoTapisDroite;
+    private Image icoTapisGauche_Droite;
+    private Image icoTapisDroite_Gauche;
+    private Image icoTapisDroite2;
+    private Image icoTapisGauche2;
+    private Image icoTapisBas;
 
 
     public VueControleur(Jeu _jeu) {
@@ -63,8 +71,14 @@ public class VueControleur extends JFrame implements Observer {
     private void chargerLesIcones() {
 
         icoRouge = new ImageIcon("./data/sprites/colors/blue.png").getImage();
+        icoTapisBas = new ImageIcon("./data/sprites/buildings/belt_bottom.png").getImage();
         icoTapisHaut = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
         icoTapisGauche = new ImageIcon("./data/sprites/buildings/belt_left.png").getImage();
+        icoTapisDroite = new ImageIcon("./data/sprites/buildings/belt_right.png").getImage();
+        icoTapisGauche_Droite = new ImageIcon("./data/sprites/buildings/belt_gauche_droite.png").getImage();
+        icoTapisDroite_Gauche = new ImageIcon("./data/sprites/buildings/belt_droite_gauche.png").getImage();
+        icoTapisDroite2 = new ImageIcon("./data/sprites/buildings/belt_right_1.png").getImage();
+        icoTapisGauche2 = new ImageIcon("./data/sprites/buildings/belt_left_1.png").getImage();
         icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
         icoMine = new ImageIcon("./data/sprites/buildings/miner.png").getImage();
         icoHub = new ImageIcon("./data/sprites/buildings/hub.png").getImage();
@@ -103,10 +117,32 @@ public class VueControleur extends JFrame implements Observer {
                     }
 
                     @Override
+
                     public void mouseEntered(MouseEvent e) {
-                        if (mousePressed) {
-                            jeu.slide(xx, yy);
+                        if (SwingUtilities.isLeftMouseButton(e)) {
+                            // Si on vient d'une case adjacente
+                            if (lastX != -1 && (lastX != xx || lastY != yy)) {
+                                Direction nouvelleDir = calculerDirection(lastX, lastY, xx, yy);
+                                System.out.println(nouvelleDir);
+
+
+                                // On pose le tapis avec la direction du mouvement
+                                jeu.slideAvecDirection(xx, yy, nouvelleDir);
+                            }
+
+                            // On met à jour la position précédente
+                            lastX = xx;
+                            lastY = yy;
                         }
+                    }
+
+                    // Méthode utilitaire pour trouver la direction
+                    private Direction calculerDirection(int x1, int y1, int x2, int y2) {
+                        if (x2 > x1) return Direction.East;
+                        if (x2 < x1) return Direction.West;
+                        if (y2 > y1) return Direction.South;
+                        if (y2 < y1) return Direction.North;
+                        return Direction.North; // Par défaut
                     }
 
                     @Override
@@ -178,10 +214,23 @@ public class VueControleur extends JFrame implements Observer {
                 if (m != null) {
 
                     if (m instanceof Tapis) {
-                        if(m.getD() == Direction.North || m.getD() == Direction.South) {
+                        Tapis tapis = (Tapis) m;
+                        if(tapis.getD() == Direction.North && tapis.getDirection1() == Direction.South) {
                             tabIP[x][y].setBackground(icoTapisHaut);
-                        } else {
+                        }else if(tapis.getD() == Direction.South && tapis.getDirection1() == Direction.North) {
+                            tabIP[x][y].setBackground(icoTapisBas);
+                        }else if(tapis.getD() == Direction.East && tapis.getDirection1() == Direction.West){
+                            tabIP[x][y].setBackground(icoTapisDroite_Gauche);
+                        }else if(tapis.getD() == Direction.West && tapis.getDirection1() == Direction.East){
+                            tabIP[x][y].setBackground(icoTapisGauche_Droite);
+                        }else if(tapis.getD() == Direction.West && tapis.getDirection1() == Direction.North || tapis.getD() == Direction.North && tapis.getDirection1() == Direction.West){
+                            tabIP[x][y].setBackground(icoTapisDroite2);
+                        } else if(tapis.getD() == Direction.East && tapis.getDirection1() == Direction.North || tapis.getD() == Direction.North && tapis.getDirection1() == Direction.East){
+                            tabIP[x][y].setBackground(icoTapisGauche2);
+                        }else if(tapis.getD() == Direction.West && tapis.getDirection1() == Direction.South || tapis.getD() == Direction.South && tapis.getDirection1() == Direction.West){
                             tabIP[x][y].setBackground(icoTapisGauche);
+                        }else if(tapis.getD() == Direction.East && tapis.getDirection1() == Direction.South || tapis.getD() == Direction.South && tapis.getDirection1() == Direction.East){
+                            tabIP[x][y].setBackground(icoTapisDroite);
                         }
                     } else if (m instanceof Poubelle) {
                         tabIP[x][y].setBackground(icoPoubelle);
