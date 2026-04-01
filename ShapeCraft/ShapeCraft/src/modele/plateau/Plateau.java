@@ -124,27 +124,81 @@ public class Plateau extends Observable implements Runnable {
             notifyObservers();
 
     }
-    public void setDecoupeuse(int x, int y, Direction orientation) {
-        int x2 = x, y2 = y;
-        if (orientation == Direction.North || orientation == Direction.South) {
-            y2 = y + 1; // deux cases verticales (ex: (x,y) et (x,y+1))
-        } else {
-            x2 = x + 1; // deux cases horizontales (ex: (x,y) et (x+1,y))
+    public void setDecoupeuse(int x, int y, Direction orientation, int type) {
+        if (type == 1) {
+            // Type 1 : 2 sorties, occupe 2 cases en ligne HORIZONTALE
+            int x2 = x, y2 = y;
+
+            if (orientation == Direction.North) {
+                // Ligne horizontale : case à gauche et case à droite
+                x2 = x + 1;
+            } else if (orientation == Direction.South) {
+                x2 = x + 1;
+            } else if (orientation == Direction.East) {
+                // Ligne verticale pour orientation Est
+                y2 = y + 1;
+            } else if (orientation == Direction.West) {
+                y2 = y + 1;
+            }
+
+            if (x2 >= 0 && x2 < SIZE_X && y2 >= 0 && y2 < SIZE_Y &&
+                    grilleCases[x][y].getMachine() == null && grilleCases[x2][y2].getMachine() == null) {
+
+                Decoupeuse decoupeuse = new Decoupeuse(orientation, type);
+                decoupeuse.setD(orientation);
+                grilleCases[x][y].setMachine(decoupeuse);
+                grilleCases[x2][y2].setMachine(decoupeuse);
+            }
         }
-        if (x2 >= 0 && x2 < SIZE_X && y2 >= 0 && y2 < SIZE_Y &&
-                grilleCases[x][y].getMachine() == null && grilleCases[x2][y2].getMachine() == null) {
+        else {
+            // Type 2 : 4 sorties, occupe 4 cases en ligne selon l'orientation
+            // (garde le code existant pour type 2)
+            int[][] cases = new int[4][2];
+            cases[0][0] = x;
+            cases[0][1] = y;
 
-            Decoupeuse decoupeuse = new Decoupeuse();
-            decoupeuse.setD(orientation);
+            if (orientation == Direction.North) {
+                cases[1][0] = x + 1; cases[1][1] = y;
+                cases[2][0] = x + 2; cases[2][1] = y;
+                cases[3][0] = x + 3; cases[3][1] = y;
+            } else if (orientation == Direction.South) {
+                cases[1][0] = x + 1; cases[1][1] = y;
+                cases[2][0] = x + 2; cases[2][1] = y;
+                cases[3][0] = x + 3; cases[3][1] = y;
+            } else if (orientation == Direction.East) {
+                cases[1][0] = x; cases[1][1] = y + 1;
+                cases[2][0] = x; cases[2][1] = y + 2;
+                cases[3][0] = x; cases[3][1] = y + 3;
+            } else if (orientation == Direction.West) {
+                cases[1][0] = x; cases[1][1] = y + 1;
+                cases[2][0] = x; cases[2][1] = y + 2;
+                cases[3][0] = x; cases[3][1] = y + 3;
+            }
 
-            grilleCases[x][y].setMachine(decoupeuse);
-            grilleCases[x2][y2].setMachine(decoupeuse);
+            boolean allFree = true;
+            for (int i = 0; i < 4; i++) {
+                int cx = cases[i][0];
+                int cy = cases[i][1];
+                if (cx < 0 || cx >= SIZE_X || cy < 0 || cy >= SIZE_Y ||
+                        grilleCases[cx][cy].getMachine() != null) {
+                    allFree = false;
+                    break;
+                }
+            }
 
-            setChanged();
-            notifyObservers();
+            if (allFree) {
+                Decoupeuse decoupeuse = new Decoupeuse(orientation, type);
+                decoupeuse.setD(orientation);
+                for (int i = 0; i < 4; i++) {
+                    int cx = cases[i][0];
+                    int cy = cases[i][1];
+                    grilleCases[cx][cy].setMachine(decoupeuse);
+                }
+            }
         }
+        setChanged();
+        notifyObservers();
     }
-
     /**
      * Indique si p est contenu dans la grille
      */

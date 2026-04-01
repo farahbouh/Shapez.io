@@ -114,6 +114,28 @@ public class ItemShape extends Item {
                 new ItemShape(result2)
         };
     }
+    public ItemShape[] Cut4() {
+        String code = this.getCode();
+        int len = code.length();
+        int quart = len / 4;
+
+        String part1 = code.substring(0, quart);
+        String part2 = code.substring(quart, 2 * quart);
+        String part3 = code.substring(2 * quart, 3 * quart);
+        String part4 = code.substring(3 * quart, len);
+
+        String result1 = part1 + "-".repeat(len - quart);
+        String result2 = "-".repeat(quart) + part2 + "-".repeat(len - 2 * quart);
+        String result3 = "-".repeat(2 * quart) + part3 + "-".repeat(len - 3 * quart);
+        String result4 = "-".repeat(3 * quart) + part4;
+
+        return new ItemShape[] {
+                new ItemShape(result1),
+                new ItemShape(result2),
+                new ItemShape(result3),
+                new ItemShape(result4)
+        };
+    }
 
     public void Color(Color c) {
 

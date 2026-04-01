@@ -36,6 +36,7 @@ public class VueControleur extends JFrame implements Observer {
     private Image icoMine;
     private Image icoHub;
     private Image icoDecoupeuse;
+    private Image icoDecoupeuse4;
     private JComponent grilleIP;
 
     private boolean mousePressed = false; // permet de mémoriser l'état de la souris
@@ -68,6 +69,7 @@ public class VueControleur extends JFrame implements Observer {
         icoMine = new ImageIcon("./data/sprites/buildings/miner.png").getImage();
         icoHub = new ImageIcon("./data/sprites/buildings/hub.png").getImage();
         icoDecoupeuse = new ImageIcon("./data/sprites/buildings/cutter.png").getImage();
+        icoDecoupeuse4 = new ImageIcon("./data/sprites/buildings/cutter-quad.png").getImage();
     }
 
 
@@ -191,10 +193,13 @@ public class VueControleur extends JFrame implements Observer {
                         tabIP[x][y].setBackground(icoHub);
                     }
                     else if (m instanceof Decoupeuse) {
-                        tabIP[x][y].setBackground(icoDecoupeuse);
-
+                        Decoupeuse decoupeuse = (Decoupeuse) m;
+                        if (decoupeuse.type == 1) {
+                            tabIP[x][y].setBackground(icoDecoupeuse);  // cutter.png pour 2 sorties
+                        } else {
+                            tabIP[x][y].setBackground(icoDecoupeuse4); // cutter-quad.png pour 4 sorties
+                        }
                     }
-
                     Item current = m.getCurrent();
 
                     if (current instanceof ItemShape) {

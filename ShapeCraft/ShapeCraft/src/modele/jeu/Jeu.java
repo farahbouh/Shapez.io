@@ -13,13 +13,17 @@ public class Jeu extends Thread{
         plateau = new Plateau();
 
         //Pour tester Decoupeuse
-
-        plateau.setMachine(5, 8, new Decoupeuse(),Direction.North);
+        plateau.setDecoupeuse(5, 8, Direction.North, 2);
+        plateau.setDecoupeuse(10,4,Direction.North,1);
+        plateau.setDecoupeuse(10, 8, Direction.North, 1);
+        //plateau.setMachine(5, 8, new Decoupeuse(),Direction.North);
         //plateau.setHub(6,4,new HubMain());
 
 
         plateau.setMachine(5, 10, new Mine());
+        plateau.setMachine(10, 10, new Mine());
         plateau.setGisement(5,10,"SySgSbSr");
+        plateau.setGisement(10,10,"SySgSbSr");
 
         start();
 
