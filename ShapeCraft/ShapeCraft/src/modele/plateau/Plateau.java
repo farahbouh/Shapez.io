@@ -32,7 +32,7 @@ public class Plateau extends Observable implements Runnable {
 
     //return case d'a côté
     public Case getCase(Case source, Direction d) {
-        
+
         Point p = map.get(source);
         return caseALaPosition(new Point(p.x+d.dx, p.y+d.dy));
 
@@ -50,7 +50,7 @@ public class Plateau extends Observable implements Runnable {
         }
 
     }
-   //pour poser des machines sur le plateau
+    //pour poser des machines sur le plateau
     public void setMachine(int x, int y, Machine m) {
         Point p = new Point(x, y);
         if(caseALaPosition(p).getMachine() == null) {
@@ -77,63 +77,92 @@ public class Plateau extends Observable implements Runnable {
         }
     }
 
+    public void setHub(int x, int y, HubMain hm) {
+        boolean peut_etre_construit = true;
+        int taille =  3;
+        // on verifie qu'il y a rien autour avant de poser
+        for (int i = 0; i < taille; i++) {
+            for (int z = 0; z < taille; z++) {
+                int posX = x + (i - 1);
+                int posY = y + (z - 1);
 
+                // On vérifie qu'on ne dépasse pas la taille de la grille
+                if (posX < 0 || posX >= SIZE_X || posY < 0 || posY >= SIZE_Y) {
+                    peut_etre_construit = false;
+                    break;
+                }
 
-        public void setHub(int x, int y, HubMain hm) {
-            boolean peut_etre_construit = true;
-            int taille =  3;
-            // on verifie qu'il y a rien autour avant de poser
+                // On vérifie si une machine existe déjà sur chaque case
+                if (grilleCases[posX][posY].getMachine() != null) {
+                    peut_etre_construit = false;
+                }
+            }
+        }
+
+        // on construit le hub
+        if (peut_etre_construit) {
             for (int i = 0; i < taille; i++) {
                 for (int z = 0; z < taille; z++) {
                     int posX = x + (i - 1);
                     int posY = y + (z - 1);
 
-                    // On vérifie qu'on ne dépasse pas la taille de la grille
-                    if (posX < 0 || posX >= SIZE_X || posY < 0 || posY >= SIZE_Y) {
-                        peut_etre_construit = false;
-                        break;
-                    }
-
-                    // On vérifie si une machine existe déjà sur chaque case
-                    if (grilleCases[posX][posY].getMachine() != null) {
-                        peut_etre_construit = false;
+                    if (i == 1 && z == 1) {
+                        // position central ou on place le hubmain
+                        grilleCases[posX][posY].setMachine(hm);
+                        setChanged();
+                        notifyObservers();
+                    } else {
+                        // On place tout autour des hubworker
+                        HubWorker hw = new HubWorker(hm);
+                        grilleCases[posX][posY].setMachine(hw);
+                        setChanged();
+                        notifyObservers();
                     }
                 }
             }
 
-            // on construit le hub
-            if (peut_etre_construit) {
-                for (int i = 0; i < taille; i++) {
-                    for (int z = 0; z < taille; z++) {
-                        int posX = x + (i - 1);
-                        int posY = y + (z - 1);
-
-                        if (i == 1 && z == 1) {
-                            // position central ou on place le hubmain
-                            grilleCases[posX][posY].setMachine(hm);
-                            setChanged();
-                            notifyObservers();
-                        } else {
-                            // On place tout autour des hubworker
-                            HubWorker hw = new HubWorker(hm);
-                            grilleCases[posX][posY].setMachine(hw);
-                            setChanged();
-                            notifyObservers();
-                        }
-                    }
-                }
-
-            }
         }
-//pour poser des gisement sur le plateau
+    }
+    //pour poser des gisement sur le plateau
 // le string est de 8lettre pour les 4petites formes de chaque côté + leurs couleurs
     public void setGisement(int x, int y, String code) {
         Point p = new Point(x, y);
 
-            grilleCases[x][y].setGisement(code);
-            setChanged();
-            notifyObservers();
+        grilleCases[x][y].setGisement(code);
+        setChanged();
+        notifyObservers();
 
+    }
+    public void setBalancer(int x, int y, Direction orientation) {
+        int x2 = x, y2 = y;
+
+        // Déterminer la deuxième case (le Balancer occupe 2 cases)
+        if (orientation == Direction.North || orientation == Direction.South) {
+            // Orientation Nord ou Sud : les cases sont alignées horizontalement
+            x2 = x + 1;
+            y2 = y;
+        } else if (orientation == Direction.East || orientation == Direction.West) {
+            // Orientation Est ou Ouest : les cases sont alignées verticalement
+            x2 = x;
+            y2 = y + 1;
+        }
+
+        if (x2 >= 0 && x2 < SIZE_X && y2 >= 0 && y2 < SIZE_Y &&
+                grilleCases[x][y].getMachine() == null && grilleCases[x2][y2].getMachine() == null) {
+
+            Balancer balancer = new Balancer(orientation);
+            balancer.setD(orientation);
+
+            // Ajouter les deux cases au Balancer
+            balancer.addCase(grilleCases[x][y]);
+            balancer.addCase(grilleCases[x2][y2]);
+
+            grilleCases[x][y].setMachine(balancer);
+            grilleCases[x2][y2].setMachine(balancer);
+        }
+
+        setChanged();
+        notifyObservers();
     }
     public void setDecoupeuse(int x, int y, Direction orientation, int type) {
         if (type == 1) {

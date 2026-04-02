@@ -38,18 +38,19 @@ public class VueControleur extends JFrame implements Observer {
     private Image icoDecoupeuse;
     private Image icoDecoupeuse4;
     private JComponent grilleIP;
+    private Image icoBalancer;
     private int lastX = -1;
     private int lastY = -1;
-
-    private boolean mousePressed = false; // permet de mémoriser l'état de la souris
-
-    private ImagePanel[][] tabIP; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône background et front, suivant ce qui est présent dans le modèle)
     private Image icoTapisDroite;
     private Image icoTapisGauche_Droite;
     private Image icoTapisDroite_Gauche;
     private Image icoTapisDroite2;
     private Image icoTapisGauche2;
     private Image icoTapisBas;
+
+    private boolean mousePressed = false; // permet de mémoriser l'état de la souris
+
+    private ImagePanel[][] tabIP; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône background et front, suivant ce qui est présent dans le modèle)
 
 
     public VueControleur(Jeu _jeu) {
@@ -69,21 +70,22 @@ public class VueControleur extends JFrame implements Observer {
 
 
     private void chargerLesIcones() {
-
-        icoRouge = new ImageIcon("./data/sprites/colors/blue.png").getImage();
-        icoTapisBas = new ImageIcon("./data/sprites/buildings/belt_bottom.png").getImage();
-        icoTapisHaut = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
-        icoTapisGauche = new ImageIcon("./data/sprites/buildings/belt_left.png").getImage();
         icoTapisDroite = new ImageIcon("./data/sprites/buildings/belt_right.png").getImage();
         icoTapisGauche_Droite = new ImageIcon("./data/sprites/buildings/belt_gauche_droite.png").getImage();
         icoTapisDroite_Gauche = new ImageIcon("./data/sprites/buildings/belt_droite_gauche.png").getImage();
         icoTapisDroite2 = new ImageIcon("./data/sprites/buildings/belt_right_1.png").getImage();
         icoTapisGauche2 = new ImageIcon("./data/sprites/buildings/belt_left_1.png").getImage();
+
+        icoTapisBas = new ImageIcon("./data/sprites/buildings/belt_bottom.png").getImage();
+        icoRouge = new ImageIcon("./data/sprites/colors/blue.png").getImage();
+        icoTapisHaut = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
+        icoTapisGauche = new ImageIcon("./data/sprites/buildings/belt_left.png").getImage();
         icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
         icoMine = new ImageIcon("./data/sprites/buildings/miner.png").getImage();
         icoHub = new ImageIcon("./data/sprites/buildings/hub.png").getImage();
         icoDecoupeuse = new ImageIcon("./data/sprites/buildings/cutter.png").getImage();
         icoDecoupeuse4 = new ImageIcon("./data/sprites/buildings/cutter-quad.png").getImage();
+        icoBalancer = new ImageIcon("./data/sprites/buildings/balancer.png").getImage();
     }
 
 
@@ -115,9 +117,15 @@ public class VueControleur extends JFrame implements Observer {
                         jeu.press(xx, yy);
                         System.out.println(xx + "-" + yy);
                     }
+                    private Direction calculerDirection(int x1, int y1, int x2, int y2) {
+                        if (x2 > x1) return Direction.East;
+                        if (x2 < x1) return Direction.West;
+                        if (y2 > y1) return Direction.South;
+                        if (y2 < y1) return Direction.North;
+                        return Direction.North; // Par défaut
+                    }
 
                     @Override
-
                     public void mouseEntered(MouseEvent e) {
                         if (SwingUtilities.isLeftMouseButton(e)) {
                             // Si on vient d'une case adjacente
@@ -134,15 +142,7 @@ public class VueControleur extends JFrame implements Observer {
                             lastX = xx;
                             lastY = yy;
                         }
-                    }
 
-                    // Méthode utilitaire pour trouver la direction
-                    private Direction calculerDirection(int x1, int y1, int x2, int y2) {
-                        if (x2 > x1) return Direction.East;
-                        if (x2 < x1) return Direction.West;
-                        if (y2 > y1) return Direction.South;
-                        if (y2 < y1) return Direction.North;
-                        return Direction.North; // Par défaut
                     }
 
                     @Override
@@ -191,7 +191,7 @@ public class VueControleur extends JFrame implements Observer {
         add(grilleIP);
     }
 
-    
+
     /**
      * Il y a une grille du côté du modèle ( jeu.getGrille() ) et une grille du côté de la vue (tabIP)
      */
@@ -232,6 +232,7 @@ public class VueControleur extends JFrame implements Observer {
                         }else if(tapis.getD() == Direction.East && tapis.getDirection1() == Direction.South || tapis.getD() == Direction.South && tapis.getDirection1() == Direction.East){
                             tabIP[x][y].setBackground(icoTapisDroite);
                         }
+
                     } else if (m instanceof Poubelle) {
                         tabIP[x][y].setBackground(icoPoubelle);
                     } else if (m instanceof Mine) {
@@ -240,6 +241,9 @@ public class VueControleur extends JFrame implements Observer {
                         tabIP[x][y].setBackground(icoHub);
                     } else if (m instanceof HubWorker) {
                         tabIP[x][y].setBackground(icoHub);
+
+                    } else if (m instanceof Balancer) {
+                        tabIP[x][y].setBackground(icoBalancer);
                     }
                     else if (m instanceof Decoupeuse) {
                         Decoupeuse decoupeuse = (Decoupeuse) m;
@@ -279,11 +283,11 @@ public class VueControleur extends JFrame implements Observer {
     public void update(Observable o, Object arg) {
 
         SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        mettreAJourAffichage();
-                    }
-                }); 
+            @Override
+            public void run() {
+                mettreAJourAffichage();
+            }
+        });
 
     }
 }

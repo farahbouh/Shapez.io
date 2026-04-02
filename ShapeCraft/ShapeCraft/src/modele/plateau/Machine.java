@@ -4,14 +4,11 @@ import modele.item.Item;
 import modele.item.ItemShape;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 public abstract class Machine implements Runnable {
-    LinkedList<Item> current; // liste des items dans la machine
-
-
+    LinkedList<Item> current;
     Case c;
-    Direction d = Direction.North; // par défaut, pour commencer, tout est orienté au north
+    Direction d = Direction.North;
 
     public Direction getD() {
         return d;
@@ -21,8 +18,7 @@ public abstract class Machine implements Runnable {
         this.d = d;
     }
 
-    public Machine()
-    {
+    public Machine() {
         current = new LinkedList<Item>();
     }
 
@@ -32,7 +28,7 @@ public abstract class Machine implements Runnable {
     }
 
     public void setCase(Case _c) {
-        c= _c;
+        c = _c;
     }
 
     public Item getCurrent() {
@@ -42,57 +38,61 @@ public abstract class Machine implements Runnable {
             return null;
         }
     }
-    public void ajouterItem(Item i) {
+
+    public boolean ajouterItem(Item i) {
         current.add(i);
+        return true;
     }
+
+    // Dans la classe Machine - modifiez la méthode send()
     public void send() {
-        if (current.isEmpty()) return; // Rien à envoyer
+        if (current.isEmpty()) return;
 
-        // On récupère la case devant nous selon l'orientation de la machine
         Case destination = c.plateau.getCase(c, this.d);
+        if (destination == null) return;
 
-        if (destination != null) {
-            Machine m = destination.getMachine();
+        Machine m = destination.getMachine();
+        if (m == null) return;
 
-            if (m != null && m.current.isEmpty()) { // La machine cible a de la place
-                boolean canSend = false;
+        Item item = current.getFirst();
+        boolean peutAccepter = false;
 
-                if (m instanceof Tapis) {
-                    Tapis prochainTapis = (Tapis) m;
-                    // Si ma sortie (this.d) est l'opposé de son entrée, ça connecte
-                    if (prochainTapis.getDirection1() == this.d.inverse()) {
-                        canSend = true;
-                    }
-                } else {
-                    // Si c'est une autre machine (Hub, etc.), on accepte par défaut
-                    canSend = true;
-                }
+        // Logique de capacité (version 2)
+        if (m instanceof Balancer) {
+            peutAccepter = m.current.size() < 2;
+        } else if (m instanceof Decoupeuse) {
+            peutAccepter = true;
+        } else if (m instanceof HubMain) {
+            peutAccepter = m.current.size() < 5;
+        } else if (m instanceof Tapis) {   // ← AJOUT depuis version 1
+            Tapis tapis = (Tapis) m;
+            // Vérifie l'orientation (logique version 1)
+            peutAccepter = tapis.getDirection1() == this.d.inverse();
+        } else {
+            peutAccepter = m.current.isEmpty();
+        }
 
-                if (canSend) {
-                    Item item = current.removeFirst(); // Utilise removeFirst() pour LinkedList
-                    m.current.add(item);
-                }
+        if (peutAccepter) {
+            if (m.ajouterItem(item)) {
+                current.remove(item);
+                System.out.println(getClass().getSimpleName() + " a envoyé " + item + " à " + m.getClass().getSimpleName());
             }
+        } else {
+            System.out.println(getClass().getSimpleName() + " ne peut pas envoyer - machine suivante pleine ou non connectée");
         }
     }
 
     public void work() {
-
-            /*if (current.size() > 0) {
-                ((ItemShape) current.get(0)).rotate();
-
-            }*/
-
-    }; // action de la machine, aucune par défaut
+        // action de la machine, aucune par défaut
+    }
 
     @Override
     public void run() {
-        work(); //delete ??
+        work();
         send();
-
     }
-    public void run2(){
+
+    public void run2() {
         work();
     }
-
 }
