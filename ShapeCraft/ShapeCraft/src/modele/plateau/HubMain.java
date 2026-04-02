@@ -1,39 +1,38 @@
 package modele.plateau;
 
-
 import java.util.HashMap;
 import modele.item.Item;
 import modele.item.ItemShape;
 
 /// zone de livraison principal (au centre, cette relation maitre/esclave permet de créer une structure 3*3)
 public class HubMain extends Machine {
-    private static HashMap<String, Integer> ressourceStocke = new HashMap<>(); //List pour stocker nos item
-    //on choisit un hashmap (comme un dictionnaire en python) de string et int au lieux d'une liste d'item pour une meilleur optimisation du systeme
+    private static HashMap<String, Integer> ressourceStocke = new HashMap<>();
+    private static final int CAPACITE_MAX = 5;
 
-    public void ajouterItem(Item i) { //on crée cette fonction qui serra appellé par les classes esclaves
+    @Override
+    public boolean ajouterItem(Item i) {
+        if (current.size() >= CAPACITE_MAX) {
+            System.out.println("HubMain: FILE PLEINE! impossible d'ajouter " + ((ItemShape)i).getCode());
+            return false;
+        }
         this.current.add(i);
+        return true;
     }
 
     @Override
     public void work() {
-
-        while (!current.isEmpty()) { //on reprend current de machine et on appel que si un item vient dans le hub (finit la boucle tant que tout les items du tour n'ont pas été entré
-            Item arrivee = current.removeFirst(); //removeFirst permet d'envoyé et de supprimer comme pop()
+        while (!current.isEmpty()) {
+            Item arrivee = current.removeFirst();
             if (arrivee != null && arrivee instanceof ItemShape) {
                 String code = ((ItemShape) arrivee).getCode();
-
-                // On incrémente le compteur pour ce code spécifique
                 ressourceStocke.put(code, ressourceStocke.getOrDefault(code, 0) + 1);
-
                 System.out.println("Hub : Reçu " + code + " | Total : " + ressourceStocke.get(code));
             }
-        }}
+        }
+    }
 
     @Override
     public void send() {
-        // On vide send car le Hub ne renvoie pas d'items aux voisins
+        // Le Hub ne renvoie pas d'items
     }
 }
-
-
-
