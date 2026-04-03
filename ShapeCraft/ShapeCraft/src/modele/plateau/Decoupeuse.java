@@ -11,19 +11,37 @@ public class Decoupeuse extends Machine {
     public Decoupeuse(Direction orientation, int type) {
         this.d = orientation;
         this.type = type;
-        // Ne pas appeler getMesCases() ici (c est null)
     }
 
+    // Méthode sans source : on la bloque pour forcer l'usage de la version avec source
     @Override
     public boolean ajouterItem(Item i) {
+        System.out.println("Decoupeuse: appel sans source, refusé");
+        return false;
+    }
+
+    // Validation : l'item n'est accepté que s'il arrive sur la première case (celle d'entrée)
+    @Override
+    public boolean ajouterItem(Item i, Case source) {
+        List<Case> mesCases = getMesCases();
+        if (mesCases.isEmpty()) return false;
+
+        // La première case de la liste est celle qui a été posée en premier (entrée)
+        Case caseEntree = mesCases.get(0);
+        if (!source.equals(caseEntree)) {
+            System.out.println("Decoupeuse: entrée refusée – item envoyé sur une case de droite");
+            return false;
+        }
+
         int capacite = (type == 1) ? 2 : 4;
         if (current.size() < capacite) {
             current.add(i);
-            System.out.println("Decoupeuse: item reçu, file=" + current.size());
+            System.out.println("Decoupeuse: item accepté sur case entrée, file=" + current.size());
             return true;
+        } else {
+            System.out.println("Decoupeuse: file pleine!");
+            return false;
         }
-        System.out.println("Decoupeuse: file pleine!");
-        return false;
     }
 
     @Override
@@ -32,7 +50,7 @@ public class Decoupeuse extends Machine {
         Item item = current.getFirst();
         if (!(item instanceof ItemShape)) return;
         ItemShape itemShape = (ItemShape) item;
-        if (itemShape.getCode().contains("-")) return;
+        if (itemShape.getCode().contains("-")) return; // déjà découpé
 
         ItemShape[] res = (type == 1) ? itemShape.Cut() : itemShape.Cut4();
         int capacite = (type == 1) ? 2 : 4;
@@ -43,6 +61,8 @@ public class Decoupeuse extends Machine {
             current.removeFirst();
             for (ItemShape r : res) current.add(r);
             System.out.println("Decoupeuse: découpage effectué, file=" + current.size());
+        } else {
+            System.out.println("Decoupeuse: pas assez de place pour les morceaux");
         }
     }
 
@@ -64,6 +84,7 @@ public class Decoupeuse extends Machine {
             if (m1 == null || m2 == null) return;
 
             if (peutAccepter(m1) && peutAccepter(m2)) {
+                // Envoi avec la case destination (la machine suivante recevra la source)
                 if (m2.ajouterItem(piece1, sortie2) && m1.ajouterItem(piece2, sortie1)) {
                     current.remove(0);
                     current.remove(0);
@@ -80,16 +101,18 @@ public class Decoupeuse extends Machine {
                 if (destinations[k] == null) return;
             }
             Machine[] machinesDest = new Machine[4];
+            boolean toutesLibres = true;
             for (int k = 0; k < 4; k++) {
-                machinesDest[k] = destinations[k].getMachine();
-                if (machinesDest[k] == null) return;
+                if (destinations[k] != null) {
+                    machinesDest[k] = destinations[k].getMachine();
+                    if (machinesDest[k] == null || !peutAccepter(machinesDest[k])) {
+                        toutesLibres = false;
+                    }
+                } else {
+                    toutesLibres = false;
+                }
             }
-
-            boolean tousAcceptent = true;
-            for (int k = 0; k < 4; k++) {
-                if (!peutAccepter(machinesDest[k])) { tousAcceptent = false; break; }
-            }
-            if (tousAcceptent) {
+            if (toutesLibres) {
                 boolean success = true;
                 for (int k = 0; k < 4; k++) {
                     if (!machinesDest[k].ajouterItem(pieces[k], destinations[k])) {
