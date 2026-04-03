@@ -1,157 +1,128 @@
 package modele.plateau;
 
-import modele.item.ItemShape;
 import modele.item.Item;
+import modele.item.ItemShape;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Decoupeuse extends Machine {
-    public int type;
+    public int type; // 1 = coupe en 2, 2 = coupe en 4
 
     public Decoupeuse(Direction orientation, int type) {
         this.d = orientation;
         this.type = type;
+        // Ne pas appeler getMesCases() ici (c est null)
     }
 
     @Override
     public boolean ajouterItem(Item i) {
-        if (type == 1) {
-            if (current.size() < 2) {
-                this.current.add(i);
-                System.out.println("Decoupeuse: item reçu, file=" + current.size());
-                return true;
-            } else {
-                System.out.println("Decoupeuse: file pleine!");
-                return false;
-            }
-        } else {
-            if (current.size() < 4) {
-                this.current.add(i);
-                System.out.println("Decoupeuse: item reçu, file=" + current.size());
-                return true;
-            } else {
-                System.out.println("Decoupeuse: file pleine!");
-                return false;
-            }
+        int capacite = (type == 1) ? 2 : 4;
+        if (current.size() < capacite) {
+            current.add(i);
+            System.out.println("Decoupeuse: item reçu, file=" + current.size());
+            return true;
         }
+        System.out.println("Decoupeuse: file pleine!");
+        return false;
     }
 
     @Override
     public void work() {
         if (current.isEmpty()) return;
-
         Item item = current.getFirst();
-        if (item != null && item instanceof ItemShape) {
-            ItemShape itemShape = (ItemShape) item;
+        if (!(item instanceof ItemShape)) return;
+        ItemShape itemShape = (ItemShape) item;
+        if (itemShape.getCode().contains("-")) return;
 
-            // Ne découper que si l'item n'est pas déjà découpé
-            if (!itemShape.getCode().contains("-")) {
-                ItemShape[] res;
-                if (type == 1) {
-                    res = itemShape.Cut();
-                } else {
-                    res = itemShape.Cut4();
-                }
-                current.removeFirst();
-
-                for (int j = 0; j < res.length; j++) {
-                    ItemShape r = res[j];
-                    current.add(r);
-                }
-                System.out.println("Decoupeuse: découpage effectué");
-            }
+        ItemShape[] res = (type == 1) ? itemShape.Cut() : itemShape.Cut4();
+        int capacite = (type == 1) ? 2 : 4;
+        int currentSize = current.size();
+        int needed = res.length;
+        int freeAfterRemoval = capacite - (currentSize - 1);
+        if (freeAfterRemoval >= needed) {
+            current.removeFirst();
+            for (ItemShape r : res) current.add(r);
+            System.out.println("Decoupeuse: découpage effectué, file=" + current.size());
         }
     }
 
     @Override
     public void send() {
         if (current.isEmpty()) return;
+        List<Case> mesCases = getMesCases();
+        if (mesCases.isEmpty()) return;
 
         if (type == 1) {
-            if (current.size() >= 2) {
-                ItemShape piece1 = (ItemShape) current.get(0);
-                ItemShape piece2 = (ItemShape) current.get(1);
+            if (current.size() < 2 || mesCases.size() != 2) return;
+            ItemShape piece1 = (ItemShape) current.get(0);
+            ItemShape piece2 = (ItemShape) current.get(1);
+            Case sortie1 = c.plateau.getCase(mesCases.get(0), this.d);
+            Case sortie2 = c.plateau.getCase(mesCases.get(1), this.d);
+            if (sortie1 == null || sortie2 == null) return;
+            Machine m1 = sortie1.getMachine();
+            Machine m2 = sortie2.getMachine();
+            if (m1 == null || m2 == null) return;
 
-                // Récupérer les deux cases de la découpeuse
-                List<Case> mesCases = new ArrayList<>();
-                for (int x = 0; x < c.plateau.SIZE_X; x++) {
-                    for (int y = 0; y < c.plateau.SIZE_Y; y++) {
-                        Case caseCourante = c.plateau.getCases()[x][y];
-                        if (caseCourante.getMachine() == this) {
-                            mesCases.add(caseCourante);
-                        }
-                    }
-                }
-
-                if (mesCases.size() == 2) {
-                    // Pour une découpeuse, les sorties sont devant chaque case dans la direction
-                    Case sortie1 = c.plateau.getCase(mesCases.get(0), this.d);
-                    Case sortie2 = c.plateau.getCase(mesCases.get(1), this.d);
-
-                    Machine m1 = (sortie1 != null) ? sortie1.getMachine() : null;
-                    Machine m2 = (sortie2 != null) ? sortie2.getMachine() : null;
-
-                    if (m1 != null && m1.current.isEmpty() && m2 != null && m2.current.isEmpty()) {
-                        m1.ajouterItem(piece1);
-                        m2.ajouterItem(piece2);
-
-                        current.remove(0);
-                        current.remove(0);
-                        System.out.println("Decoupeuse2: envoi réussi");
-                    }
+            if (peutAccepter(m1) && peutAccepter(m2)) {
+                if (m2.ajouterItem(piece1, sortie2) && m1.ajouterItem(piece2, sortie1)) {
+                    current.remove(0);
+                    current.remove(0);
+                    System.out.println("Decoupeuse2: envoi réussi");
                 }
             }
         } else if (type == 2) {
-            if (current.size() >= 4) {
-                ItemShape[] pieces = new ItemShape[4];
+            if (current.size() < 4 || mesCases.size() != 4) return;
+            ItemShape[] pieces = new ItemShape[4];
+            for (int k = 0; k < 4; k++) pieces[k] = (ItemShape) current.get(k);
+            Case[] destinations = new Case[4];
+            for (int k = 0; k < 4; k++) {
+                destinations[k] = c.plateau.getCase(mesCases.get(k), this.d);
+                if (destinations[k] == null) return;
+            }
+            Machine[] machinesDest = new Machine[4];
+            for (int k = 0; k < 4; k++) {
+                machinesDest[k] = destinations[k].getMachine();
+                if (machinesDest[k] == null) return;
+            }
+
+            boolean tousAcceptent = true;
+            for (int k = 0; k < 4; k++) {
+                if (!peutAccepter(machinesDest[k])) { tousAcceptent = false; break; }
+            }
+            if (tousAcceptent) {
+                boolean success = true;
                 for (int k = 0; k < 4; k++) {
-                    pieces[k] = (ItemShape) current.get(k);
-                }
-
-                // Récupérer les 4 cases de la découpeuse
-                List<Case> mesCases = new ArrayList<>();
-                for (int x = 0; x < c.plateau.SIZE_X; x++) {
-                    for (int y = 0; y < c.plateau.SIZE_Y; y++) {
-                        Case caseCourante = c.plateau.getCases()[x][y];
-                        if (caseCourante.getMachine() == this) {
-                            mesCases.add(caseCourante);
-                        }
+                    if (!machinesDest[k].ajouterItem(pieces[k], destinations[k])) {
+                        success = false;
+                        break;
                     }
                 }
-
-                if (mesCases.size() == 4) {
-                    // Pour chaque case, la sortie est dans la direction de la découpeuse
-                    Case[] destinations = new Case[4];
-                    for (int k = 0; k < 4; k++) {
-                        destinations[k] = c.plateau.getCase(mesCases.get(k), this.d);
-                    }
-
-                    Machine[] machinesDest = new Machine[4];
-                    boolean toutesLibres = true;
-
-                    for (int k = 0; k < 4; k++) {
-                        if (destinations[k] != null) {
-                            machinesDest[k] = destinations[k].getMachine();
-                            if (machinesDest[k] == null || !machinesDest[k].current.isEmpty()) {
-                                toutesLibres = false;
-                            }
-                        } else {
-                            toutesLibres = false;
-                        }
-                    }
-
-                    if (toutesLibres) {
-                        for (int k = 0; k < 4; k++) {
-                            machinesDest[k].ajouterItem(pieces[k]);
-                        }
-
-                        for (int k = 0; k < 4; k++) {
-                            current.remove(0);
-                        }
-                        System.out.println("Decoupeuse4: envoi réussi");
-                    }
+                if (success) {
+                    for (int k = 0; k < 4; k++) current.remove(0);
+                    System.out.println("Decoupeuse4: envoi réussi");
                 }
             }
         }
+    }
+
+    private boolean peutAccepter(Machine m) {
+        if (m == null) return false;
+        if (m instanceof Decoupeuse) {
+            int capa = ((Decoupeuse) m).type == 1 ? 2 : 4;
+            return m.current.size() < capa;
+        }
+        if (m instanceof Balancer) return ((Balancer) m).peutRecevoir(null);
+        if (m instanceof Tapis) return m.current.isEmpty();
+        return m.current.isEmpty();
+    }
+
+    private List<Case> getMesCases() {
+        List<Case> list = new ArrayList<>();
+        for (int x = 0; x < c.plateau.SIZE_X; x++)
+            for (int y = 0; y < c.plateau.SIZE_Y; y++) {
+                Case ca = c.plateau.getCases()[x][y];
+                if (ca.getMachine() == this) list.add(ca);
+            }
+        return list;
     }
 }

@@ -43,7 +43,9 @@ public abstract class Machine implements Runnable {
         current.add(i);
         return true;
     }
-
+    public boolean ajouterItem(Item i, Case source) {
+        return ajouterItem(i);
+    }
     // Dans la classe Machine - modifiez la méthode send()
     public void send() {
         if (current.isEmpty()) return;
@@ -73,12 +75,12 @@ public abstract class Machine implements Runnable {
         }
 
         if (peutAccepter) {
-            if (m.ajouterItem(item)) {
+            if (m.ajouterItem(item, destination)) {
                 current.remove(item);
                 System.out.println(getClass().getSimpleName() + " a envoyé " + item + " à " + m.getClass().getSimpleName());
             }
         } else {
-            System.out.println(getClass().getSimpleName() + " ne peut pas envoyer - machine suivante pleine ou non connectée");
+            //System.out.println(getClass().getSimpleName() + " ne peut pas envoyer - machine suivante pleine ou non connectée");
         }
     }
 

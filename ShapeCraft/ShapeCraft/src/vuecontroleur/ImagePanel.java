@@ -97,7 +97,6 @@ public class ImagePanel extends JPanel {
                                 g.setColor(Color.BLACK);
                                 break;
 
-                            // TODO autres couleurs
                         }
 
                         switch (ss) {
@@ -105,7 +104,7 @@ public class ImagePanel extends JPanel {
                                 g.fillRect(xFront + (widthFront / 2) * ((i >> 1) ^ 1), yFront + (heigthFront / 2) * ((i & 1) ^ ((i >> 1) & 1)), widthFront / 2, heigthFront / 2);
                                 break;
 
-                            case SubShape.Circle:
+                            case SubShape.Quarter_circle:
                                     g.fillArc(xFront, yFront, widthFront, heigthFront, (4-i) * 90, 90);
                                     break;
                             // TODO autres formes

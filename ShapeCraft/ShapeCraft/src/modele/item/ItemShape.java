@@ -13,18 +13,19 @@ public class ItemShape extends Item {
 
     public SubShape[] getSubShapes(Layer l) {
         switch(l) {
-            case one : return new SubShape[] {tabSubShapes[0], tabSubShapes[1], tabSubShapes[2], tabSubShapes[3]};
-
-            // TODO two & three
+            case one : return new SubShape[] {tabSubShapes[0], tabSubShapes[1], tabSubShapes[2], tabSubShapes[3]}; // forme de base
+            case two: return new SubShape[] {tabSubShapes[4], tabSubShapes[5], tabSubShapes[6], tabSubShapes[7]}; // decoration
+            case three: return new SubShape[] {tabSubShapes[8], tabSubShapes[9], tabSubShapes[10], tabSubShapes[11]}; //decoration de decoration
             default:
                 throw new IllegalStateException("Unexpected value: " + l);
         }
     }
 
     public Color[] getColors(Layer l) {
-        switch(l) {
+        switch(l) { //meme sys que subshapes
             case one : return new Color[] {tabColors[0], tabColors[1], tabColors[2], tabColors[3]};
-            // TODO two & three
+            case two : return new Color[] {tabColors[4], tabColors[5], tabColors[6], tabColors[7]};
+            case three: return new Color[] {tabColors[8], tabColors[9], tabColors[10], tabColors[11]};
             default:
                 throw new IllegalStateException("Unexpected value: " + l);
         }
@@ -44,7 +45,7 @@ public class ItemShape extends Item {
             switch (str.charAt(i*2)) {
                 case 'C' : tabSubShapes[i] = SubShape.Square; break;
                 case '-' : tabSubShapes[i] = SubShape.None; break;
-                case 'S' : tabSubShapes[i] = SubShape.Circle; break;
+                case 'S' : tabSubShapes[i] = SubShape.Quarter_circle; break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + str.charAt(i));
             }
