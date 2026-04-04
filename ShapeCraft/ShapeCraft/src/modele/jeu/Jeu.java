@@ -5,6 +5,11 @@ import modele.plateau.*;
 public class Jeu extends Thread {
     private Plateau plateau;
     private Direction directionactuelle = Direction.North;
+    private String machineSelectionnee = "Tapis";
+
+    public void setMachineSelectionnee(String nom) {
+        this.machineSelectionnee = nom;
+    }
 
     public Jeu() {
         plateau = new Plateau();
@@ -50,10 +55,14 @@ public class Jeu extends Thread {
     public Plateau getPlateau() { return plateau; }
 
     public void press(int x, int y) {
-        if (plateau.getCases()[x][y].getMachine() == null)
-            plateau.setMachine(x, y, new Tapis(), directionactuelle);
-        else
-            System.out.println("Case occupée");
+        if (plateau.getCases()[x][y].getMachine() == null) {
+            switch (machineSelectionnee) {
+                case "Mine":       plateau.setMachine(x, y, new Mine()); break;
+                case "Poubelle":   plateau.setMachine(x, y, new Poubelle()); break;
+                case "Decoupeuse": plateau.setDecoupeuse(x, y, directionactuelle, 1); break;
+                default:           plateau.setMachine(x, y, new Tapis(), directionactuelle); break;
+            }
+        }
     }
 
     public void press_r() {

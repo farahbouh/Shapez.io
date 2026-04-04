@@ -211,7 +211,27 @@ public class VueControleur extends JFrame implements Observer {
             }
         }
 
-        add(grilleIP);
+        setLayout(new BorderLayout());
+        add(grilleIP, BorderLayout.CENTER);
+        setSize(sizeX * pxCase, sizeY * pxCase + 60);
+
+// Barre du bas
+        JPanel barre = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
+        barre.setBackground(new Color(40, 40, 40));
+        barre.setPreferredSize(new Dimension(0, 60));
+
+        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Poubelle", "Mixer"};
+        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoPoubelle,icoMixer};
+
+        for (int i = 0; i < noms.length; i++) {
+            final String nom = noms[i];
+            JButton btn = new JButton(nom, new ImageIcon(icones[i].getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
+            btn.setFocusable(false);
+            btn.addActionListener(e -> jeu.setMachineSelectionnee(nom));
+            barre.add(btn);
+        }
+
+        add(barre, BorderLayout.SOUTH);
     }
 
 

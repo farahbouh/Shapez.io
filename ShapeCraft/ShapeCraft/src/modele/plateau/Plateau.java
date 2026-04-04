@@ -167,27 +167,33 @@ public class Plateau extends Observable implements Runnable {
         notifyObservers();
     }
     public void setDecoupeuse(int x, int y, Direction orientation, int type) {
-
+        boolean autoriser = true;
         Point p0[] = new Point[4];
         p0[0] = new Point(x, y);
+        if(caseALaPosition(p0[0]).getMachine() != null) autoriser = false;
         for(int i = 1;i<type*2;i++){
             if (orientation == Direction.East){
                 p0[i] = new Point(x,y-i); //on met à la vertical
+                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
             }
             if (orientation == Direction.West){
                 p0[i] = new Point(x,y+i); //on met à la vertical
+                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
             }
             if (orientation == Direction.North){
                 p0[i] = new Point(x+i,y); //on met à l'horizontal
+                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
+
             }
             if (orientation == Direction.South){
                 p0[i] = new Point(x-i,y); //on met à l'horizontal
+                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
             }
         }
 
 
 for(int i = 0;i<type*2;i++){
-        if(caseALaPosition(p0[i]).getMachine() == null) {
+        if(autoriser) {
                 if(i==0){
                     Decoupeuse d = new Decoupeuse(type);
                     grilleCases[x][y].setMachine(d,orientation);
