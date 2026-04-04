@@ -1,10 +1,11 @@
 package modele.plateau;
 
 import modele.item.Item;
+import modele.item.ItemColor;
 import modele.item.ItemShape;
 
 public class Mixer extends Machine{
-    private Item Couleur;
+    private ItemColor Couleur;
     private Item resultat;
 
     public Mixer(){
@@ -16,7 +17,7 @@ public class Mixer extends Machine{
         return Couleur;
     }
 
-    public void setCouleur(Item couleur) {
+    public void setCouleur(ItemColor couleur) {
         Couleur = couleur;
     }
 
@@ -26,7 +27,7 @@ public class Mixer extends Machine{
     public void work() {
         if(Couleur != null && !current.isEmpty()){
             ItemShape is = (ItemShape) current.removeFirst();
-            String s = is.mixShapeAndColor((ItemShape) Couleur);
+            String s = is.mixShapeAndColor((ItemColor) Couleur);
             current.add(new ItemShape(s));
         }
     }

@@ -1,6 +1,7 @@
 package modele.plateau;
 
 import modele.item.Item;
+import modele.item.ItemColor;
 import modele.item.ItemShape;
 
 import java.util.Random;
@@ -20,6 +21,13 @@ public class Mine extends Machine {
                     ItemShape copie = new ItemShape(((ItemShape) gisement).getCode());
                     current.add(copie);
                 }
+                if (gisement instanceof ItemColor)
+                {
+                    ItemColor copie = new ItemColor(((ItemColor) gisement).getCodecolor());
+                    current.add(copie);
+                }
+
+
             }
         }
     }

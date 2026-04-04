@@ -1,6 +1,7 @@
 package modele.plateau;
 
 import modele.item.Item;
+import modele.item.ItemColor;
 
 public class MixerWorker extends Machine{
     private Mixer master;
@@ -11,7 +12,8 @@ public class MixerWorker extends Machine{
     @Override
     public void work() {
         if(!current.isEmpty() && master.getCouleur() == null){
-            Item i = current.removeFirst();
+            ItemColor i = (ItemColor) current.removeFirst();
+
             master.setCouleur(i);
         }
 

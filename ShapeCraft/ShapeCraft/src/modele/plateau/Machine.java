@@ -64,6 +64,10 @@ public abstract class Machine implements Runnable {
             peutAccepter = m.current.size() < 2;
         } else if (m instanceof Decoupeuse) {
             peutAccepter = true;
+        } else if (m instanceof MixerWorker) {
+            peutAccepter = m.current.size() < 1;
+    }else if (m instanceof Mixer) {
+            peutAccepter = m.current.size() < 1;
         } else if (m instanceof HubWorker) {
             peutAccepter = m.current.size() < 5;
         } else if (m instanceof Tapis) {   // ← AJOUT depuis version 1

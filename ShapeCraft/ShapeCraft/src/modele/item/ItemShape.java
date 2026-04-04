@@ -142,14 +142,14 @@ public class ItemShape extends Item {
 
     }
 
-    public String mixShapeAndColor(ItemShape colorCode) {
+    public String mixShapeAndColor(ItemColor colorCode) {
         // On utilise StringBuilder pour construire la chaîne efficacement
         StringBuilder result = new StringBuilder();
 
         // On parcourt les 8 caractères, 2 par 2 (4 quadrants)
         for (int i = 0; i < 8; i += 2) {
             char shape = this.getCode().charAt(i);
-            char color = colorCode.getCode().charAt(i + 1);
+            char color = colorCode.getCodecolor();
 
             // LOGIQUE :
             // Si la forme est '-', alors il n'y a pas de couleur possible -> '-'

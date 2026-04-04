@@ -7,6 +7,9 @@ package modele.plateau;
 
 
 
+import modele.item.ItemColor;
+import modele.item.ItemShape;
+
 import java.util.HashMap;
 import java.util.Observable;
 
@@ -125,13 +128,13 @@ public class Plateau extends Observable implements Runnable {
     //pour poser des gisement sur le plateau
 // le string est de 8lettre pour les 4petites formes de chaque côté + leurs couleurs
     public void setGisement(int x, int y, String code) {
-        Point p = new Point(x, y);
 
         grilleCases[x][y].setGisement(code);
         setChanged();
         notifyObservers();
 
     }
+
     public void setBalancer(int x, int y, Direction orientation) {
         int x2 = x, y2 = y;
 

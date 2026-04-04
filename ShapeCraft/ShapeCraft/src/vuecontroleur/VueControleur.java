@@ -52,6 +52,13 @@ public class VueControleur extends JFrame implements Observer {
 
     private ImagePanel[][] tabIP; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône background et front, suivant ce qui est présent dans le modèle)
     private Image icoMixer;
+    private Image icoBleu;
+    private Image icoCyan;
+    private Image icoVert;
+    private Image icoViolet;
+    private Image icoGris;
+    private Image icoBlanc;
+    private Image icoJaune;
 
 
     public VueControleur(Jeu _jeu) {
@@ -78,7 +85,7 @@ public class VueControleur extends JFrame implements Observer {
         icoTapisGauche2 = new ImageIcon("./data/sprites/buildings/belt_left_1.png").getImage();
 
         icoTapisBas = new ImageIcon("./data/sprites/buildings/belt_bottom.png").getImage();
-        icoRouge = new ImageIcon("./data/sprites/colors/blue.png").getImage();
+       
         icoTapisHaut = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
         icoTapisGauche = new ImageIcon("./data/sprites/buildings/belt_left.png").getImage();
         icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
@@ -88,6 +95,14 @@ public class VueControleur extends JFrame implements Observer {
         icoDecoupeuse4 = new ImageIcon("./data/sprites/buildings/cutter-quad.png").getImage();
         icoBalancer = new ImageIcon("./data/sprites/buildings/balancer.png").getImage();
         icoMixer = new ImageIcon("./data/sprites/buildings/mixer.png").getImage();
+        icoBleu = new ImageIcon("./data/sprites/colors/blue.png").getImage();
+        icoCyan = new ImageIcon("./data/sprites/colors/cyan.png").getImage();
+        icoVert = new ImageIcon("./data/sprites/colors/green.png").getImage();
+        icoViolet = new ImageIcon("./data/sprites/colors/purple.png").getImage();
+        icoRouge = new ImageIcon("./data/sprites/colors/red.png").getImage();
+        icoGris = new ImageIcon("./data/sprites/colors/uncolored.png").getImage();
+        icoBlanc = new ImageIcon("./data/sprites/colors/white.png").getImage();
+        icoJaune = new ImageIcon("./data/sprites/colors/yellow.png").getImage();
     }
 
 
@@ -264,9 +279,18 @@ public class VueControleur extends JFrame implements Observer {
 
                     if (current instanceof ItemShape) {
                         tabIP[x][y].setShape((ItemShape) current);
-                    }
-                    if (current instanceof ItemColor) {
-                        // tabIP[x][y].setFront(); TODO : placer l'icone des couleurs approprié
+                    }else if (current instanceof ItemColor) {
+                        ItemColor ic = (ItemColor) current;
+                        modele.item.Color couleur = ic.getColor();
+                        //on met modele.item sinon le code peut confondre avec la bibliotheque color
+                        if (couleur == modele.item.Color.Red)         tabIP[x][y].setFront(icoRouge);
+                        else if (couleur == modele.item.Color.Blue)   tabIP[x][y].setFront(icoBleu);
+                        else if (couleur == modele.item.Color.Cyan)   tabIP[x][y].setFront(icoCyan);
+                        else if (couleur == modele.item.Color.Green)  tabIP[x][y].setFront(icoVert);
+                        else if (couleur == modele.item.Color.Purple) tabIP[x][y].setFront(icoViolet);
+                        else if (couleur == modele.item.Color.White)  tabIP[x][y].setFront(icoBlanc);
+                        else if (couleur == modele.item.Color.Yellow) tabIP[x][y].setFront(icoJaune);
+                        else if (couleur == modele.item.Color.Grey)   tabIP[x][y].setFront(icoGris);
                     }
 
 
@@ -277,6 +301,17 @@ public class VueControleur extends JFrame implements Observer {
                     // on prend le string du gisement pour le dessiner
                     if (g instanceof ItemShape) {
                         tabIP[x][y].setShape((ItemShape) g);
+                    } else if (g instanceof ItemColor) {
+                        ItemColor ic = (ItemColor) g;
+                        modele.item.Color couleur = ic.getColor();
+                        if (couleur == modele.item.Color.Red)         tabIP[x][y].setFront(icoRouge);
+                        else if (couleur == modele.item.Color.Blue)   tabIP[x][y].setFront(icoBleu);
+                        else if (couleur == modele.item.Color.Cyan)   tabIP[x][y].setFront(icoCyan);
+                        else if (couleur == modele.item.Color.Green)  tabIP[x][y].setFront(icoVert);
+                        else if (couleur == modele.item.Color.Purple) tabIP[x][y].setFront(icoViolet);
+                        else if (couleur == modele.item.Color.White)  tabIP[x][y].setFront(icoBlanc);
+                        else if (couleur == modele.item.Color.Yellow) tabIP[x][y].setFront(icoJaune);
+                        else if (couleur == modele.item.Color.Grey)   tabIP[x][y].setFront(icoGris);
                     }
                 }
             }

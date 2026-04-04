@@ -6,6 +6,7 @@
 package modele.plateau;
 
 import modele.item.Item;
+import modele.item.ItemColor;
 import modele.item.ItemShape;
 
 public class Case {
@@ -41,11 +42,14 @@ public class Case {
 
         if (code.length() <= 2) {
             // Implémentation simplifiée pour ItemColor si nécessaire
-            // this.gisement = new ItemColor(code);
+            char chode = code.charAt(0);
+            this.gisement = new ItemColor(chode);
         } else {
             this.gisement = new ItemShape(code);
         }
     }
+
+
 
     public Item getGisement() {
         return gisement;
