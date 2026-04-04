@@ -68,7 +68,7 @@ public class Balancer extends Machine {
             return b.itemCase1 == null || b.itemCase2 == null;
         }
         if (m instanceof Decoupeuse) {
-            int capa = ((Decoupeuse) m).type == 1 ? 2 : 4;
+            int capa = ((Decoupeuse) m).getType() == 1 ? 2 : 4;
             return m.current.size() < capa;
         }
         if (m instanceof Tapis) return m.current.isEmpty();

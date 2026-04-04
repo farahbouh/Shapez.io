@@ -35,33 +35,7 @@ public class Tapis extends Machine {
 
     @Override
     public void send() {
-        if (current.isEmpty()) return;
-        Case destination = c.plateau.getCase(c, this.d);
-        if (destination == null) return;
-        Machine machineDest = destination.getMachine();
-        if (machineDest == null) return;
-
-        boolean peutAccepter = false;
-        if (machineDest instanceof Tapis) {
-            Tapis t = (Tapis) machineDest;
-            peutAccepter = t.getDirection1() == this.d.inverse() && t.current.isEmpty();
-        } else if (machineDest instanceof Decoupeuse) {
-            Decoupeuse dec = (Decoupeuse) machineDest;
-            int capa = (dec.type == 1) ? 2 : 4;
-            peutAccepter = dec.current.size() < capa;
-        } else if (machineDest instanceof Balancer) {
-            peutAccepter = ((Balancer) machineDest).peutRecevoir(destination);
-        } else {
-            peutAccepter = machineDest.current.isEmpty();
-        }
-
-        if (peutAccepter) {
-            Item item = current.getFirst();
-            if (machineDest.ajouterItem(item, destination)) {
-                current.removeFirst();
-                System.out.println("Tapis a envoyé un item");
-            }
-        }
+        super.send();
     }
 
     @Override
