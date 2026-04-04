@@ -51,6 +51,7 @@ public class VueControleur extends JFrame implements Observer {
     private boolean mousePressed = false; // permet de mémoriser l'état de la souris
 
     private ImagePanel[][] tabIP; // cases graphique (au moment du rafraichissement, chaque case va être associée à une icône background et front, suivant ce qui est présent dans le modèle)
+    private Image icoMixer;
 
 
     public VueControleur(Jeu _jeu) {
@@ -86,6 +87,7 @@ public class VueControleur extends JFrame implements Observer {
         icoDecoupeuse = new ImageIcon("./data/sprites/buildings/cutter.png").getImage();
         icoDecoupeuse4 = new ImageIcon("./data/sprites/buildings/cutter-quad.png").getImage();
         icoBalancer = new ImageIcon("./data/sprites/buildings/balancer.png").getImage();
+        icoMixer = new ImageIcon("./data/sprites/buildings/mixer.png").getImage();
     }
 
 
@@ -241,6 +243,8 @@ public class VueControleur extends JFrame implements Observer {
 
                     } else if (m instanceof Poubelle) {
                         tabIP[x][y].setBackground(icoPoubelle);
+                    }else if (m instanceof Mixer || m instanceof MixerWorker) {
+                        tabIP[x][y].setBackground(icoMixer);
                     } else if (m instanceof Mine) {
                         tabIP[x][y].setBackground(icoMine);
                     } else if (m instanceof HubMain) {

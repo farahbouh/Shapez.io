@@ -16,7 +16,7 @@ public class Jeu extends Thread {
             String code;
             int choix = x % 6;
             switch (choix) {
-                case 0: code = "CrCgCbCy"; break;
+                case 0: code = "C-C-CbCy"; break;
                 case 1: code = "SpSpSpSp"; break;
                 case 2: code = "SwScSwSc"; break;
                 case 3: code = "CbCrCgCy"; break;
@@ -31,6 +31,7 @@ public class Jeu extends Thread {
         plateau.setDecoupeuse(10, 10, Direction.North, 1);
         plateau.setBalancer(10, 5, Direction.North);
         // Ajout d'une découpeuse type 1 (2 sorties) juste après le balancer (au-dessus)
+        plateau.setMixer(8,8,Direction.North);
         plateau.setDecoupeuse(10, 3, Direction.North, 1);
         plateau.setDecoupeuse(3, 8, Direction.North, 1);
 

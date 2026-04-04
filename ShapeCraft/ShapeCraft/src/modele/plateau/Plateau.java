@@ -7,8 +7,6 @@ package modele.plateau;
 
 
 
-import modele.item.Item;
-
 import java.util.HashMap;
 import java.util.Observable;
 
@@ -203,6 +201,22 @@ for(int i = 0;i<type*2;i++){
 
 
         }}
+
+    }
+    public void setMixer(int x, int y, Direction orientation){
+        Point p = new Point(x, y);
+        Point p2 = new Point(x,y,orientation.next());
+
+
+        if(caseALaPosition(p).getMachine() == null && caseALaPosition(p2).getMachine() == null) {
+            Mixer m = new Mixer();
+            MixerWorker mw = new MixerWorker(m);
+            mw.setD(orientation);
+            grilleCases[x][y].setMachine(m,orientation);
+            grilleCases[p2.x][p2.y].setMachine(mw,orientation);
+            setChanged();
+            notifyObservers();
+        }
 
     }
     /**

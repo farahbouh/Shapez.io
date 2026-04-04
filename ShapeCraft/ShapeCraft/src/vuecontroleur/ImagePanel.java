@@ -92,6 +92,9 @@ public class ImagePanel extends JPanel {
                             case modele.item.Color.Yellow:
                                 g.setColor(Color.YELLOW);
                                 break;
+                            case modele.item.Color.Grey:
+                                g.setColor(new Color(128,128,128));
+                                break;
                             default:
                                 //si on donne aucune couleur alors c'est noir
                                 g.setColor(Color.BLACK);

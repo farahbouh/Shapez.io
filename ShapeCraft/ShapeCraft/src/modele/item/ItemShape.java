@@ -59,7 +59,7 @@ public class ItemShape extends Item {
                 case 'p' : tabColors[i] = Color.Purple; break;
                 case 'c' : tabColors[i] = Color.Cyan; break;
 
-                case '-' : tabColors[i] = null; break;
+                case '-' : tabColors[i] = Color.Grey; break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + str.charAt((i + 1)*2));
             }
@@ -140,6 +140,30 @@ public class ItemShape extends Item {
 
     public void Color(Color c) {
 
+    }
+
+    public String mixShapeAndColor(ItemShape colorCode) {
+        // On utilise StringBuilder pour construire la chaîne efficacement
+        StringBuilder result = new StringBuilder();
+
+        // On parcourt les 8 caractères, 2 par 2 (4 quadrants)
+        for (int i = 0; i < 8; i += 2) {
+            char shape = this.getCode().charAt(i);
+            char color = colorCode.getCode().charAt(i + 1);
+
+            // LOGIQUE :
+            // Si la forme est '-', alors il n'y a pas de couleur possible -> '-'
+            // Sinon, on prend la couleur du deuxième string
+            if (shape == '-') {
+                result.append("-"); // Pas de forme
+                result.append("-"); // Donc pas de couleur
+            } else {
+                result.append(shape); // On garde la forme
+                result.append(color); // On applique la couleur
+            }
+        }
+
+        return result.toString();
     }
 
 }
