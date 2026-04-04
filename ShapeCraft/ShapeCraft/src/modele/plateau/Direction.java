@@ -34,8 +34,4 @@ public enum Direction {
         }
     }
 
-    public int[] addition(int x, int y) {
-        return new int[] { x + this.dx, y + this.dy };
-    }
-
 }

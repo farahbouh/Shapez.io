@@ -127,10 +127,8 @@ public class VueControleur extends JFrame implements Observer {
 
                     @Override
                     public void mouseEntered(MouseEvent e) {
-                        if ((e.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0) { //pour être sur si le bouton est enffoncé
+                        if (SwingUtilities.isLeftMouseButton(e)) {
                             // Si on vient d'une case adjacente
-
-
                             if (lastX != -1 && (lastX != xx || lastY != yy)) {
                                 Direction nouvelleDir = calculerDirection(lastX, lastY, xx, yy);
                                 System.out.println(nouvelleDir);
@@ -150,16 +148,12 @@ public class VueControleur extends JFrame implements Observer {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         mousePressed = true;
-                        lastX = xx;  // ← ajouter
-                        lastY = yy;  // ← ajouter
                         jeu.press(xx, yy);
                     }
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         mousePressed = false;
-                        lastX = -1;
-                        lastY = -1; //à chaque clique on réinitialise
 
                     }
                 });
@@ -251,11 +245,14 @@ public class VueControleur extends JFrame implements Observer {
                     } else if (m instanceof Balancer) {
                         tabIP[x][y].setBackground(icoBalancer);
                     }
-                    else if (m instanceof Decoupeuse || m instanceof  DecoupeuseWorker) {
-                            // afficher la même icône que la Decoupeuse principale
-                            tabIP[x][y].setBackground(icoDecoupeuse);
+                    else if (m instanceof Decoupeuse) {
+                        Decoupeuse decoupeuse = (Decoupeuse) m;
+                        if (decoupeuse.type == 1) {
+                            tabIP[x][y].setBackground(icoDecoupeuse);  // cutter.png pour 2 sorties
+                        } else {
+                            tabIP[x][y].setBackground(icoDecoupeuse4); // cutter-quad.png pour 4 sorties
                         }
-
+                    }
                     Item current = m.getCurrent();
 
                     if (current instanceof ItemShape) {
