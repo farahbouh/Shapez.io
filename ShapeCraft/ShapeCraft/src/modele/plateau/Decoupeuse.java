@@ -2,71 +2,72 @@ package modele.plateau;
 
 import modele.item.Item;
 import modele.item.ItemShape;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Decoupeuse extends Machine {
-    private int type; // 1 = coupe en 2, 2 = coupe en 4
+    private int type;
     private ItemShape[] reserve;
 
     public Decoupeuse(int type) {
-
         this.type = type;
     }
 
-    public void send_worker() { // envoie au autre découpeur en fonction du type
-         if(reserve != null){
-             Case case1 = c.plateau.getCase(c,d.next()); //next car si la direction est nord alors c'est à l'horizonatl
+    @Override
+    public boolean isLibre() {
+        return reserve == null && current.isEmpty();
+    }
 
-             if(case1 != null){
-                 Machine machine1 = case1.getMachine();
-                 if(machine1 != null && machine1.current.isEmpty()){
-                     if(!reserve[1].getCode().equals("--------")) machine1.current.add(reserve[1]);
-                 }
-             }// on a fait pour la premiere case qui va forcement être envoyé qu'importe le type maintenant on fait pour le type 2
-             if (type == 2){
-             Case case2 = case1.plateau.getCase(case1,d.next());
-             Case case3 = case2.plateau.getCase(case2,d.next());
-             if(case2 != null && case3 != null){
-                 Machine machine2 = case2.getMachine();
-                 Machine machine3 = case3.getMachine();
-                 if(machine2 != null && machine3 != null && machine2.current.isEmpty() && machine3.current.isEmpty()){
-                     if(!reserve[2].getCode().equals("--------")) machine2.current.add(reserve[2]);
-                     if(!reserve[3].getCode().equals("--------")) machine3.current.add(reserve[3]);
+    @Override
+    public boolean ajouterItem(Item i, Case source) {
+        if (!isLibre()) return false;
+        current.add(i);
+        return true;
+    }
 
-                 }
-             }
-
-         }}
-         reserve= null;
+    private void send_worker() {
+        if (reserve == null) return;
+        Case case1 = c.plateau.getCase(c, d.next());
+        if (case1 == null) return;
+        Machine machine1 = case1.getMachine();
+        if (machine1 != null && reserve[1] != null && !reserve[1].getCode().equals("--------")) {
+            if (!machine1.ajouterItem(reserve[1], case1)) return;
+        }
+        if (type == 2) {
+            Case case2 = c.plateau.getCase(case1, d.next());
+            if (case2 == null) return;
+            Case case3 = c.plateau.getCase(case2, d.next());
+            if (case3 == null) return;
+            Machine machine2 = case2.getMachine();
+            Machine machine3 = case3.getMachine();
+            if (machine2 != null && reserve[2] != null && !reserve[2].getCode().equals("--------")) {
+                if (!machine2.ajouterItem(reserve[2], case2)) return;
+            }
+            if (machine3 != null && reserve[3] != null && !reserve[3].getCode().equals("--------")) {
+                if (!machine3.ajouterItem(reserve[3], case3)) return;
+            }
+        }
+        reserve = null;
     }
 
     @Override
     public void work() {
-            Item item = getCurrent();  // getCurrent() retourne null si vide
-            if (item != null && item instanceof ItemShape) {
-                ItemShape i = (ItemShape) item;
-                if(type == 1) {
-                    reserve = i.Cut(); // recupere le reste de la forme
-                } else if(type == 2) {
-                    reserve = i.Cut4();
-                }
-
-                current.removeFirst();
-                if(!reserve[0].getCode().equals("--------")) current.add(reserve[0]);
-                this.send_worker();
-
-            }
-
+        if (reserve != null) return;
+        Item item = getCurrent();
+        if (item != null && item instanceof ItemShape) {
+            ItemShape i = (ItemShape) item;
+            if (type == 1) reserve = i.Cut();
+            else reserve = i.Cut4();
+            current.removeFirst();
+            if (!reserve[0].getCode().equals("--------")) current.add(reserve[0]);
+            send_worker();
         }
+    }
 
     @Override
     public void send() {
+        send_worker();
+        if (reserve != null) return;
         super.send();
     }
-
-
-
 
     public int getType() {
         return type;

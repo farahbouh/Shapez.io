@@ -246,7 +246,7 @@ for(int i = 0;i<type*2;i++){
 
 
     @Override
-    public void run() {
+    public void run() {/*
         for (int x = 0; x < SIZE_X; x++) {
             for (int y = 0; y < SIZE_Y; y++) {
                 Case c = grilleCases[x][y];
@@ -262,7 +262,18 @@ for(int i = 0;i<type*2;i++){
                     c.getMachine().run();
                 }
             }
-        }
+        }*/
+        // Phase 1 : toutes les machines travaillent
+        for (int x = 0; x < SIZE_X; x++)
+            for (int y = 0; y < SIZE_Y; y++)
+                if (grilleCases[x][y].getMachine() != null)
+                    grilleCases[x][y].getMachine().work();
+
+        // Phase 2 : toutes les machines envoient
+        for (int x = 0; x < SIZE_X; x++)
+            for (int y = 0; y < SIZE_Y; y++)
+                if (grilleCases[x][y].getMachine() != null)
+                    grilleCases[x][y].getMachine().send();
         setChanged();
         notifyObservers();
     }

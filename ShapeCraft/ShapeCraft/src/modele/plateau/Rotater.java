@@ -11,6 +11,5 @@ public class Rotater extends Machine {
             ((ItemShape) item).rotate();
             System.out.println("Rotater a pivoté une forme");
         }
-        send();
     }
 }

@@ -38,6 +38,4 @@ public class Tapis extends Machine {
         super.send();
     }
 
-    @Override
-    public void run() { send(); }
 }

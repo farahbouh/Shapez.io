@@ -38,7 +38,9 @@ public abstract class Machine implements Runnable {
             return null;
         }
     }
-
+    public boolean isLibre() {
+        return current.isEmpty();
+    }
     public boolean ajouterItem(Item i) {
         current.add(i);
         return true;
@@ -46,6 +48,7 @@ public abstract class Machine implements Runnable {
     public boolean ajouterItem(Item i, Case source) {
         return ajouterItem(i);
     }
+    // Dans la classe Machine - modifiez la méthode send()
     // Dans la classe Machine - modifiez la méthode send()
     public void send() {
         if (current.isEmpty()) return;
@@ -59,26 +62,15 @@ public abstract class Machine implements Runnable {
         Item item = current.getFirst();
         boolean peutAccepter = false;
 
-        // Logique de capacité (version corrigée avec Rotater et Poubelle)
-        if (m instanceof Balancer) {
-            peutAccepter = m.current.size() < 2;
-        } else if (m instanceof Decoupeuse) {
-            peutAccepter = true;
-        } else if (m instanceof MixerWorker) {
-            peutAccepter = m.current.size() < 1;
-        } else if (m instanceof Mixer) {
-            peutAccepter = m.current.size() < 1;
-        } else if (m instanceof HubWorker) {
-            peutAccepter = m.current.size() < 5;
-        } else if (m instanceof Tapis) {
+        if (m instanceof Tapis) {
             Tapis tapis = (Tapis) m;
-            peutAccepter = tapis.getDirection1() == this.d.inverse();
-        } else if (m instanceof Rotater) {
-            peutAccepter = m.current.isEmpty();
+            peutAccepter = tapis.getDirection1() == this.d.inverse() && m.current.isEmpty();
         } else if (m instanceof Poubelle) {
             peutAccepter = true;
+        } else if (m instanceof HubWorker) {
+            peutAccepter = m.current.size() < 5;
         } else {
-            peutAccepter = m.current.isEmpty();
+            peutAccepter = m.isLibre();
         }
 
         if (peutAccepter) {

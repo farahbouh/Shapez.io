@@ -8,9 +8,15 @@ public class BalancerWorker extends Machine {
     public BalancerWorker(Balancer master) {
         this.master = master;
     }
+    @Override
+    public boolean isLibre() {
+        // Le worker n'accepte que si son master n'a pas déjà un itemWorker
+        return current.isEmpty() && master.peutRecevoirWorker();
+    }
 
     @Override
     public boolean ajouterItem(Item i, Case source) {
+        if (!isLibre()) return false;
         current.add(i);
         return true;
     }
