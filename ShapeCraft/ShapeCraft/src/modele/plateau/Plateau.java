@@ -228,6 +228,17 @@ for(int i = 0;i<type*2;i++){
         }
 
     }
+    public void setRotater(int x, int y, Direction orientation) {
+        if (x >= 0 && x < SIZE_X && y >= 0 && y < SIZE_Y &&
+                grilleCases[x][y].getMachine() == null) {
+
+            Rotater rotater = new Rotater();
+            rotater.setD(orientation);
+            grilleCases[x][y].setMachine(rotater, orientation);
+            setChanged();
+            notifyObservers();
+        }
+    }
     /**
      * Indique si p est contenu dans la grille
      */

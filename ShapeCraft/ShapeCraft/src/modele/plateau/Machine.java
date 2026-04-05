@@ -59,21 +59,26 @@ public abstract class Machine implements Runnable {
         Item item = current.getFirst();
         boolean peutAccepter = false;
 
-        // Logique de capacité (version 2)
+        // Logique de capacité (version corrigée avec Rotater et Poubelle)
         if (m instanceof Balancer) {
             peutAccepter = m.current.size() < 2;
         } else if (m instanceof Decoupeuse) {
             peutAccepter = true;
         } else if (m instanceof MixerWorker) {
             peutAccepter = m.current.size() < 1;
-    }else if (m instanceof Mixer) {
+        } else if (m instanceof Mixer) {
             peutAccepter = m.current.size() < 1;
         } else if (m instanceof HubWorker) {
             peutAccepter = m.current.size() < 5;
-        } else if (m instanceof Tapis) {   // ← AJOUT depuis version 1
+        } else if (m instanceof Tapis) {
             Tapis tapis = (Tapis) m;
-            // Vérifie l'orientation (logique version 1)
             peutAccepter = tapis.getDirection1() == this.d.inverse();
+        } else if (m instanceof Rotater) {
+            peutAccepter = m.current.isEmpty();
+        } else if (m instanceof Poubelle) {
+            peutAccepter = true;
+        } else {
+            peutAccepter = m.current.isEmpty();
         }
 
         if (peutAccepter) {
@@ -81,8 +86,6 @@ public abstract class Machine implements Runnable {
                 current.remove(item);
                 System.out.println(getClass().getSimpleName() + " a envoyé " + item + " à " + m.getClass().getSimpleName());
             }
-        } else {
-            //System.out.println(getClass().getSimpleName() + " ne peut pas envoyer - machine suivante pleine ou non connectée");
         }
     }
 

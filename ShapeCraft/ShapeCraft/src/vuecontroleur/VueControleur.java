@@ -39,6 +39,7 @@ public class VueControleur extends JFrame implements Observer {
     private Image icoDecoupeuse4;
     private JComponent grilleIP;
     private Image icoBalancer;
+    private Image icoRotater;
     private int lastX = -1;
     private int lastY = -1;
     private Image icoTapisDroite;
@@ -103,6 +104,7 @@ public class VueControleur extends JFrame implements Observer {
         icoGris = new ImageIcon("./data/sprites/colors/uncolored.png").getImage();
         icoBlanc = new ImageIcon("./data/sprites/colors/white.png").getImage();
         icoJaune = new ImageIcon("./data/sprites/colors/yellow.png").getImage();
+        icoRotater=new ImageIcon("./data/sprites/buildings/rotater.png").getImage();
     }
 
 
@@ -289,6 +291,8 @@ public class VueControleur extends JFrame implements Observer {
 
                     } else if (m instanceof Balancer) {
                         tabIP[x][y].setBackground(icoBalancer);
+                    } else if (m instanceof RotaterWorker|| m instanceof Rotater) {
+                        tabIP[x][y].setBackground(icoRotater);
                     }
                     else if (m instanceof Decoupeuse || m instanceof  DecoupeuseWorker) {
                             // afficher la même icône que la Decoupeuse principale

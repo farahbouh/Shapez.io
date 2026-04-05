@@ -32,6 +32,7 @@ public class Jeu extends Thread {
         }
 
         // === 2. Machines pour tester ===
+        plateau.setRotater(2, 2, Direction.North);
         plateau.setDecoupeuse(5, 10, Direction.North, 2);
         plateau.setDecoupeuse(10, 10, Direction.North, 1);
         plateau.setBalancer(10, 5, Direction.North);
