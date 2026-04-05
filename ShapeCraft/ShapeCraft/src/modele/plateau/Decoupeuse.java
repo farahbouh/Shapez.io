@@ -18,6 +18,10 @@ public class Decoupeuse extends Machine {
 
     @Override
     public boolean ajouterItem(Item i, Case source) {
+        // Optionnel : vérifier la direction (mais ce n'est pas obligatoire)
+        // Si tu veux laisser passer tous les items, supprime cette vérification
+        Case entreeAttendue = c.plateau.getCase(this.c, this.d.inverse());
+        if (source != entreeAttendue) return false;
         if (!isLibre()) return false;
         current.add(i);
         return true;
@@ -25,24 +29,26 @@ public class Decoupeuse extends Machine {
 
     private void send_worker() {
         if (reserve == null) return;
-        Case case1 = c.plateau.getCase(c, d.next());
-        if (case1 == null) return;
-        Machine machine1 = case1.getMachine();
-        if (machine1 != null && reserve[1] != null && !reserve[1].getCode().equals("--------")) {
-            if (!machine1.ajouterItem(reserve[1], case1)) return;
+        // On envoie au premier worker avec cette machine comme source
+        Case firstWorkerCase = c.plateau.getCase(c, d.next());
+        if (firstWorkerCase == null) return;
+        Machine firstWorker = firstWorkerCase.getMachine();
+        if (firstWorker != null && reserve[1] != null && !reserve[1].getCode().equals("--------")) {
+            if (!firstWorker.ajouterItem(reserve[1], this.c)) return;
         }
         if (type == 2) {
-            Case case2 = c.plateau.getCase(case1, d.next());
-            if (case2 == null) return;
-            Case case3 = c.plateau.getCase(case2, d.next());
-            if (case3 == null) return;
-            Machine machine2 = case2.getMachine();
-            Machine machine3 = case3.getMachine();
-            if (machine2 != null && reserve[2] != null && !reserve[2].getCode().equals("--------")) {
-                if (!machine2.ajouterItem(reserve[2], case2)) return;
+            // Envoi aux workers suivants : la source doit être le worker précédent
+            Case secondWorkerCase = c.plateau.getCase(firstWorkerCase, d.next());
+            if (secondWorkerCase == null) return;
+            Machine secondWorker = secondWorkerCase.getMachine();
+            if (secondWorker != null && reserve[2] != null && !reserve[2].getCode().equals("--------")) {
+                if (!secondWorker.ajouterItem(reserve[2], firstWorkerCase)) return;
             }
-            if (machine3 != null && reserve[3] != null && !reserve[3].getCode().equals("--------")) {
-                if (!machine3.ajouterItem(reserve[3], case3)) return;
+            Case thirdWorkerCase = c.plateau.getCase(secondWorkerCase, d.next());
+            if (thirdWorkerCase == null) return;
+            Machine thirdWorker = thirdWorkerCase.getMachine();
+            if (thirdWorker != null && reserve[3] != null && !reserve[3].getCode().equals("--------")) {
+                if (!thirdWorker.ajouterItem(reserve[3], secondWorkerCase)) return;
             }
         }
         reserve = null;

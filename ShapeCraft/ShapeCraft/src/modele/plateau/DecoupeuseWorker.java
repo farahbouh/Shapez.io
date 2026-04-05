@@ -3,6 +3,7 @@ package modele.plateau;
 import modele.item.Item;
 
 public class DecoupeuseWorker extends Machine {
+
     public DecoupeuseWorker() {}
 
     @Override
@@ -12,6 +13,11 @@ public class DecoupeuseWorker extends Machine {
 
     @Override
     public boolean ajouterItem(Item i, Case source) {
+        // Vérifie que la machine source est une Decoupeuse ou un DecoupeuseWorker
+        Machine sourceMachine = source.getMachine();
+        if (!(sourceMachine instanceof Decoupeuse) && !(sourceMachine instanceof DecoupeuseWorker)) {
+            return false; // Refuse si la source n'est pas une découpeuse ou un worker
+        }
         if (!isLibre()) return false;
         current.add(i);
         return true;
@@ -26,8 +32,8 @@ public class DecoupeuseWorker extends Machine {
         Machine m = destination.getMachine();
         if (m == null) return;
         Item item = current.getFirst();
-        // Tente d'ajouter à la machine suivante
-        if (m.ajouterItem(item, destination)) {
+        // Passe la case de ce worker comme source
+        if (m.ajouterItem(item, this.c)) {
             current.removeFirst();
             System.out.println(getClass().getSimpleName() + " a envoyé " + item);
         }
