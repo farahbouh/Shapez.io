@@ -222,9 +222,8 @@ public class VueControleur extends JFrame implements Observer {
         barre.setBackground(new Color(40, 40, 40));
         barre.setPreferredSize(new Dimension(0, 60));
 
-        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Poubelle", "Mixer"};
-        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoPoubelle,icoMixer};
-
+        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Balancer"};
+        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater, icoBalancer};
         for (int i = 0; i < noms.length; i++) {
             final String nom = noms[i];
             JButton btn = new JButton(nom, new ImageIcon(icones[i].getScaledInstance(32, 32, Image.SCALE_SMOOTH)));

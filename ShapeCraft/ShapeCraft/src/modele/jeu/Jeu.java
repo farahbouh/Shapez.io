@@ -61,6 +61,10 @@ public class Jeu extends Thread {
                 case "Mine":       plateau.setMachine(x, y, new Mine()); break;
                 case "Poubelle":   plateau.setMachine(x, y, new Poubelle()); break;
                 case "Decoupeuse": plateau.setDecoupeuse(x, y, directionactuelle, 1); break;
+                case "Decoupeuse2":  plateau.setDecoupeuse(x, y, directionactuelle, 2); break;
+                case "Rotater":      plateau.setRotater(x, y, directionactuelle); break;
+                case "Balancer":     plateau.setBalancer(x, y, directionactuelle); break;
+                case "Mixer":        plateau.setMixer(x, y, directionactuelle); break;
                 default:           plateau.setMachine(x, y, new Tapis(), directionactuelle); break;
             }
         }
