@@ -8,14 +8,17 @@ public class BalancerWorker extends Machine {
     public BalancerWorker(Balancer master) {
         this.master = master;
     }
+
     @Override
     public boolean isLibre() {
-        // Le worker n'accepte que si son master n'a pas déjà un itemWorker
         return current.isEmpty() && master.peutRecevoirWorker();
     }
 
     @Override
     public boolean ajouterItem(Item i, Case source) {
+        // Vérifie que l'item vient de la case située à l'opposé de la direction du worker
+        Case entreeAttendue = c.plateau.getCase(this.c, this.d.inverse());
+        if (source != entreeAttendue) return false;
         if (!isLibre()) return false;
         current.add(i);
         return true;
@@ -30,5 +33,7 @@ public class BalancerWorker extends Machine {
     }
 
     @Override
-    public void send() {}
+    public void send() {
+        // Le worker n'envoie rien directement, c'est le master qui le fait
+    }
 }

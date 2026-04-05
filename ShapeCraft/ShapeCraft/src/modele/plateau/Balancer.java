@@ -11,21 +11,19 @@ public class Balancer extends Machine {
     public Balancer(Direction orientation) { this.d = orientation; }
 
     public void setWorker(BalancerWorker w) { this.worker = w; }
-    // Ajouter une méthode pour que le worker sache si le master attend déjà un itemWorker
+
     public boolean peutRecevoirWorker() {
         return itemWorker == null;
     }
 
-    // isLibre pour l'entrée principale
     @Override
     public boolean isLibre() {
         return itemDirect == null;
     }
-    public boolean aDejaItemWorker() {
-        return itemWorker != null;
-    }
+
     @Override
     public boolean ajouterItem(Item i, Case source) {
+        // Pas de vérification de source pour ne pas casser
         if (itemDirect != null) return false;
         itemDirect = i;
         trySend();
@@ -53,8 +51,9 @@ public class Balancer extends Machine {
 
         if (!m1.isLibre() || !m2.isLibre()) return;
 
-        boolean ok1 = m2.ajouterItem(itemDirect, sortie2);
-        boolean ok2 = m1.ajouterItem(itemWorker, sortie1);
+        // CORRECTION : on passe la case source réelle (celle qui envoie)
+        boolean ok1 = m2.ajouterItem(itemDirect, this.c);   // source = master
+        boolean ok2 = m1.ajouterItem(itemWorker, worker.c); // source = worker
         if (ok1 && ok2) {
             itemDirect = null;
             itemWorker = null;
