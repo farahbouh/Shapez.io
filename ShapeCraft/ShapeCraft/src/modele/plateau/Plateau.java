@@ -137,34 +137,23 @@ public class Plateau extends Observable implements Runnable {
 
     public void setBalancer(int x, int y, Direction orientation) {
         int x2 = x, y2 = y;
-
-        // Déterminer la deuxième case (le Balancer occupe 2 cases)
         if (orientation == Direction.North || orientation == Direction.South) {
-            // Orientation Nord ou Sud : les cases sont alignées horizontalement
             x2 = x + 1;
             y2 = y;
-        } else if (orientation == Direction.East || orientation == Direction.West) {
-            // Orientation Est ou Ouest : les cases sont alignées verticalement
+        } else {
             x2 = x;
             y2 = y + 1;
         }
-
         if (x2 >= 0 && x2 < SIZE_X && y2 >= 0 && y2 < SIZE_Y &&
                 grilleCases[x][y].getMachine() == null && grilleCases[x2][y2].getMachine() == null) {
-
             Balancer balancer = new Balancer(orientation);
-            balancer.setD(orientation);
-
-            // Ajouter les deux cases au Balancer
-            balancer.addCase(grilleCases[x][y]);
-            balancer.addCase(grilleCases[x2][y2]);
-
-            grilleCases[x][y].setMachine(balancer);
-            grilleCases[x2][y2].setMachine(balancer);
+            BalancerWorker worker = new BalancerWorker(balancer);
+            balancer.setWorker(worker);
+            grilleCases[x][y].setMachine(balancer, orientation);
+            grilleCases[x2][y2].setMachine(worker, orientation);
+            setChanged();
+            notifyObservers();
         }
-
-        setChanged();
-        notifyObservers();
     }
     public void setDecoupeuse(int x, int y, Direction orientation, int type) {
         boolean autoriser = true;

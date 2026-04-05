@@ -288,7 +288,7 @@ public class VueControleur extends JFrame implements Observer {
                     } else if (m instanceof HubWorker) {
                         tabIP[x][y].setBackground(icoHub);
 
-                    } else if (m instanceof Balancer) {
+                    } else if (m instanceof Balancer||m instanceof BalancerWorker) {
                         tabIP[x][y].setBackground(icoBalancer);
                     } else if (m instanceof RotaterWorker|| m instanceof Rotater) {
                         tabIP[x][y].setBackground(icoRotater);
