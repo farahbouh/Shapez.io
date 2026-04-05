@@ -52,10 +52,8 @@ public abstract class Machine implements Runnable {
     // Dans la classe Machine - modifiez la méthode send()
     public void send() {
         if (current.isEmpty()) return;
-
         Case destination = c.plateau.getCase(c, this.d);
         if (destination == null) return;
-
         Machine m = destination.getMachine();
         if (m == null) return;
 
@@ -74,7 +72,8 @@ public abstract class Machine implements Runnable {
         }
 
         if (peutAccepter) {
-            if (m.ajouterItem(item, destination)) {
+            // ICI : on passe this.c (la case de la machine qui envoie) au lieu de destination
+            if (m.ajouterItem(item, this.c)) {
                 current.remove(item);
                 System.out.println(getClass().getSimpleName() + " a envoyé " + item + " à " + m.getClass().getSimpleName());
             }
