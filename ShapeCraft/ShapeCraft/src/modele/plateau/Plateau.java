@@ -160,46 +160,27 @@ public class Plateau extends Observable implements Runnable {
         Point p0[] = new Point[4];
         p0[0] = new Point(x, y);
         if(caseALaPosition(p0[0]).getMachine() != null) autoriser = false;
-        for(int i = 1;i<type*2;i++){
-            if (orientation == Direction.East){
-                p0[i] = new Point(x,y-i); //on met à la vertical
-                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
-            }
-            if (orientation == Direction.West){
-                p0[i] = new Point(x,y+i); //on met à la vertical
-                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
-            }
-            if (orientation == Direction.North){
-                p0[i] = new Point(x+i,y); //on met à l'horizontal
-                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
-
-            }
-            if (orientation == Direction.South){
-                p0[i] = new Point(x-i,y); //on met à l'horizontal
-                if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
-            }
+        for(int i = 1; i < type*2; i++){
+            if (orientation == Direction.East)   { p0[i] = new Point(x, y-i); }
+            if (orientation == Direction.West)   { p0[i] = new Point(x, y+i); }
+            if (orientation == Direction.North)  { p0[i] = new Point(x+i, y); }
+            if (orientation == Direction.South)  { p0[i] = new Point(x-i, y); }
+            if(caseALaPosition(p0[i]).getMachine() != null) autoriser = false;
         }
 
-
-for(int i = 0;i<type*2;i++){
         if(autoriser) {
-                if(i==0){
-                    Decoupeuse d = new Decoupeuse(type);
-                    grilleCases[x][y].setMachine(d,orientation);
-                    setChanged();
-                    notifyObservers();
-                } else{
-                    DecoupeuseWorker w = new DecoupeuseWorker();
-                    grilleCases[p0[i].x][p0[i].y].setMachine(w,orientation);
-                    setChanged();
-                    notifyObservers();
-                }
+            Decoupeuse d = new Decoupeuse(type);
+            grilleCases[x][y].setMachine(d, orientation);
+            setChanged();
+            notifyObservers();
 
-
-
-
-        }}
-
+            for(int i = 1; i < type*2; i++){
+                DecoupeuseWorker w = new DecoupeuseWorker(d); // on passe le master
+                grilleCases[p0[i].x][p0[i].y].setMachine(w, orientation);
+                setChanged();
+                notifyObservers();
+            }
+        }
     }
     public void setMixer(int x, int y, Direction orientation){
         Point p = new Point(x, y);

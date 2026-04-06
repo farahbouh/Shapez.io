@@ -4,8 +4,18 @@ import modele.item.Item;
 
 public class DecoupeuseWorker extends Machine {
 
-    public DecoupeuseWorker() {}
+    public DecoupeuseWorker(Decoupeuse master) {
+        this.master = master;
+    }
+    private Decoupeuse master;
 
+    public void setMaster(Decoupeuse master) {
+        this.master = master;
+    }
+
+    public Decoupeuse getMaster() {
+        return master;
+    }
     @Override
     public boolean isLibre() {
         return current.isEmpty();

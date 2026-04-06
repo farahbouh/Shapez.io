@@ -292,12 +292,20 @@ public class VueControleur extends JFrame implements Observer {
                         tabIP[x][y].setBackground(icoBalancer);
                     } else if (m instanceof RotaterWorker|| m instanceof Rotater) {
                         tabIP[x][y].setBackground(icoRotater);
-                    }
-                    else if (m instanceof Decoupeuse || m instanceof  DecoupeuseWorker) {
-                            // afficher la même icône que la Decoupeuse principale
+                    } else if (m instanceof Decoupeuse || m instanceof DecoupeuseWorker) {
+                        int type = 1;
+                        if (m instanceof Decoupeuse) {
+                            type = ((Decoupeuse) m).getType();
+                        } else {
+                            Decoupeuse master = ((DecoupeuseWorker) m).getMaster();
+                            if (master != null) type = master.getType();
+                        }
+                        if (type == 2) {
+                            tabIP[x][y].setBackground(icoDecoupeuse4);
+                        } else {
                             tabIP[x][y].setBackground(icoDecoupeuse);
                         }
-
+                    }
                     Item current = m.getCurrent();
 
                     if (current instanceof ItemShape) {
