@@ -16,9 +16,6 @@ public class BalancerWorker extends Machine {
 
     @Override
     public boolean ajouterItem(Item i, Case source) {
-        // Vérifie que l'item vient de la case située à l'opposé de la direction du worker
-        Case entreeAttendue = c.plateau.getCase(this.c, this.d.inverse());
-        if (source != entreeAttendue) return false;
         if (!isLibre()) return false;
         current.add(i);
         return true;
