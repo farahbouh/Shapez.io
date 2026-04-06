@@ -175,7 +175,7 @@ public class Plateau extends Observable implements Runnable {
             notifyObservers();
 
             for(int i = 1; i < type*2; i++){
-                DecoupeuseWorker w = new DecoupeuseWorker(d); // on passe le master
+                DecoupeuseWorker w = new DecoupeuseWorker(d,i); // on passe le master
                 grilleCases[p0[i].x][p0[i].y].setMachine(w, orientation);
                 setChanged();
                 notifyObservers();

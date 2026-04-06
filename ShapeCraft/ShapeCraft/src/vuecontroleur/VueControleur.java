@@ -86,7 +86,7 @@ public class VueControleur extends JFrame implements Observer {
         icoTapisGauche2 = new ImageIcon("./data/sprites/buildings/belt_left_1.png").getImage();
 
         icoTapisBas = new ImageIcon("./data/sprites/buildings/belt_bottom.png").getImage();
-       
+
         icoTapisHaut = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
         icoTapisGauche = new ImageIcon("./data/sprites/buildings/belt_left.png").getImage();
         icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
@@ -244,7 +244,7 @@ public class VueControleur extends JFrame implements Observer {
 
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
-
+                tabIP[x][y].resetTile();
                 tabIP[x][y].setBackground((Image) null);
 
                 tabIP[x][y].setFront(null);
@@ -279,8 +279,13 @@ public class VueControleur extends JFrame implements Observer {
 
                     } else if (m instanceof Poubelle) {
                         tabIP[x][y].setBackground(icoPoubelle);
-                    }else if (m instanceof Mixer || m instanceof MixerWorker) {
+                    } else if (m instanceof Mixer) {
                         tabIP[x][y].setBackground(icoMixer);
+                        tabIP[x][y].setTile(0, 0, 2, 1); // case principale = gauche
+                    } else if (m instanceof MixerWorker) {
+                        tabIP[x][y].setBackground(icoMixer);
+                        tabIP[x][y].setTile(1, 0, 2, 1); // case worker = droite
+
                     } else if (m instanceof Mine) {
                         tabIP[x][y].setBackground(icoMine);
                     } else if (m instanceof HubMain) {
@@ -288,24 +293,29 @@ public class VueControleur extends JFrame implements Observer {
                     } else if (m instanceof HubWorker) {
                         tabIP[x][y].setBackground(icoHub);
 
-                    } else if (m instanceof Balancer||m instanceof BalancerWorker) {
+                    } else if (m instanceof Balancer) {
                         tabIP[x][y].setBackground(icoBalancer);
+                        tabIP[x][y].setTile(0, 0, 2, 1);
+                    } else if (m instanceof BalancerWorker) {
+                        tabIP[x][y].setBackground(icoBalancer);
+                        tabIP[x][y].setTile(1, 0, 2, 1);
                     } else if (m instanceof RotaterWorker|| m instanceof Rotater) {
                         tabIP[x][y].setBackground(icoRotater);
-                    } else if (m instanceof Decoupeuse || m instanceof DecoupeuseWorker) {
-                        int type = 1;
-                        if (m instanceof Decoupeuse) {
-                            type = ((Decoupeuse) m).getType();
-                        } else {
-                            Decoupeuse master = ((DecoupeuseWorker) m).getMaster();
-                            if (master != null) type = master.getType();
-                        }
-                        if (type == 2) {
-                            tabIP[x][y].setBackground(icoDecoupeuse4);
-                        } else {
-                            tabIP[x][y].setBackground(icoDecoupeuse);
-                        }
-                    }
+                    }  else if (m instanceof Decoupeuse) {
+                    int type = ((Decoupeuse) m).getType();
+                    Image ico = type == 2 ? icoDecoupeuse4 : icoDecoupeuse;
+                    tabIP[x][y].setBackground(ico);
+                    tabIP[x][y].setTile(0, 0, type * 2, 1); // ← manquait
+
+                } else if (m instanceof DecoupeuseWorker) {
+                    Decoupeuse master = ((DecoupeuseWorker) m).getParent();
+                    int type = master != null ? master.getType() : 1;
+                    int index = ((DecoupeuseWorker) m).getIndex(); // ← nécessite getIndex()
+                    Image ico = type == 2 ? icoDecoupeuse4 : icoDecoupeuse;
+                    tabIP[x][y].setBackground(ico);
+                    tabIP[x][y].setTile(index, 0, type * 2, 1); // ← manquait
+                }
+
                     Item current = m.getCurrent();
 
                     if (current instanceof ItemShape) {

@@ -4,17 +4,21 @@ import modele.item.Item;
 
 public class DecoupeuseWorker extends Machine {
 
-    public DecoupeuseWorker(Decoupeuse master) {
-        this.master = master;
-    }
-    private Decoupeuse master;
+    private Decoupeuse parent;
+    private int index; // 1, 2 ou 3
 
-    public void setMaster(Decoupeuse master) {
-        this.master = master;
+    public DecoupeuseWorker(Decoupeuse parent, int index) {
+        this.parent = parent;
+        this.index = index;
+    }
+    public int getIndex() { return index; }
+
+    public void setParent(Decoupeuse parent) {
+        this.parent = parent;
     }
 
-    public Decoupeuse getMaster() {
-        return master;
+    public Decoupeuse getParent() {
+        return parent;
     }
     @Override
     public boolean isLibre() {
