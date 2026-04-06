@@ -29,28 +29,45 @@ public class Decoupeuse extends Machine {
 
     private void send_worker() {
         if (reserve == null) return;
-        // On envoie au premier worker avec cette machine comme source
+
         Case firstWorkerCase = c.getVoisine(d.next());
         if (firstWorkerCase == null) return;
         Machine firstWorker = firstWorkerCase.getMachine();
-        if (firstWorker != null && reserve[1] != null && !reserve[1].getCode().equals("--------")) {
-            if (!firstWorker.ajouterItem(reserve[1], this.c)) return;
+
+        // Vérifier que TOUT est libre avant d'envoyer quoi que ce soit
+        if (reserve[1] != null && !reserve[1].getCode().equals("--------")) {
+            if (firstWorker == null || !firstWorker.isLibre()) return;
         }
+
         if (type == 2) {
-            // Envoi aux workers suivants : la source doit être le worker précédent
-            Case secondWorkerCase =c.getVoisine(d.next());
+            Case secondWorkerCase = firstWorkerCase.getVoisine(d.next());
             if (secondWorkerCase == null) return;
             Machine secondWorker = secondWorkerCase.getMachine();
-            if (secondWorker != null && reserve[2] != null && !reserve[2].getCode().equals("--------")) {
-                if (!secondWorker.ajouterItem(reserve[2], firstWorkerCase)) return;
+
+            if (reserve[2] != null && !reserve[2].getCode().equals("--------")) {
+                if (secondWorker == null || !secondWorker.isLibre()) return;
             }
-            Case thirdWorkerCase = c.getVoisine(d.next());
+
+            Case thirdWorkerCase = secondWorkerCase.getVoisine(d.next());
             if (thirdWorkerCase == null) return;
             Machine thirdWorker = thirdWorkerCase.getMachine();
-            if (thirdWorker != null && reserve[3] != null && !reserve[3].getCode().equals("--------")) {
-                if (!thirdWorker.ajouterItem(reserve[3], secondWorkerCase)) return;
+
+            if (reserve[3] != null && !reserve[3].getCode().equals("--------")) {
+                if (thirdWorker == null || !thirdWorker.isLibre()) return;
             }
+
+            // Tout est libre : on envoie à tous
+            if (reserve[1] != null && !reserve[1].getCode().equals("--------"))
+                firstWorker.ajouterItem(reserve[1], this.c);
+            if (reserve[2] != null && !reserve[2].getCode().equals("--------"))
+                secondWorker.ajouterItem(reserve[2], firstWorkerCase);
+            if (reserve[3] != null && !reserve[3].getCode().equals("--------"))
+                thirdWorker.ajouterItem(reserve[3], secondWorkerCase);
+        } else {
+            if (reserve[1] != null && !reserve[1].getCode().equals("--------"))
+                firstWorker.ajouterItem(reserve[1], this.c);
         }
+
         reserve = null;
     }
 
