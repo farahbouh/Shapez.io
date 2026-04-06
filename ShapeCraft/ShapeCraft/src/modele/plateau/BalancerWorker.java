@@ -17,6 +17,11 @@ public class BalancerWorker extends Machine {
     @Override
     public boolean ajouterItem(Item i, Case source) {
         if (!isLibre()) return false;
+
+        // La source doit être la case juste derrière (entrée = direction inverse)
+        Case entreeAttendue = c.getVoisine(d.inverse());
+        if (source != entreeAttendue) return false;
+
         current.add(i);
         return true;
     }

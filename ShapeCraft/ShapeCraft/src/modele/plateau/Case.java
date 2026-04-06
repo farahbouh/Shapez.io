@@ -37,6 +37,16 @@ public class Case {
         plateau = _plateau;
         gisement = null;
     }
+    public Case getVoisine(Direction d) {
+        if (plateau == null) return null;
+        return plateau.getCase(this, d);
+    }
+
+    public Machine getMachineVoisine(Direction d) {
+        Case c = getVoisine(d);
+        if (c == null) return null;
+        return c.getMachine();
+    }
 
     public void setGisement(String code) {
 

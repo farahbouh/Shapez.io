@@ -20,7 +20,7 @@ public class Decoupeuse extends Machine {
     public boolean ajouterItem(Item i, Case source) {
         // Optionnel : vérifier la direction (mais ce n'est pas obligatoire)
         // Si tu veux laisser passer tous les items, supprime cette vérification
-        Case entreeAttendue = c.plateau.getCase(this.c, this.d.inverse());
+        Case entreeAttendue = c.getVoisine(this.d.inverse());
         if (source != entreeAttendue) return false;
         if (!isLibre()) return false;
         current.add(i);
@@ -30,7 +30,7 @@ public class Decoupeuse extends Machine {
     private void send_worker() {
         if (reserve == null) return;
         // On envoie au premier worker avec cette machine comme source
-        Case firstWorkerCase = c.plateau.getCase(c, d.next());
+        Case firstWorkerCase = c.getVoisine(d.next());
         if (firstWorkerCase == null) return;
         Machine firstWorker = firstWorkerCase.getMachine();
         if (firstWorker != null && reserve[1] != null && !reserve[1].getCode().equals("--------")) {
@@ -38,13 +38,13 @@ public class Decoupeuse extends Machine {
         }
         if (type == 2) {
             // Envoi aux workers suivants : la source doit être le worker précédent
-            Case secondWorkerCase = c.plateau.getCase(firstWorkerCase, d.next());
+            Case secondWorkerCase =c.getVoisine(d.next());
             if (secondWorkerCase == null) return;
             Machine secondWorker = secondWorkerCase.getMachine();
             if (secondWorker != null && reserve[2] != null && !reserve[2].getCode().equals("--------")) {
                 if (!secondWorker.ajouterItem(reserve[2], firstWorkerCase)) return;
             }
-            Case thirdWorkerCase = c.plateau.getCase(secondWorkerCase, d.next());
+            Case thirdWorkerCase = c.getVoisine(d.next());
             if (thirdWorkerCase == null) return;
             Machine thirdWorker = thirdWorkerCase.getMachine();
             if (thirdWorker != null && reserve[3] != null && !reserve[3].getCode().equals("--------")) {

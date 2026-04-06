@@ -27,7 +27,7 @@ public class DecoupeuseWorker extends Machine {
     public void send() {
         if (current.isEmpty()) return;
         if (c == null) return;
-        Case destination = c.plateau.getCase(c, this.d);
+        Case destination = c.getVoisine(this.d);
         if (destination == null) return;
         Machine m = destination.getMachine();
         if (m == null) return;

@@ -23,8 +23,12 @@ public class Balancer extends Machine {
 
     @Override
     public boolean ajouterItem(Item i, Case source) {
-        // Pas de vérification de source pour ne pas casser
         if (itemDirect != null) return false;
+
+        // La source doit être la case juste derrière (entrée = direction inverse)
+        Case entreeAttendue = c.getVoisine(d.inverse());
+        if (source != entreeAttendue) return false;
+
         itemDirect = i;
         trySend();
         return true;
@@ -39,10 +43,10 @@ public class Balancer extends Machine {
 
     private void trySend() {
         if (itemDirect == null || itemWorker == null) return;
-        if (c == null || worker == null || worker.c == null) return;
+        if (worker == null || worker.c == null) return;
 
-        Case sortie1 = c.plateau.getCase(this.c, this.d);
-        Case sortie2 = c.plateau.getCase(worker.c, this.d);
+        Case sortie1 = c.getVoisine(d);
+        Case sortie2 = worker.c.getVoisine(d);
         if (sortie1 == null || sortie2 == null) return;
 
         Machine m1 = sortie1.getMachine();
@@ -51,9 +55,8 @@ public class Balancer extends Machine {
 
         if (!m1.isLibre() || !m2.isLibre()) return;
 
-        // CORRECTION : on passe la case source réelle (celle qui envoie)
-        boolean ok1 = m2.ajouterItem(itemDirect, this.c);   // source = master
-        boolean ok2 = m1.ajouterItem(itemWorker, worker.c); // source = worker
+        boolean ok1 = m2.ajouterItem(itemDirect, this.c);
+        boolean ok2 = m1.ajouterItem(itemWorker, worker.c);
         if (ok1 && ok2) {
             itemDirect = null;
             itemWorker = null;
