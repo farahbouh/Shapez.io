@@ -136,7 +136,7 @@ public class Plateau extends Observable implements Runnable {
     }
 
     public void setBalancer(int x, int y, Direction orientation) {
-        int x2 = x, y2 = y;
+        int x2, y2;
         if (orientation == Direction.North || orientation == Direction.South) {
             x2 = x + 1;
             y2 = y;
@@ -147,7 +147,7 @@ public class Plateau extends Observable implements Runnable {
         if (x2 >= 0 && x2 < SIZE_X && y2 >= 0 && y2 < SIZE_Y &&
                 grilleCases[x][y].getMachine() == null && grilleCases[x2][y2].getMachine() == null) {
             Balancer balancer = new Balancer(orientation);
-            BalancerWorker worker = new BalancerWorker(balancer);
+            BalancerWorker worker = new BalancerWorker(balancer, orientation); // ← ajout
             balancer.setWorker(worker);
             grilleCases[x][y].setMachine(balancer, orientation);
             grilleCases[x2][y2].setMachine(worker, orientation);

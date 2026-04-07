@@ -3,39 +3,39 @@ package modele.plateau;
 import modele.item.Item;
 
 public class BalancerWorker extends Machine {
-    private Balancer master;
+    private Balancer parent;
 
-    public BalancerWorker(Balancer master) {
-        this.master = master;
+    public BalancerWorker(Balancer parent, Direction orientation) {
+        this.parent = parent;
+        this.d = orientation;
     }
 
     @Override
-    public boolean isLibre() {
-        return current.isEmpty() && master.peutRecevoirWorker();
+    public boolean estLibre() {
+        return current.isEmpty();
     }
 
     @Override
     public boolean ajouterItem(Item i, Case source) {
-        if (!isLibre()) return false;
+        // On vérifie que le parent peut recevoir et que le worker est vide
+        if (!current.isEmpty() || !parent.peutRecevoirWorker()) return false;
 
-        // La source doit être la case juste derrière (entrée = direction inverse)
-        Case entreeAttendue = c.getVoisine(d.inverse());
-        if (source != entreeAttendue) return false;
-
+        //verifier si l'item vient de la bonne entree
+        // si il vient de la bonne entree alors on l'ajoute dans la file d'attente
+        if (source != c.getVoisine(d.inverse())) return false;
         current.add(i);
         return true;
     }
 
     @Override
     public void work() {
-        if (!current.isEmpty()) {
-            Item i = current.removeFirst();
-            master.recevoirDuWorker(i);
+        if (current.isEmpty()) return; // si file vide on fait rien
+        Item i = current.removeFirst(); //suppresion de la fil et traitement de l'element
+        if (!parent.recevoirDuWorker(i)) { // si Balancerplein on l'ajoute a la lsite a nouveau
+            current.addFirst(i);
         }
     }
 
     @Override
-    public void send() {
-        // Le worker n'envoie rien directement, c'est le master qui le fait
-    }
+    public void send() {} // le maitre gère l'envoi
 }

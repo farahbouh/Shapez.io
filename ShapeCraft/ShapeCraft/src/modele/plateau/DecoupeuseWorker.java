@@ -21,7 +21,7 @@ public class DecoupeuseWorker extends Machine {
         return parent;
     }
     @Override
-    public boolean isLibre() {
+    public boolean estLibre() {
         return current.isEmpty();
     }
 
@@ -32,7 +32,7 @@ public class DecoupeuseWorker extends Machine {
         if (!(sourceMachine instanceof Decoupeuse) && !(sourceMachine instanceof DecoupeuseWorker)) {
             return false; // Refuse si la source n'est pas une découpeuse ou un worker
         }
-        if (!isLibre()) return false;
+        if (!estLibre()) return false;
         current.add(i);
         return true;
     }

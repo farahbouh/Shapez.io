@@ -38,7 +38,10 @@ public class Case {
         gisement = null;
     }
     public Case getVoisine(Direction d) {
-        if (plateau == null) return null;
+        if (plateau == null)
+        {
+            return null;
+        }
         return plateau.getCase(this, d);
     }
 

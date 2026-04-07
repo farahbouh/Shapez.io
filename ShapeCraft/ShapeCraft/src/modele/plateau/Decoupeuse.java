@@ -12,7 +12,7 @@ public class Decoupeuse extends Machine {
     }
 
     @Override
-    public boolean isLibre() {
+    public boolean estLibre() {
         return reserve == null && current.isEmpty();
     }
 
@@ -22,7 +22,7 @@ public class Decoupeuse extends Machine {
         // Si tu veux laisser passer tous les items, supprime cette vérification
         Case entreeAttendue = c.getVoisine(this.d.inverse());
         if (source != entreeAttendue) return false;
-        if (!isLibre()) return false;
+        if (!estLibre()) return false;
         current.add(i);
         return true;
     }
@@ -36,7 +36,7 @@ public class Decoupeuse extends Machine {
 
         // Vérifier que TOUT est libre avant d'envoyer quoi que ce soit
         if (reserve[1] != null && !reserve[1].getCode().equals("--------")) {
-            if (firstWorker == null || !firstWorker.isLibre()) return;
+            if (firstWorker == null || !firstWorker.estLibre()) return;
         }
 
         if (type == 2) {
@@ -45,7 +45,7 @@ public class Decoupeuse extends Machine {
             Machine secondWorker = secondWorkerCase.getMachine();
 
             if (reserve[2] != null && !reserve[2].getCode().equals("--------")) {
-                if (secondWorker == null || !secondWorker.isLibre()) return;
+                if (secondWorker == null || !secondWorker.estLibre()) return;
             }
 
             Case thirdWorkerCase = secondWorkerCase.getVoisine(d.next());
@@ -53,7 +53,7 @@ public class Decoupeuse extends Machine {
             Machine thirdWorker = thirdWorkerCase.getMachine();
 
             if (reserve[3] != null && !reserve[3].getCode().equals("--------")) {
-                if (thirdWorker == null || !thirdWorker.isLibre()) return;
+                if (thirdWorker == null || !thirdWorker.estLibre()) return;
             }
 
             // Tout est libre : on envoie à tous

@@ -1,7 +1,6 @@
 package modele.plateau;
 
 import modele.item.Item;
-import modele.item.ItemShape;
 
 import java.util.LinkedList;
 
@@ -38,7 +37,7 @@ public abstract class Machine implements Runnable {
             return null;
         }
     }
-    public boolean isLibre() {
+    public boolean estLibre() {
         return current.isEmpty();
     }
     public boolean ajouterItem(Item i) {
@@ -68,7 +67,7 @@ public abstract class Machine implements Runnable {
         } else if (m instanceof HubWorker) {
             peutAccepter = m.current.size() < 5;
         } else {
-            peutAccepter = m.isLibre();
+            peutAccepter = m.estLibre();
         }
 
         if (peutAccepter) {
