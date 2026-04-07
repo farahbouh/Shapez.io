@@ -15,9 +15,9 @@ public class Jeu extends Thread {
         plateau = new Plateau();
         int ligneBas = Plateau.SIZE_Y - 1; // dernière ligne (15 si SIZE_Y=16)
 
-        // === 1. Mines et gisements sur toute la ligne du bas ===
+        // Mines et gisements sur toute la ligne du bas
         for (int x = 0; x < Plateau.SIZE_X; x++) {
-            plateau.setMachine(x, ligneBas, new Mine());
+            //plateau.setMachine(x, ligneBas, new Mine());
             String code;
             int choix = x % 6;
             switch (choix) {
@@ -31,10 +31,6 @@ public class Jeu extends Thread {
             plateau.setGisement(x, ligneBas, code);
         }
         plateau.setGisement(7,8,"r");
-        plateau.setMachine(7,8,new Mine());
-        plateau.setMixer(8,8,Direction.North);
-        plateau.setRotater(4,4,Direction.North,1);
-        plateau.setRotater(4,9,Direction.North,2);
         start();
     }
 

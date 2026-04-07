@@ -47,12 +47,12 @@ public class Case {
         return plateau.getCase(this, d);
     }
 
+    public void setGisement(Item item) {
+        this.gisement = item;
+    }
 
     public Item getGisement() {
         return gisement;
-    }
-    public void setGisement(Item item) {
-        this.gisement = item;
     }
 
 }
