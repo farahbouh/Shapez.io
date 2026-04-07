@@ -20,9 +20,27 @@ public class ItemColor extends Item {
         }
     }
 
-
-    public void transform(Color add) { // faire varier la couleur suivant la couleur ajoutée
-
+    public void transform(Color add) {
+            // faire varier la couleur suivant la couleur ajoutée
+            // on regarde effectue les melanges connues
+            if (this.color == Color.Red && add == Color.Blue) {
+                this.color = Color.Purple;
+            } else if (this.color == Color.Blue && add == Color.Red) {
+                this.color = Color.Purple;
+            } else {
+                this.color = add;
+            }
+            // on assigne le nouveau code à la couleur creer
+            switch (this.color) {
+                case Red:    Codecolor = 'r'; break;
+                case Blue:   Codecolor = 'b'; break;
+                case Purple: Codecolor = 'p'; break;
+                case Yellow: Codecolor = 'y'; break;
+                case Green:  Codecolor = 'g'; break;
+                case Cyan:   Codecolor = 'c'; break;
+                case White:  Codecolor = 'w'; break;
+                case Grey:   Codecolor = '-'; break;
+            }
     }
 
     public Color getColor() {
@@ -32,6 +50,4 @@ public class ItemColor extends Item {
     public char getCodecolor() {
         return Codecolor;
     }
-
-
 }

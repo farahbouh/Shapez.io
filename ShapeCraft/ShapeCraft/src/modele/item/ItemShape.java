@@ -12,7 +12,7 @@ public class ItemShape extends Item {
     public enum Layer {one, two, three};
 
     public SubShape[] getSubShapes(Layer l) {
-        switch(l) {
+        switch(l) { // chaque case correspond à une couche
             case one : return new SubShape[] {tabSubShapes[0], tabSubShapes[1], tabSubShapes[2], tabSubShapes[3]}; // forme de base
             case two: return new SubShape[] {tabSubShapes[4], tabSubShapes[5], tabSubShapes[6], tabSubShapes[7]}; // decoration
             case three: return new SubShape[] {tabSubShapes[8], tabSubShapes[9], tabSubShapes[10], tabSubShapes[11]}; //decoration de decoration
@@ -22,7 +22,7 @@ public class ItemShape extends Item {
     }
 
     public Color[] getColors(Layer l) {
-        switch(l) { //meme sys que subshapes
+        switch(l) { //meme systeme que subshapes
             case one : return new Color[] {tabColors[0], tabColors[1], tabColors[2], tabColors[3]};
             case two : return new Color[] {tabColors[4], tabColors[5], tabColors[6], tabColors[7]};
             case three: return new Color[] {tabColors[8], tabColors[9], tabColors[10], tabColors[11]};
@@ -44,8 +44,10 @@ public class ItemShape extends Item {
         for (int i = 0; i < 4; i++) { // fait uniquement pour la première couche
             switch (str.charAt(i*2)) {
                 case 'C' : tabSubShapes[i] = SubShape.Square; break;
-                case '-' : tabSubShapes[i] = SubShape.None; break;
                 case 'S' : tabSubShapes[i] = SubShape.Quarter_circle; break;
+                case 'F' : tabSubShapes[i] = SubShape.Fan; break;
+                case 'T' : tabSubShapes[i] = SubShape.Star; break;
+                case '-' : tabSubShapes[i] = SubShape.None; break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + str.charAt(i));
             }
@@ -77,7 +79,7 @@ public class ItemShape extends Item {
 
     // TODO : écrire l'ensemble des fonctions de transformation souhaitées, définir les paramètres éventuels (sens, axe, etc.)
     public void rotate() {
-
+    // l'item i prend place de l'item j permettant la rotation
         SubShape[] bufferSubShapes = new SubShape[4];
         bufferSubShapes[0] = tabSubShapes[3];
         bufferSubShapes [1] = tabSubShapes[0];
@@ -99,43 +101,25 @@ public class ItemShape extends Item {
 
     }
 
-    public ItemShape[] Cut() {
-
-        String codedebut = this.getCode();
-        int mid = codedebut.length() / 2;
-
-        String firstHalf = codedebut.substring(0, mid);
-        String secondHalf = codedebut.substring(mid);
-
-        String result1 = firstHalf + "-".repeat(mid);
-        String result2 = "-".repeat(mid) + secondHalf;
-
-        return new ItemShape[] {
-                new ItemShape(result1),
-                new ItemShape(result2)
-        };
-    }
-    public ItemShape[] Cut4() {
+    public ItemShape[] Cut(int nb) {
         String code = this.getCode();
         int len = code.length();
-        int quart = len / 4;
+        int taillepart = len / nb;   // taille d'une part (taille / nombre de part attendu)
+        ItemShape[] resultats = new ItemShape[nb]; // creation d'un tab pour stocker les valeurs
 
-        String part1 = code.substring(0, quart);
-        String part2 = code.substring(quart, 2 * quart);
-        String part3 = code.substring(2 * quart, 3 * quart);
-        String part4 = code.substring(3 * quart, len);
+        for (int i = 0; i < nb; i++) { //construit et ajoute le resultat de la boucle j dans resultats
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < nb; j++)  {//parcours la figure originale et verifie qu'on est bien au jieme morceau / nb attendu
+                if (j == i) {
 
-        String result1 = part1 + "-".repeat(len - quart);
-        String result2 = "-".repeat(quart) + part2 + "-".repeat(len - 2 * quart);
-        String result3 = "-".repeat(2 * quart) + part3 + "-".repeat(len - 3 * quart);
-        String result4 = "-".repeat(3 * quart) + part4;
-
-        return new ItemShape[] {
-                new ItemShape(result1),
-                new ItemShape(result2),
-                new ItemShape(result3),
-                new ItemShape(result4)
-        };
+                    sb.append(code.substring(j * taillepart, (j + 1) * taillepart));
+                } else {
+                    sb.append("-".repeat(taillepart));
+                }
+            }
+            resultats[i] = new ItemShape(sb.toString());
+        }
+        return resultats;
     }
 
     public void Color(Color c) {
@@ -143,26 +127,23 @@ public class ItemShape extends Item {
     }
 
     public String mixShapeAndColor(ItemColor colorCode) {
-        // On utilise StringBuilder pour construire la chaîne efficacement
+        // Utilisation d'un StringBuilder pour construire la chaîne efficacement
         StringBuilder result = new StringBuilder();
 
-        // On parcourt les 8 caractères, 2 par 2 (4 quadrants)
+        // Parcourt les 8 caractères, 2 par 2 (4 quadrants)
         for (int i = 0; i < 8; i += 2) {
             char shape = this.getCode().charAt(i);
             char color = colorCode.getCodecolor();
-
-            // LOGIQUE :
             // Si la forme est '-', alors il n'y a pas de couleur possible -> '-'
             // Sinon, on prend la couleur du deuxième string
             if (shape == '-') {
-                result.append("-"); // Pas de forme
-                result.append("-"); // Donc pas de couleur
+                result.append("-"); //vide
+                result.append("-");
             } else {
                 result.append(shape); // On garde la forme
                 result.append(color); // On applique la couleur
             }
         }
-
         return result.toString();
     }
 

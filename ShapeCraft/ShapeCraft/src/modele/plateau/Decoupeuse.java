@@ -77,8 +77,8 @@ public class Decoupeuse extends Machine {
         Item item = getCurrent();
         if (item != null && item instanceof ItemShape) {
             ItemShape i = (ItemShape) item;
-            if (type == 1) reserve = i.Cut();
-            else reserve = i.Cut4();
+            if (type == 1) reserve = i.Cut(2);
+            else reserve = i.Cut(4);
             current.removeFirst();
             if (!reserve[0].getCode().equals("--------")) current.add(reserve[0]);
             send_worker();
