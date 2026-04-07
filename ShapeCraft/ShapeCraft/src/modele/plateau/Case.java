@@ -47,19 +47,12 @@ public class Case {
         return plateau.getCase(this, d);
     }
 
-    public void setGisement(String code) {
-
-        if (code.length() <= 2) {
-            // Implémentation simplifiée pour ItemColor si nécessaire
-            char chode = code.charAt(0); // on recupe le code pour afficher la bonne col et forme
-            this.gisement = new ItemColor(chode);
-        } else {
-            this.gisement = new ItemShape(code);
-        }
-    }
 
     public Item getGisement() {
         return gisement;
+    }
+    public void setGisement(Item item) {
+        this.gisement = item;
     }
 
 }
