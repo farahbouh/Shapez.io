@@ -12,11 +12,11 @@ public class Point {
     public Point(int x,int y, Direction D){
         if(D == Direction.North){
             this.x = x;
-            this.y = y+1;
+            this.y = y-1;
 
         } else if(D == Direction.South){
             this.x = x;
-            this.y = y-1;
+            this.y = y+1;
 
         }
         else if(D == Direction.East){

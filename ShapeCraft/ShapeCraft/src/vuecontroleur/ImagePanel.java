@@ -5,151 +5,136 @@ import modele.item.SubShape;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 public class ImagePanel extends JPanel {
     private Image imgBackground;
     private Image imgFront;
     private ItemShape shape;
-    // Ajouter ces 4 champs après les existants
-    private int tileCol = 0;
-    private int tileRow = 0;
+
+    private int tileCol  = 0;
+    private int tileRow  = 0;
     private int tileCols = 1;
     private int tileRows = 1;
 
-    // Ajouter ces deux méthodes
+    // Angle de rotation en degrés (0, 90, 180, 270), sens horaire
+    private int rotationAngle = 0;
+
     public void setTile(int col, int row, int totalCols, int totalRows) {
         tileCol = col; tileRow = row; tileCols = totalCols; tileRows = totalRows;
     }
+
     public void resetTile() {
         tileCol = 0; tileRow = 0; tileCols = 1; tileRows = 1;
     }
 
-    public void setShape(ItemShape _shape) {
-        shape = _shape;
+    public void setRotationAngle(int angle) {
+        this.rotationAngle = angle;
     }
 
-    public void setBackground(Image _imgBackground) {
-        imgBackground = _imgBackground;
-    }
+    public void setShape(ItemShape _shape)       { shape = _shape; }
+    public void setBackground(Image _img)        { imgBackground = _img; }
+    public void setFront(Image _img)             { imgFront = _img; }
 
-    public void setFront(Image _imgFront) {
-        imgFront = _imgFront;
-    }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        final int bordure= 1;
-        final int xBack = bordure;
-        final int yBack = bordure;
-        final int widthBack = getWidth() - bordure*2;
-        final int heigthBack = getHeight() - bordure*2;
+        final int bordure      = 1;
+        final int xBack        = bordure;
+        final int yBack        = bordure;
+        final int widthBack    = getWidth()  - bordure * 2;
+        final int heightBack   = getHeight() - bordure * 2;
 
-        final int subPartWidth = widthBack / 4;
-        final int subPartHeigth = heigthBack / 4;
+        final int subPartW     = widthBack  / 4;
+        final int subPartH     = heightBack / 4;
+        final int xFront       = bordure + subPartW;
+        final int yFront       = bordure + subPartH;
+        final int widthFront   = subPartW * 2;
+        final int heightFront  = subPartH * 2;
 
-        final int xFront = bordure + subPartWidth;
-        final int yFront = bordure + subPartHeigth;
-        final int widthFront = subPartWidth*2;
-        final int heigthFront = subPartHeigth*2;
-
-
-
-        // cadre
-        g.drawRoundRect(bordure, bordure, widthBack, heigthBack, bordure, bordure);
-
+        g.drawRoundRect(bordure, bordure, widthBack, heightBack, bordure, bordure);
 
         if (imgBackground != null) {
-            if (tileCols == 1 && tileRows == 1) {
-                // cas normal : afficher l'image entière
-                g.drawImage(imgBackground, xBack, yBack, widthBack, heigthBack, this);
-            } else {
-                // cas multi-case : créer une image à la taille totale, puis extraire la portion
-                int fullW = widthBack * tileCols;
-                int fullH = heigthBack * tileRows;
 
-                java.awt.image.BufferedImage full = new java.awt.image.BufferedImage(fullW, fullH, java.awt.image.BufferedImage.TYPE_INT_ARGB);
-                Graphics gFull = full.createGraphics();
-                gFull.drawImage(imgBackground, 0, 0, fullW, fullH, null);
-                gFull.dispose();
+            // ── 1. Construire l'image source à la taille totale du sprite ──────────
+            //    Pour un sprite 2×1 cases, fullW = 2*widthBack, fullH = heightBack
+            int fullW = widthBack  * tileCols;
+            int fullH = heightBack * tileRows;
 
-                int srcX = tileCol * widthBack;
-                int srcY = tileRow * heigthBack;
-                g.drawImage(full, xBack, yBack, xBack + widthBack, yBack + heigthBack,
-                        srcX, srcY, srcX + widthBack, srcY + heigthBack, this);
+            BufferedImage full = new BufferedImage(fullW, fullH, BufferedImage.TYPE_INT_ARGB);
+            {
+                Graphics gf = full.createGraphics();
+                gf.drawImage(imgBackground, 0, 0, fullW, fullH, null);
+                gf.dispose();
             }
+
+            // ── 2. Extraire la portion correspondant à cette case ─────────────────
+            int srcX = Math.min(tileCol * widthBack,  fullW - widthBack);
+            int srcY = Math.min(tileRow * heightBack,  fullH - heightBack);
+            BufferedImage portion = full.getSubimage(srcX, srcY, widthBack, heightBack);
+
+            // ── 3. Appliquer la rotation si nécessaire ────────────────────────────
+            if (rotationAngle != 0) {
+                portion = rotateImage(portion, rotationAngle);
+            }
+
+            g.drawImage(portion, xBack, yBack, widthBack, heightBack, this);
         }
 
         if (imgFront != null) {
-            g.drawImage(imgFront, xFront, yFront, widthFront, heigthFront, this);
+            g.drawImage(imgFront, xFront, yFront, widthFront, heightFront, this);
         }
 
-
         if (shape != null) {
-
-            // TODO autres layers
-            SubShape[] tabS = shape.getSubShapes(ItemShape.Layer.one);
+            SubShape[]          tabS = shape.getSubShapes(ItemShape.Layer.one);
             modele.item.Color[] tabC = shape.getColors(ItemShape.Layer.one);
 
             for (int i = 0; i < 4; i++) {
+                if (tabS[i] == SubShape.None) continue;
 
-                SubShape ss = tabS[i];
-                modele.item.Color cc = tabC[i];
+                switch (tabC[i]) {
+                    case Red:    g.setColor(Color.RED);                  break;
+                    case White:  g.setColor(Color.WHITE);                break;
+                    case Blue:   g.setColor(Color.BLUE);                 break;
+                    case Cyan:   g.setColor(Color.CYAN);                 break;
+                    case Green:  g.setColor(Color.GREEN);                break;
+                    case Purple: g.setColor(new Color(128, 0, 128));     break;
+                    case Yellow: g.setColor(Color.YELLOW);               break;
+                    case Grey:   g.setColor(new Color(128, 128, 128));   break;
+                    default:     g.setColor(Color.BLACK);                break;
+                }
 
-
-                if (ss != SubShape.None) {
-
-                    switch (tabC[i]) {
-                        case modele.item.Color.Red:
-                            g.setColor(Color.RED);
-                            break;
-                        case modele.item.Color.White:
-                            g.setColor(Color.WHITE);
-                            break;
-                        case modele.item.Color.Blue:
-                            g.setColor(Color.BLUE);
-                            break;
-                        case modele.item.Color.Cyan:
-                            g.setColor(Color.CYAN);
-                            break;
-                        case modele.item.Color.Green:
-                            g.setColor(Color.GREEN);
-                            break;
-                        case modele.item.Color.Purple:
-                            g.setColor(new Color(128, 0, 128));
-                            break;
-                        case modele.item.Color.Yellow:
-                            g.setColor(Color.YELLOW);
-                            break;
-                        case modele.item.Color.Grey:
-                            g.setColor(new Color(128,128,128));
-                            break;
-                        default:
-                            //si on donne aucune couleur alors c'est noir
-                            g.setColor(Color.BLACK);
-                            break;
-
-                    }
-
-                    switch (ss) {
-                        case SubShape.Square:
-                            g.fillRect(xFront + (widthFront / 2) * ((i >> 1) ^ 1), yFront + (heigthFront / 2) * ((i & 1) ^ ((i >> 1) & 1)), widthFront / 2, heigthFront / 2);
-                            break;
-
-                        case SubShape.Quarter_circle:
-                            g.fillArc(xFront, yFront, widthFront, heigthFront, (4-i) * 90, 90);
-                            break;
-                        // TODO autres formes
-                    }
+                switch (tabS[i]) {
+                    case Square:
+                        g.fillRect(
+                            xFront + (widthFront  / 2) * ((i >> 1) ^ 1),
+                            yFront + (heightFront / 2) * ((i & 1) ^ ((i >> 1) & 1)),
+                            widthFront / 2, heightFront / 2);
+                        break;
+                    case Quarter_circle:
+                        g.fillArc(xFront, yFront, widthFront, heightFront, (4 - i) * 90, 90);
+                        break;
                 }
             }
         }
     }
 
-
+    /** Fait pivoter un BufferedImage de `angle` degrés dans le sens horaire. */
+    private BufferedImage rotateImage(BufferedImage src, int angle) {
+        int w = src.getWidth();
+        int h = src.getHeight();
+        // Pour 90° et 270°, largeur et hauteur s'échangent
+        int nw = (angle % 180 != 0) ? h : w;
+        int nh = (angle % 180 != 0) ? w : h;
+        BufferedImage result = new BufferedImage(nw, nh, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = result.createGraphics();
+        g2.translate(nw / 2.0, nh / 2.0);
+        g2.rotate(Math.toRadians(angle));
+        g2.translate(-w / 2.0, -h / 2.0);
+        g2.drawImage(src, 0, 0, null);
+        g2.dispose();
+        return result;
+    }
 }
-
-
-
-
-

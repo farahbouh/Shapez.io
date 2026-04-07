@@ -40,7 +40,6 @@ public class VueControleur extends JFrame implements Observer {
     private JComponent grilleIP;
     private Image icoBalancer;
     private Image icoRotater;
-    private Image icoRotater2;
     private int lastX = -1;
     private int lastY = -1;
     private Image icoTapisDroite;
@@ -106,7 +105,6 @@ public class VueControleur extends JFrame implements Observer {
         icoBlanc = new ImageIcon("./data/sprites/colors/white.png").getImage();
         icoJaune = new ImageIcon("./data/sprites/colors/yellow.png").getImage();
         icoRotater=new ImageIcon("./data/sprites/buildings/rotater.png").getImage();
-        icoRotater2=new ImageIcon("./data/sprites/buildings/rotater-ccw.png").getImage();
     }
 
 
@@ -224,8 +222,8 @@ public class VueControleur extends JFrame implements Observer {
         barre.setBackground(new Color(40, 40, 40));
         barre.setPreferredSize(new Dimension(0, 60));
 
-        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Rotater2", "Balancer"};
-        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater,icoRotater2, icoBalancer};
+        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Balancer"};
+        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater, icoBalancer};
         for (int i = 0; i < noms.length; i++) {
             final String nom = noms[i];
             JButton btn = new JButton(nom, new ImageIcon(icones[i].getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
@@ -247,6 +245,7 @@ public class VueControleur extends JFrame implements Observer {
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 tabIP[x][y].resetTile();
+                tabIP[x][y].setRotationAngle(0);
                 tabIP[x][y].setBackground((Image) null);
 
                 tabIP[x][y].setFront(null);
@@ -281,15 +280,22 @@ public class VueControleur extends JFrame implements Observer {
 
                     } else if (m instanceof Poubelle) {
                         tabIP[x][y].setBackground(icoPoubelle);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                     } else if (m instanceof Mixer) {
                         tabIP[x][y].setBackground(icoMixer);
-                        tabIP[x][y].setTile(0, 0, 2, 1); // case principale = gauche
+                        tabIP[x][y].setTile(0, 0, 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                     } else if (m instanceof MixerWorker) {
                         tabIP[x][y].setBackground(icoMixer);
-                        tabIP[x][y].setTile(1, 0, 2, 1); // case worker = droite
+                        tabIP[x][y].setTile(1, 0, 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
 
                     } else if (m instanceof Mine) {
                         tabIP[x][y].setBackground(icoMine);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                     } else if (m instanceof HubMain) {
                         tabIP[x][y].setBackground(icoHub);
                     } else if (m instanceof HubWorker) {
@@ -298,55 +304,33 @@ public class VueControleur extends JFrame implements Observer {
                     } else if (m instanceof Balancer) {
                         tabIP[x][y].setBackground(icoBalancer);
                         tabIP[x][y].setTile(0, 0, 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                     } else if (m instanceof BalancerWorker) {
                         tabIP[x][y].setBackground(icoBalancer);
                         tabIP[x][y].setTile(1, 0, 2, 1);
-                    }else if (m instanceof Rotater) {
-                        Rotater rot = (Rotater) m;
-                        int sens = rot.getType();          // méthode à ajouter dans Rotater
-                        if (sens == 0) {
-                            tabIP[x][y].setBackground(icoRotater);
-                        } else {
-                            tabIP[x][y].setBackground(icoRotater2);
-                        }
-                    } else if (m instanceof RotaterWorker) {
-                        RotaterWorker rw = (RotaterWorker) m;
-                        Rotater master = rw.getMaster();   // méthode à ajouter dans RotaterWorker
-                        if (master != null && master.getType() == 1) {
-                            tabIP[x][y].setBackground(icoRotater);
-                        } else {
-                            tabIP[x][y].setBackground(icoRotater2);
-                        }
-                    } if (m instanceof Decoupeuse) {
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
+                    } else if (m instanceof RotaterWorker || m instanceof Rotater) {
+                        tabIP[x][y].setBackground(icoRotater);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
+                    } else if (m instanceof Decoupeuse) {
                         int type = ((Decoupeuse) m).getType();
-                        Image ico;
-                        if (type == 2) {
-                            ico = icoDecoupeuse4;
-                        } else {
-                            ico = icoDecoupeuse;
-                        }
+                        Image ico = type == 2 ? icoDecoupeuse4 : icoDecoupeuse;
                         tabIP[x][y].setBackground(ico);
                         tabIP[x][y].setTile(0, 0, type * 2, 1);
-                    }
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
 
-                    if (m instanceof DecoupeuseWorker) {
-                        DecoupeuseWorker worker = (DecoupeuseWorker) m;
-                        Decoupeuse master = worker.getParent();
-                        int type;
-                        if (master != null) {
-                            type = master.getType();
-                        } else {
-                            type = 1;
-                        }
-                        int index = worker.getIndex();
-                        Image ico;
-                        if (type == 2) {
-                            ico = icoDecoupeuse4;
-                        } else {
-                            ico = icoDecoupeuse;
-                        }
+                    } else if (m instanceof DecoupeuseWorker) {
+                        Decoupeuse master = ((DecoupeuseWorker) m).getParent();
+                        int type  = master != null ? master.getType() : 1;
+                        int index = ((DecoupeuseWorker) m).getIndex();
+                        Direction dMaster = master != null ? master.getD() : Direction.North;
+                        Image ico = type == 2 ? icoDecoupeuse4 : icoDecoupeuse;
                         tabIP[x][y].setBackground(ico);
                         tabIP[x][y].setTile(index, 0, type * 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(dMaster));
                     }
 
                     Item current = m.getCurrent();
@@ -406,4 +390,15 @@ public class VueControleur extends JFrame implements Observer {
         });
 
     }
+    /** Convertit une Direction en angle de rotation en degrés (sens horaire).
+     *  North = 0°, East = 90°, South = 180°, West = 270° */
+    private int directionToAngle(Direction d) {
+        switch (d) {
+            case East:  return 90;
+            case South: return 180;
+            case West:  return 270;
+            default:    return 0;
+        }
+    }
+
 }
