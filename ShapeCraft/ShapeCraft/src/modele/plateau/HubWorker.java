@@ -14,7 +14,7 @@ public class HubWorker extends Machine {
         // Si un item arrive sur un bord du Hub, on le donne immédiatement au centre
         if (!current.isEmpty()) {
             Item i = current.removeFirst();
-            parent.ajouterItem(i); // On l'envoie au Hub main
+            parent.current.add(i); // On l'envoie au Hub main
         }
     }
 

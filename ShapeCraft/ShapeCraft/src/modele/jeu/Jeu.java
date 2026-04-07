@@ -14,7 +14,11 @@ public class Jeu extends Thread {
     public Jeu() {
         plateau = new Plateau();
         int ligneBas = Plateau.SIZE_Y - 1; // dernière ligne (15 si SIZE_Y=16)
+        HubMain hb = new HubMain();
+        String[] s = {"CbCrCgCy"};
+        int[] i = {5};
 
+        hb.ajouterdefis(s,i);
         // Mines et gisements sur toute la ligne du bas
         for (int x = 0; x < Plateau.SIZE_X; x++) {
             //plateau.setMachine(x, ligneBas, new Mine());

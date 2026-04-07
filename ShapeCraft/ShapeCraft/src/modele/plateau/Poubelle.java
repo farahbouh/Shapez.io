@@ -5,7 +5,7 @@ import modele.item.Item;
 public class Poubelle extends Machine {
     @Override
     public boolean ajouterItem(Item i) {
-        // La poubelle détruit l'item immédiatement
+        // La poubelle détruit l'item 
         System.out.println("Poubelle a détruit " + i);
         return true;
     }
