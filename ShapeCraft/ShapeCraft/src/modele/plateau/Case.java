@@ -17,12 +17,14 @@ public class Case {
     protected Item gisement; // certaines cases sont des gisements, pour placer des mines
 
 
-    public void setMachine(Machine m) { // set machine avec par defaut la direction a north
+    public void setMachine(Machine m) {
+        // set machine avec par defaut la direction a north
 
         machine = m;
         m.setCase(this);
     }
-    public void setMachine(Machine m, Direction d) { //setmachine où on choisit nous même la direction
+    public void setMachine(Machine m, Direction d) {
+        //setmachine avec le choix de la direction
         m.setD(d);
         machine = m;
         m.setCase(this);
@@ -45,24 +47,16 @@ public class Case {
         return plateau.getCase(this, d);
     }
 
-    public Machine getMachineVoisine(Direction d) {
-        Case c = getVoisine(d);
-        if (c == null) return null;
-        return c.getMachine();
-    }
-
     public void setGisement(String code) {
 
         if (code.length() <= 2) {
             // Implémentation simplifiée pour ItemColor si nécessaire
-            char chode = code.charAt(0);
+            char chode = code.charAt(0); // on recupe le code pour afficher la bonne col et forme
             this.gisement = new ItemColor(chode);
         } else {
             this.gisement = new ItemShape(code);
         }
     }
-
-
 
     public Item getGisement() {
         return gisement;
