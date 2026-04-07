@@ -10,24 +10,22 @@ public class Mine extends Machine {
 
 
     @Override
-    public void work() { // TODO : modifier, suivant le gisement
+    public void work() { 
         Item gisement = c.getGisement();
         if(gisement != null && current.isEmpty())
-        { //si pas de gisement alors la mine ne produit rien, pareil si la mine possede déjà un mineral sur lui
+        { //si pas de gisement alors la mine ne produit pas
             if (new Random().nextInt(4) == 0)
             {
-                if (gisement instanceof ItemShape)
+                if (gisement instanceof ItemShape) //gisement objet
                 {
                     ItemShape copie = new ItemShape(((ItemShape) gisement).getCode());
-                    current.add(copie);
+                    current.add(copie); // on ajoute l'item du meme type
                 }
-                if (gisement instanceof ItemColor)
+                if (gisement instanceof ItemColor) //gisement couleur
                 {
                     ItemColor copie = new ItemColor(((ItemColor) gisement).getCodecolor());
-                    current.add(copie);
+                    current.add(copie); // on ajoute la couleur
                 }
-
-
             }
         }
     }

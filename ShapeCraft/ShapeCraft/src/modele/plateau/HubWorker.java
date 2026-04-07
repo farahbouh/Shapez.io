@@ -3,10 +3,10 @@ package modele.plateau;
 import modele.item.Item;
 
 public class HubWorker extends Machine {
-    private HubMain master;
+    private HubMain parent;
 
-    public HubWorker(HubMain master) {
-        this.master = master;
+    public HubWorker(HubMain parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -14,7 +14,7 @@ public class HubWorker extends Machine {
         // Si un item arrive sur un bord du Hub, on le donne immédiatement au centre
         if (!current.isEmpty()) {
             Item i = current.removeFirst();
-            master.ajouterItem(i); // On l'envoie au  Hub main
+            parent.ajouterItem(i); // On l'envoie au Hub main
         }
     }
 

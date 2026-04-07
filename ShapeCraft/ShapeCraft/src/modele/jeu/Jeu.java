@@ -31,6 +31,7 @@ public class Jeu extends Thread {
             plateau.setGisement(x, ligneBas, code);
         }
         plateau.setGisement(7,8,"r");
+        plateau.setHub(10,10,new HubMain());
         start();
     }
 

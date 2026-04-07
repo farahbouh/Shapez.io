@@ -22,9 +22,9 @@ public class HubMain extends Machine {
     @Override
     public void work() {
         while (!current.isEmpty()) {
-            Item arrivee = current.removeFirst();
+            Item arrivee = current.removeFirst(); // des que item recu on le supprime
             if (arrivee != null && arrivee instanceof ItemShape) {
-                String code = ((ItemShape) arrivee).getCode();
+                String code = ((ItemShape) arrivee).getCode();// on recupere le code
                 ressourceStocke.put(code, ressourceStocke.getOrDefault(code, 0) + 1);
                 System.out.println("Hub : Reçu " + code + " | Total : " + ressourceStocke.get(code));
             }

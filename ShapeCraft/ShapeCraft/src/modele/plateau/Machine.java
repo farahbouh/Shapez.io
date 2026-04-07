@@ -5,7 +5,7 @@ import modele.item.Item;
 import java.util.LinkedList;
 
 public abstract class Machine implements Runnable {
-    LinkedList<Item> current;
+    LinkedList<Item> current; //queue stockant nos elements
     Case c;
     Direction d = Direction.North;
 
@@ -32,14 +32,15 @@ public abstract class Machine implements Runnable {
 
     public Item getCurrent() {
         if (current.size() > 0) {
-            return current.get(0);
+            return current.get(0); // on recup le 1er
         } else {
-            return null;
+            return null; // pas d'item
         }
     }
     public boolean estLibre() {
         return current.isEmpty();
-    }
+    } // si la liste est vide alors on peut work
+
     public boolean ajouterItem(Item i) {
         current.add(i);
         return true;
@@ -47,8 +48,7 @@ public abstract class Machine implements Runnable {
     public boolean ajouterItem(Item i, Case source) {
         return ajouterItem(i);
     }
-    // Dans la classe Machine - modifiez la méthode send()
-    // Dans la classe Machine - modifiez la méthode send()
+
     public void send() {
         if (current.isEmpty()) return;
         Case destination = c.plateau.getCase(c, this.d);
@@ -57,11 +57,13 @@ public abstract class Machine implements Runnable {
         if (m == null) return;
 
         Item item = current.getFirst();
-        boolean peutAccepter = false;
+        boolean peutAccepter = false; //par defaut on accepte pas l'item
 
         if (m instanceof Tapis) {
             Tapis tapis = (Tapis) m;
+            // verifie si la machine peut acceper l'element en fonction de dir
             peutAccepter = tapis.getDirection1() == this.d.inverse() && m.current.isEmpty();
+
         } else if (m instanceof Poubelle) {
             peutAccepter = true;
         } else if (m instanceof HubWorker) {
@@ -71,7 +73,7 @@ public abstract class Machine implements Runnable {
         }
 
         if (peutAccepter) {
-            // ICI : on passe this.c (la case de la machine qui envoie) au lieu de destination
+            // on passe la case de la machine qui envoie au lieu de destination
             if (m.ajouterItem(item, this.c)) {
                 current.remove(item);
                 System.out.println(getClass().getSimpleName() + " a envoyé " + item + " à " + m.getClass().getSimpleName());
@@ -85,11 +87,7 @@ public abstract class Machine implements Runnable {
 
     @Override
     public void run() {
-        work();
+        work(); // work puis envoie
         send();
-    }
-
-    public void run2() {
-        work();
     }
 }
