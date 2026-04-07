@@ -79,7 +79,7 @@ public class ItemShape extends Item {
 
     // TODO : écrire l'ensemble des fonctions de transformation souhaitées, définir les paramètres éventuels (sens, axe, etc.)
     public void rotate() {
-    // l'item i prend place de l'item j permettant la rotation
+    // l'item i prend place de l'item j permettant la rotation horaire
         SubShape[] bufferSubShapes = new SubShape[4];
         bufferSubShapes[0] = tabSubShapes[3];
         bufferSubShapes [1] = tabSubShapes[0];
@@ -91,6 +91,27 @@ public class ItemShape extends Item {
         bufferColors [1] = tabColors[0];
         bufferColors [2] = tabColors[1];
         bufferColors [3] = tabColors[2];
+
+        tabSubShapes = bufferSubShapes;
+        tabColors = bufferColors;
+
+
+    }
+
+    public void rotategauche() {
+        // l'item i prend place de l'item j permettant la rotation antihoraire
+        SubShape[] bufferSubShapes = new SubShape[4];
+        bufferSubShapes[0] = tabSubShapes[1];
+        bufferSubShapes[1] = tabSubShapes[2];
+        bufferSubShapes[2] = tabSubShapes[3];
+        bufferSubShapes[3] = tabSubShapes[0];
+
+        Color[] bufferColors = new Color[4];
+        bufferColors[0] = tabColors[1];
+        bufferColors[1] = tabColors[2];
+        bufferColors[2] = tabColors[3];
+        bufferColors[3] = tabColors[0];
+
 
         tabSubShapes = bufferSubShapes;
         tabColors = bufferColors;

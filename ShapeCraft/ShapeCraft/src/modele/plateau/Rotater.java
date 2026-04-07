@@ -4,7 +4,13 @@ import modele.item.Item;
 import modele.item.ItemShape;
 
 public class Rotater extends Machine {
-
+    int type; //horaire=1 antihoraire=0
+    public Rotater(int type) {
+        this.type = type;
+    }
+    public int getType() {
+        return type;
+    }
     @Override
     public boolean ajouterItem(Item i, Case source) {
         // Vérifie que l'item vient de la case située à l'opposé de la direction de sortie
@@ -20,7 +26,12 @@ public class Rotater extends Machine {
     public void work() {
         Item item = getCurrent();
         if (item instanceof ItemShape) {
-            ((ItemShape) item).rotate();
+            if (type==1) {
+                ((ItemShape) item).rotate();
+            }
+            else {
+                ((ItemShape) item).rotategauche();
+            }
             System.out.println("Rotater a pivoté une forme");
         }
     }

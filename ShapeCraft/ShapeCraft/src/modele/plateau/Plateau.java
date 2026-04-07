@@ -198,11 +198,10 @@ public class Plateau extends Observable implements Runnable {
         }
 
     }
-    public void setRotater(int x, int y, Direction orientation) {
+    public void setRotater(int x, int y, Direction orientation, int type) {
         if (x >= 0 && x < SIZE_X && y >= 0 && y < SIZE_Y &&
                 grilleCases[x][y].getMachine() == null) {
-
-            Rotater rotater = new Rotater();
+            Rotater rotater = new Rotater(type);  // utilise le type pour le sens
             rotater.setD(orientation);
             grilleCases[x][y].setMachine(rotater, orientation);
             setChanged();

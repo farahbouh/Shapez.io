@@ -40,6 +40,7 @@ public class VueControleur extends JFrame implements Observer {
     private JComponent grilleIP;
     private Image icoBalancer;
     private Image icoRotater;
+    private Image icoRotater2;
     private int lastX = -1;
     private int lastY = -1;
     private Image icoTapisDroite;
@@ -105,6 +106,7 @@ public class VueControleur extends JFrame implements Observer {
         icoBlanc = new ImageIcon("./data/sprites/colors/white.png").getImage();
         icoJaune = new ImageIcon("./data/sprites/colors/yellow.png").getImage();
         icoRotater=new ImageIcon("./data/sprites/buildings/rotater.png").getImage();
+        icoRotater2=new ImageIcon("./data/sprites/buildings/rotater-ccw.png").getImage();
     }
 
 
@@ -222,8 +224,8 @@ public class VueControleur extends JFrame implements Observer {
         barre.setBackground(new Color(40, 40, 40));
         barre.setPreferredSize(new Dimension(0, 60));
 
-        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Balancer"};
-        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater, icoBalancer};
+        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Rotater2", "Balancer"};
+        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater,icoRotater2, icoBalancer};
         for (int i = 0; i < noms.length; i++) {
             final String nom = noms[i];
             JButton btn = new JButton(nom, new ImageIcon(icones[i].getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
@@ -299,22 +301,53 @@ public class VueControleur extends JFrame implements Observer {
                     } else if (m instanceof BalancerWorker) {
                         tabIP[x][y].setBackground(icoBalancer);
                         tabIP[x][y].setTile(1, 0, 2, 1);
-                    } else if (m instanceof RotaterWorker|| m instanceof Rotater) {
-                        tabIP[x][y].setBackground(icoRotater);
-                    }  else if (m instanceof Decoupeuse) {
-                    int type = ((Decoupeuse) m).getType();
-                    Image ico = type == 2 ? icoDecoupeuse4 : icoDecoupeuse;
-                    tabIP[x][y].setBackground(ico);
-                    tabIP[x][y].setTile(0, 0, type * 2, 1); // ← manquait
+                    }else if (m instanceof Rotater) {
+                        Rotater rot = (Rotater) m;
+                        int sens = rot.getType();          // méthode à ajouter dans Rotater
+                        if (sens == 0) {
+                            tabIP[x][y].setBackground(icoRotater);
+                        } else {
+                            tabIP[x][y].setBackground(icoRotater2);
+                        }
+                    } else if (m instanceof RotaterWorker) {
+                        RotaterWorker rw = (RotaterWorker) m;
+                        Rotater master = rw.getMaster();   // méthode à ajouter dans RotaterWorker
+                        if (master != null && master.getType() == 1) {
+                            tabIP[x][y].setBackground(icoRotater);
+                        } else {
+                            tabIP[x][y].setBackground(icoRotater2);
+                        }
+                    } if (m instanceof Decoupeuse) {
+                        int type = ((Decoupeuse) m).getType();
+                        Image ico;
+                        if (type == 2) {
+                            ico = icoDecoupeuse4;
+                        } else {
+                            ico = icoDecoupeuse;
+                        }
+                        tabIP[x][y].setBackground(ico);
+                        tabIP[x][y].setTile(0, 0, type * 2, 1);
+                    }
 
-                } else if (m instanceof DecoupeuseWorker) {
-                    Decoupeuse master = ((DecoupeuseWorker) m).getParent();
-                    int type = master != null ? master.getType() : 1;
-                    int index = ((DecoupeuseWorker) m).getIndex(); // ← nécessite getIndex()
-                    Image ico = type == 2 ? icoDecoupeuse4 : icoDecoupeuse;
-                    tabIP[x][y].setBackground(ico);
-                    tabIP[x][y].setTile(index, 0, type * 2, 1); // ← manquait
-                }
+                    if (m instanceof DecoupeuseWorker) {
+                        DecoupeuseWorker worker = (DecoupeuseWorker) m;
+                        Decoupeuse master = worker.getParent();
+                        int type;
+                        if (master != null) {
+                            type = master.getType();
+                        } else {
+                            type = 1;
+                        }
+                        int index = worker.getIndex();
+                        Image ico;
+                        if (type == 2) {
+                            ico = icoDecoupeuse4;
+                        } else {
+                            ico = icoDecoupeuse;
+                        }
+                        tabIP[x][y].setBackground(ico);
+                        tabIP[x][y].setTile(index, 0, type * 2, 1);
+                    }
 
                     Item current = m.getCurrent();
 

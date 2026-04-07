@@ -30,26 +30,11 @@ public class Jeu extends Thread {
             }
             plateau.setGisement(x, ligneBas, code);
         }
-
-        // === 2. Machines pour tester ===
-        plateau.setRotater(2, 2, Direction.North);
-        plateau.setDecoupeuse(5, 10, Direction.North, 2);
-        plateau.setDecoupeuse(10, 10, Direction.North, 1);
-        plateau.setBalancer(10, 5, Direction.North);
-        // Ajout d'une découpeuse type 1 (2 sorties) juste après le balancer (au-dessus)
         plateau.setGisement(7,8,"r");
         plateau.setMachine(7,8,new Mine());
         plateau.setMixer(8,8,Direction.North);
-        plateau.setDecoupeuse(10, 3, Direction.North, 1);
-        plateau.setDecoupeuse(3, 8, Direction.North, 1);
-
-        // Poubelle en (0,0)
-        plateau.setMachine(0, 0, new Poubelle());
-        for (int y = ligneBas-1; y >= 1; y--) {
-            if (plateau.getCases()[0][y].getMachine() == null)
-                plateau.setTapis(0, y, Direction.South, Direction.North);
-        }
-
+        plateau.setRotater(4,4,Direction.North,1);
+        plateau.setRotater(4,9,Direction.North,2);
         start();
     }
 
@@ -62,7 +47,8 @@ public class Jeu extends Thread {
                 case "Poubelle":   plateau.setMachine(x, y, new Poubelle()); break;
                 case "Decoupeuse": plateau.setDecoupeuse(x, y, directionactuelle, 1); break;
                 case "Decoupeuse2":  plateau.setDecoupeuse(x, y, directionactuelle, 2); break;
-                case "Rotater":      plateau.setRotater(x, y, directionactuelle); break;
+                case "Rotater":      plateau.setRotater(x, y, directionactuelle,1); break;
+                case "Rotater2":plateau.setRotater(x, y, directionactuelle,2); break;
                 case "Balancer":     plateau.setBalancer(x, y, directionactuelle); break;
                 case "Mixer":        plateau.setMixer(x, y, directionactuelle); break;
                 default:           plateau.setMachine(x, y, new Tapis(), directionactuelle); break;

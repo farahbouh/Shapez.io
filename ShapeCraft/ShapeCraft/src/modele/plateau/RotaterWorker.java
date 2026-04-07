@@ -3,6 +3,12 @@ import modele.item.Item;
 
 public class RotaterWorker extends Machine {
 
+    Rotater master;
+
+    public Rotater getMaster() {
+        return master;
+    }
+
     @Override
     public boolean ajouterItem(Item i, Case source) {
         // Même vérification : le worker a aussi une direction de sortie (this.d)
