@@ -9,12 +9,6 @@ public class Poubelle extends Machine {
         System.out.println("Poubelle a détruit " + i);
         return true;
     }
-
-    @Override
-    public boolean ajouterItem(Item i, Case source) {
-        return ajouterItem(i);
-    }
-
     @Override
     public void send() {
         // Une poubelle n'envoie rien
