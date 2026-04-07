@@ -182,10 +182,11 @@ public class Plateau extends Observable implements Runnable {
         if (c1 != null && c2 != null &&
                 c1.getMachine() == null &&
                 c2.getMachine() == null) {
-            Mixer m = new Mixer();
-            MixerWorker mw = new MixerWorker(m);
+            Mixer m = new Mixer(orientation);
+            MixerWorker worker = new MixerWorker(m, orientation);
+            m.setWorker(worker);
             grilleCases[x][y].setMachine(m, orientation);
-            grilleCases[p2.x][p2.y].setMachine(mw, orientation);
+            grilleCases[p2.x][p2.y].setMachine(worker, orientation);
             setChanged();
             notifyObservers();
         }

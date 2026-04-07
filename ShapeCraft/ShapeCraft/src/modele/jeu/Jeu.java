@@ -30,8 +30,23 @@ public class Jeu extends Thread {
             }
             plateau.setGisement(x, ligneBas, code);
         }
-        plateau.setGisement(7,8,"r");
+        plateau.setMachine(2, 2, new Mine());   // Mine Rouge
+        plateau.setMachine(4, 2, new Mine());   // Mine Bleue
+        plateau.setMachine(6, 2, new Mine());   // Mine Verte
+        plateau.setMachine(8, 2, new Mine());   // Mine Jaune
+        plateau.setMachine(10, 2, new Mine());  // Mine Cyan
+        plateau.setMachine(12, 2, new Mine());  // Mine Violette
+        plateau.setMachine(14, 2, new Mine());  // Mine Blanche
+        plateau.setGisement(2, 2, "r");   // Rouge
+        plateau.setGisement(2, 4, "b");   // Bleu
+        plateau.setGisement(2, 6, "g");   // Vert
+        plateau.setGisement(2, 8, "y");   // Jaune
+        plateau.setGisement(2, 10, "c");  // Cyan
+        plateau.setGisement(2, 12, "p");  // Violet (Purple)
+        plateau.setGisement(2, 14, "w");  // Blanc
+        plateau.setGisement(4, 2, "-");   // Gris (vide/rien)
         plateau.setHub(10,10,new HubMain());
+
         start();
     }
 

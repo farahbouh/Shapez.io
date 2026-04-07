@@ -10,7 +10,7 @@ public class Mine extends Machine {
 
 
     @Override
-    public void work() { 
+    public void work() {
         Item gisement = c.getGisement();
         if(gisement != null && current.isEmpty())
         { //si pas de gisement alors la mine ne produit pas

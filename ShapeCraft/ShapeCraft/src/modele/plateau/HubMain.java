@@ -12,7 +12,7 @@ public class HubMain extends Machine {
     @Override
     public boolean ajouterItem(Item i) {
         if (current.size() >= CAPACITE_MAX) {
-            System.out.println("HubMain: FILE PLEINE! impossible d'ajouter " + ((ItemShape)i).getCode());
+            System.out.println("HubMain: file pleine! impossible d'ajouter " + ((ItemShape)i).getCode());
             return false;
         }
         this.current.add(i);
