@@ -38,6 +38,7 @@ public class VueControleur extends JFrame implements Observer {
     private Image icoDecoupeuse;
     private Image icoDecoupeuse4;
     private Image icoRotater2;
+    private Image icoPainter;
     private JComponent grilleIP;
     private Image icoBalancer;
     private Image icoRotater;
@@ -107,6 +108,7 @@ public class VueControleur extends JFrame implements Observer {
         icoJaune = new ImageIcon("./data/sprites/colors/yellow.png").getImage();
         icoRotater=new ImageIcon("./data/sprites/buildings/rotater.png").getImage();
         icoRotater2=new ImageIcon("./data/sprites/buildings/rotater-ccw.png").getImage();
+        icoPainter=new ImageIcon("./data/sprites/buildings/painter.png").getImage();
     }
     
 
@@ -225,8 +227,8 @@ public class VueControleur extends JFrame implements Observer {
         barre.setBackground(new Color(40, 40, 40));
         barre.setPreferredSize(new Dimension(0, 60));
 
-        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Rotater2", "Balancer"};
-        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater,icoRotater2, icoBalancer};
+        String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Rotater2", "Balancer", "Painter1"};
+        Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater,icoRotater2, icoBalancer,icoPainter};
         for (int i = 0; i < noms.length; i++) {
             final String nom = noms[i];
             JButton btn = new JButton(nom, new ImageIcon(icones[i].getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
@@ -260,7 +262,6 @@ public class VueControleur extends JFrame implements Observer {
                 Item g = c.getGisement();
 
                 if (m != null) {
-
                     if (m instanceof Tapis) {
                         Tapis tapis = (Tapis) m;
                         if(tapis.getD() == Direction.North && tapis.getDirection1() == Direction.South) {
@@ -280,43 +281,43 @@ public class VueControleur extends JFrame implements Observer {
                         }else if(tapis.getD() == Direction.East && tapis.getDirection1() == Direction.South || tapis.getD() == Direction.South && tapis.getDirection1() == Direction.East){
                             tabIP[x][y].setBackground(icoTapisDroite);
                         }
-
                     } else if (m instanceof Poubelle) {
                         tabIP[x][y].setBackground(icoPoubelle);
                         tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
-
                     } else if (m instanceof Mixer) {
                         tabIP[x][y].setBackground(icoMixer);
                         tabIP[x][y].setTile(0, 0, 2, 1);
                         tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
-
                     } else if (m instanceof MixerWorker) {
                         tabIP[x][y].setBackground(icoMixer);
                         tabIP[x][y].setTile(1, 0, 2, 1);
                         tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
-
                     } else if (m instanceof Mine) {
                         tabIP[x][y].setBackground(icoMine);
                         tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
-
                     } else if (m instanceof HubMain) {
                         tabIP[x][y].setBackground(icoHub);
                     } else if (m instanceof HubWorker) {
                         tabIP[x][y].setBackground(icoHub);
-
+                    } else if (m instanceof Painter1) {
+                        tabIP[x][y].setBackground(icoPainter);
+                        tabIP[x][y].setTile(0, 0, 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+                    } else if (m instanceof PainterWorker) {
+                        tabIP[x][y].setBackground(icoPainter);
+                        tabIP[x][y].setTile(1, 0, 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
                     } else if (m instanceof Balancer) {
                         tabIP[x][y].setBackground(icoBalancer);
                         tabIP[x][y].setTile(0, 0, 2, 1);
                         tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
-
                     } else if (m instanceof BalancerWorker) {
                         tabIP[x][y].setBackground(icoBalancer);
                         tabIP[x][y].setTile(1, 0, 2, 1);
                         tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
-
-                    }else if (m instanceof Rotater) {
+                    } else if (m instanceof Rotater) {
                         Rotater rot = (Rotater) m;
-                        int sens = rot.getType();          // méthode à ajouter dans Rotater
+                        int sens = rot.getType();
                         if (sens == 0) {
                             tabIP[x][y].setBackground(icoRotater);
                         } else {
@@ -324,13 +325,13 @@ public class VueControleur extends JFrame implements Observer {
                         }
                     } else if (m instanceof RotaterWorker) {
                         RotaterWorker rw = (RotaterWorker) m;
-                        Rotater parent = rw.getParent();   // méthode à ajouter dans RotaterWorker
+                        Rotater parent = rw.getParent();
                         if (parent != null && parent.getType() == 1) {
                             tabIP[x][y].setBackground(icoRotater);
                         } else {
                             tabIP[x][y].setBackground(icoRotater2);
                         }
-                    } if (m instanceof Decoupeuse) {
+                    } else if (m instanceof Decoupeuse) {
                         int type = ((Decoupeuse) m).getType();
                         Image ico;
                         if (type == 2) {
@@ -340,9 +341,7 @@ public class VueControleur extends JFrame implements Observer {
                         }
                         tabIP[x][y].setBackground(ico);
                         tabIP[x][y].setTile(0, 0, type * 2, 1);
-                    }
-
-                    if (m instanceof DecoupeuseWorker) {
+                    } else if (m instanceof DecoupeuseWorker) {
                         DecoupeuseWorker worker = (DecoupeuseWorker) m;
                         Decoupeuse master = worker.getParent();
                         int type;
@@ -362,15 +361,13 @@ public class VueControleur extends JFrame implements Observer {
                         tabIP[x][y].setTile(index, 0, type * 2, 1);
                     }
 
-
+                    // Affichage de l'item dans la machine
                     Item current = m.getCurrent();
-
                     if (current instanceof ItemShape) {
                         tabIP[x][y].setShape((ItemShape) current);
-                    }else if (current instanceof ItemColor) {
+                    } else if (current instanceof ItemColor) {
                         ItemColor ic = (ItemColor) current;
                         modele.item.Color couleur = ic.getColor();
-                        //on met modele.item sinon le code peut confondre avec la bibliotheque color
                         if (couleur == modele.item.Color.Red)         tabIP[x][y].setFront(icoRouge);
                         else if (couleur == modele.item.Color.Blue)   tabIP[x][y].setFront(icoBleu);
                         else if (couleur == modele.item.Color.Cyan)   tabIP[x][y].setFront(icoCyan);
@@ -380,11 +377,9 @@ public class VueControleur extends JFrame implements Observer {
                         else if (couleur == modele.item.Color.Yellow) tabIP[x][y].setFront(icoJaune);
                         else if (couleur == modele.item.Color.Grey)   tabIP[x][y].setFront(icoGris);
                     }
-
-
                 }
-                // On n'affiche le gisement que s'il n'y a pas de machine par-dessus
-                else if (g != null) {
+// On n'affiche le gisement que s'il n'y a pas de machine par-dessus
+                 else if (g != null) {
 
                     // on prend le string du gisement pour le dessiner
                     if (g instanceof ItemShape) {

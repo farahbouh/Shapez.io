@@ -203,7 +203,31 @@ public class Plateau extends Observable implements Runnable {
             notifyObservers();
         }
     }
+    public void setPainter(int x, int y, Direction orientation) {
+        // Painter à (x,y)
+        // Worker à (x, y+1) pour que le Painter soit à l'Ouest du Worker
+        Point p0 = new Point(x, y);
+        Point p1 = new Point(x+1,  y);  // Worker à l'Est du Painter
 
+        Case c1 = caseALaPosition(p0);
+        Case c2 = caseALaPosition(p1);
+
+        if (c1 != null && c2 != null &&
+                c1.getMachine() == null &&
+                c2.getMachine() == null &&
+                c1.getGisement() == null &&
+                c2.getGisement() == null) {
+
+            Painter1 painter = new Painter1(orientation);
+            PainterWorker worker = new PainterWorker(painter, orientation);
+            painter.setWorker(worker);
+
+            grilleCases[x][y].setMachine(painter, orientation);
+            grilleCases[p1.x][p1.y].setMachine(worker, orientation);
+            setChanged();
+            notifyObservers();
+        }
+    }
     private boolean contenuDansGrille(Point p) {
         return p.x >= 0 && p.x < SIZE_X && p.y >= 0 && p.y < SIZE_Y;
     }

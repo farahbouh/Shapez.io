@@ -72,6 +72,7 @@ public class ItemShape extends Item {
     public ItemShape(ItemShape item){
         this.tabColors = item.tabColors;
         this.tabSubShapes = item.tabSubShapes;
+        this.code = item.code;
     }
 
 
@@ -149,6 +150,17 @@ public class ItemShape extends Item {
 
     public String mixShapeAndColor(ItemColor colorCode) {
         // Utilisation d'un StringBuilder pour construire la chaîne efficacement
+        if (this.getCode() == null) {
+            System.err.println("Erreur: getCode() est null dans mixShapeAndColor");
+            return null;
+        }
+
+        // Vérification que colorCode n'est pas null
+        if (colorCode == null) {
+            System.err.println("Erreur: colorCode est null dans mixShapeAndColor");
+            return this.getCode();
+        }
+
         StringBuilder result = new StringBuilder();
 
         // Parcourt les 8 caractères, 2 par 2 (4 quadrants)
