@@ -18,43 +18,33 @@ public class Niveau {
     }
 
     public void niveau1() {
-        plateau.setGisement(1, 1, "S-S-S-S-");
-        plateau.setGisement(2, 2, "r");   // Rouge
-        plateau.setGisement(2, 10, "c");  // Cyan
-        // tapis shape vers painter
 
-        plateau.setPainter(4, 1, Direction.North);
+        for (int x = 5; x <= 7; x++) {
+            for (int y = 5; y <= 7; y++) {
+                plateau.setGisement(x, y, "S-S-S-S-");
+            }
+        }
+
 
         hub = new HubMain();
         plateau.setHub(5, 1, hub);
-        hub.ajouterdefis(new String[]{"S-S-S-S-"}, new int[]{3});
+        hub.ajouterdefis(new String[]{"S-S-S-S-"}, new int[]{3}); //cercle gris x3
     }
 
     public void niveau2() {
         System.out.print("niveau2");
-        plateau.setGisement(1, 10, "SbSbSbSb"); // 10 moitiés de cercle
-
-        // collecter 10 moitiés de cercle
-        hub.ajouterdefis(new String[]{"S-S-----"}, new int[]{10});
+        hub.ajouterdefis(new String[]{"S-S-----"}, new int[]{3}); //3 moitie droite
 
     }
     public void niveau3() {
         System.out.print("niveau3");
-        plateau.setGisement(10, 10, "SbSbSbSb"); // 10 moitiés de cercle
-        plateau.setGisement(12, 10, "SbSbSbSb"); // 10 moitiés de cercle
-        plateau.setGisement(12, 11, "SbSbSbSb"); // 10 moitiés de cercle
         plateau.setGisement(2, 2, "r");   // Rouge
         plateau.setGisement(2, 4, "b");   // Bleu
 
-        // Défi : collecter 6 moitiés de cercle correctement découpées et orientées
-        hub.ajouterdefis(new String[]{"S-"}, new int[]{6});
+        hub.ajouterdefis(new String[]{"Sp------"}, new int[]{6}); // collecter 6 moitie de cercle
 
     }
     public void niveau4() {
-        System.out.print("niveau4");
-        plateau.setGisement(1, 10, "SbSbSbSb"); // 10 moitiés de cercle
-
-        // Défi : collecter 6 moitiés de cercle correctement découpées et orientées
         hub.ajouterdefis(new String[]{"Sb"}, new int[]{6});
 
     }

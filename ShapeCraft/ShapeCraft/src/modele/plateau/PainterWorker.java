@@ -24,13 +24,8 @@ public class PainterWorker extends Machine {
         if (source != c.getVoisine(Direction.North)) return false;
         if (!(i instanceof ItemColor)) return false;
 
-        System.out.println("PainterWorker a reçu une couleur du Nord: " + ((ItemColor)i).getColor());
-
         // Transmet la couleur au Painter
         boolean result = parent.recevoirDuWorker(i);
-        if (result) {
-            System.out.println("PainterWorker a transmis la couleur au Painter");
-        }
         return result;
     }
 
@@ -39,7 +34,6 @@ public class PainterWorker extends Machine {
         if (item == null) return false;
 
         itemPeint = item;
-        System.out.println("PainterWorker a reçu l'item peint du Painter: " + itemPeint.getCode());
         return true;
     }
 
@@ -57,11 +51,9 @@ public class PainterWorker extends Machine {
         if (machineSortie == null) return;
         if (!machineSortie.estLibre()) return;
 
-        System.out.println("PainterWorker envoie l'item peint vers l'Est: " + itemPeint.getCode());
 
         if (machineSortie.ajouterItem(itemPeint, this.c)) {
             itemPeint = null;
-            System.out.println("PainterWorker a envoyé l'item avec succès");
         }
     }
 }
