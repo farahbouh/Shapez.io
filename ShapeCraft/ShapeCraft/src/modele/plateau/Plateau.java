@@ -53,7 +53,7 @@ public class Plateau extends Observable implements Runnable {
     public void setMachine(int x, int y, Machine m, Direction d) {
         Point p = new Point(x, y);
         Case c = caseALaPosition(p);
-        if (c != null && c.getMachine() == null && c.getGisement() == null) {
+        if (c != null && c.getMachine() == null) {
             grilleCases[x][y].setMachine(m, d);
             setChanged();
             notifyObservers();
@@ -63,7 +63,7 @@ public class Plateau extends Observable implements Runnable {
     public void setTapis(int x, int y, Direction d1, Direction d2) {
         Point p = new Point(x, y);
         Case c = caseALaPosition(p);
-        if (c != null && c.getMachine() == null && c.getGisement() == null) {
+        if (c != null && c.getMachine() == null) {
             Tapis tapis = new Tapis(d1);
             grilleCases[x][y].setMachine(tapis, d2);
             setChanged();
@@ -143,7 +143,7 @@ public class Plateau extends Observable implements Runnable {
         Point p0[] = new Point[4];
         p0[0] = new Point(x, y);
         Case c0 = caseALaPosition(p0[0]);
-        if (c0 == null || c0.getMachine() != null || c0.getGisement() != null) autoriser = false;
+        if (c0 == null || c0.getMachine() != null) autoriser = false;
         for (int i = 1; i < type * 2; i++) {
             if (orientation == Direction.East) {
                 p0[i] = new Point(x, y + i);
@@ -158,7 +158,7 @@ public class Plateau extends Observable implements Runnable {
                 p0[i] = new Point(x - i, y);
             }
             Case c = caseALaPosition(p0[i]);
-            if (c == null || c.getMachine() != null || c.getGisement() != null) autoriser = false;
+            if (c == null || c.getMachine() != null) autoriser = false;
         }
         if (autoriser) {
             Decoupeuse d = new Decoupeuse(type);
@@ -195,7 +195,7 @@ public class Plateau extends Observable implements Runnable {
     public void setRotater(int x, int y, Direction orientation, int type) {
         Point p = new Point(x, y);
         Case c = caseALaPosition(p);
-        if (c != null && c.getMachine() == null && c.getGisement() == null) {
+        if (c != null && c.getMachine() == null) {
             Rotater rotater = new Rotater(type);
             rotater.setD(orientation);
             grilleCases[x][y].setMachine(rotater, orientation);
@@ -214,9 +214,7 @@ public class Plateau extends Observable implements Runnable {
 
         if (c1 != null && c2 != null &&
                 c1.getMachine() == null &&
-                c2.getMachine() == null &&
-                c1.getGisement() == null &&
-                c2.getGisement() == null) {
+                c2.getMachine() == null) {
 
             Painter1 painter = new Painter1(orientation);
             PainterWorker worker = new PainterWorker(painter, orientation);

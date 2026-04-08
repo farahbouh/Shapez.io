@@ -25,7 +25,6 @@ public class Niveau {
             }
         }
 
-
         hub = new HubMain();
         plateau.setHub(5, 1, hub);
         hub.ajouterdefis(new String[]{"S-S-S-S-"}, new int[]{3}); //cercle gris x3

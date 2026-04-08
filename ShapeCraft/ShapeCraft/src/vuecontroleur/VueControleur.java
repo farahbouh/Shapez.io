@@ -110,7 +110,7 @@ public class VueControleur extends JFrame implements Observer {
         icoRotater2=new ImageIcon("./data/sprites/buildings/rotater-ccw.png").getImage();
         icoPainter=new ImageIcon("./data/sprites/buildings/painter.png").getImage();
     }
-    
+
 
 
 
@@ -174,8 +174,8 @@ public class VueControleur extends JFrame implements Observer {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         mousePressed = true;
-                        lastX = xx;  // ← ajouter
-                        lastY = yy;  // ← ajouter
+                        lastX = xx;  //pour un potentielle glissement on sauvegarde les valeurs
+                        lastY = yy;
                         jeu.press(xx, yy);
                     }
 
@@ -193,19 +193,6 @@ public class VueControleur extends JFrame implements Observer {
                         switch (e.getKeyCode()) {
                             case KeyEvent.VK_R: // Touche R pour Rotation
                                 jeu.press_r();
-                                System.out.println("change direction");
-                                break;
-
-                            case KeyEvent.VK_1: // Touche 1 pour Tapis
-                                String typeSelectionne = "Tapis";
-                                break;
-
-                            case KeyEvent.VK_2: // Touche 2 pour Mine
-                                String typeSelectionne2 = "Mine";
-                                break;
-
-                            case KeyEvent.VK_ESCAPE: // Annuler la sélection
-                                String typeSelectionne3 = "Selection";
                                 break;
                         }
                     }
@@ -223,16 +210,16 @@ public class VueControleur extends JFrame implements Observer {
         setSize(sizeX * pxCase, sizeY * pxCase + 60);
 
 // Barre du bas
-        JPanel barre = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
+        JPanel barre = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8)); //Flowlayout car elle permet de mettre des boutons de gauche a droite
         barre.setBackground(new Color(40, 40, 40));
-        barre.setPreferredSize(new Dimension(0, 60));
+        barre.setPreferredSize(new Dimension(0, 60)); //fixe hauteur a 60
 
         String[] noms = {"Tapis", "Mine", "Decoupeuse", "Decoupeuse2", "Poubelle", "Mixer", "Rotater", "Rotater2", "Balancer", "Painter1"};
         Image[] icones = {icoTapisHaut, icoMine, icoDecoupeuse, icoDecoupeuse4, icoPoubelle, icoMixer, icoRotater,icoRotater2, icoBalancer,icoPainter};
         for (int i = 0; i < noms.length; i++) {
             final String nom = noms[i];
-            JButton btn = new JButton(nom, new ImageIcon(icones[i].getScaledInstance(32, 32, Image.SCALE_SMOOTH)));
-            btn.setFocusable(false);
+            JButton btn = new JButton(nom, new ImageIcon(icones[i].getScaledInstance(32, 32, Image.SCALE_SMOOTH))); //image en plus petit 32*32
+            btn.setFocusable(false); //prend pas evenement clavier
             btn.addActionListener(e -> jeu.setMachineSelectionnee(nom));
             barre.add(btn);
         }
@@ -320,16 +307,28 @@ public class VueControleur extends JFrame implements Observer {
                         int sens = rot.getType();
                         if (sens == 0) {
                             tabIP[x][y].setBackground(icoRotater);
+                            tabIP[x][y].setTile(0, 0, 1, 1);
+                            tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                         } else {
                             tabIP[x][y].setBackground(icoRotater2);
+                            tabIP[x][y].setTile(0, 0, 1, 1);
+                            tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                         }
                     } else if (m instanceof RotaterWorker) {
                         RotaterWorker rw = (RotaterWorker) m;
                         Rotater parent = rw.getParent();
                         if (parent != null && parent.getType() == 1) {
                             tabIP[x][y].setBackground(icoRotater);
+                            tabIP[x][y].setTile(0, 0, 1, 1);
+                            tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                         } else {
                             tabIP[x][y].setBackground(icoRotater2);
+                            tabIP[x][y].setTile(0, 0, 1, 1);
+                            tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                         }
                     } else if (m instanceof Decoupeuse) {
                         int type = ((Decoupeuse) m).getType();
@@ -341,6 +340,8 @@ public class VueControleur extends JFrame implements Observer {
                         }
                         tabIP[x][y].setBackground(ico);
                         tabIP[x][y].setTile(0, 0, type * 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                     } else if (m instanceof DecoupeuseWorker) {
                         DecoupeuseWorker worker = (DecoupeuseWorker) m;
                         Decoupeuse master = worker.getParent();
@@ -359,6 +360,8 @@ public class VueControleur extends JFrame implements Observer {
                         }
                         tabIP[x][y].setBackground(ico);
                         tabIP[x][y].setTile(index, 0, type * 2, 1);
+                        tabIP[x][y].setRotationAngle(directionToAngle(m.getD()));
+
                     }
 
                     // Affichage de l'item dans la machine
@@ -379,7 +382,7 @@ public class VueControleur extends JFrame implements Observer {
                     }
                 }
 // On n'affiche le gisement que s'il n'y a pas de machine par-dessus
-                 else if (g != null) {
+                else if (g != null) {
 
                     // on prend le string du gisement pour le dessiner
                     if (g instanceof ItemShape) {

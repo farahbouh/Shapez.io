@@ -24,7 +24,7 @@ public class Jeu extends Thread {
     public void press(int x, int y) {
         if (plateau.getCases()[x][y].getMachine() == null) {
             switch (machineSelectionnee) {
-                case "Mine":       plateau.setMachine(x, y, new Mine()); break;
+                case "Mine":       plateau.setMachine(x, y, new Mine(), directionactuelle); break;
                 case "Poubelle":   plateau.setMachine(x, y, new Poubelle()); break;
                 case "Decoupeuse": plateau.setDecoupeuse(x, y, directionactuelle, 1); break;
                 case "Decoupeuse2":  plateau.setDecoupeuse(x, y, directionactuelle, 2); break;
