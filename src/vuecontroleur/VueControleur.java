@@ -81,34 +81,34 @@ public class VueControleur extends JFrame implements Observer {
 
 
     private void chargerLesIcones() {
-        icoTapisDroite = new ImageIcon("./data/sprites/buildings/belt_right.png").getImage();
-        icoTapisGauche_Droite = new ImageIcon("./data/sprites/buildings/belt_gauche_droite.png").getImage();
-        icoTapisDroite_Gauche = new ImageIcon("./data/sprites/buildings/belt_droite_gauche.png").getImage();
-        icoTapisDroite2 = new ImageIcon("./data/sprites/buildings/belt_right_1.png").getImage();
-        icoTapisGauche2 = new ImageIcon("./data/sprites/buildings/belt_left_1.png").getImage();
+        icoTapisDroite = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_right.png")).getImage();
+        icoTapisGauche_Droite = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_gauche_droite.png")).getImage();
+        icoTapisDroite_Gauche = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_droite_gauche.png")).getImage();
+        icoTapisDroite2 = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_right_1.png")).getImage();
+        icoTapisGauche2 = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_left_1.png")).getImage();
 
-        icoTapisBas = new ImageIcon("./data/sprites/buildings/belt_bottom.png").getImage();
+        icoTapisBas = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_bottom.png")).getImage();
 
-        icoTapisHaut = new ImageIcon("./data/sprites/buildings/belt_top.png").getImage();
-        icoTapisGauche = new ImageIcon("./data/sprites/buildings/belt_left.png").getImage();
-        icoPoubelle = new ImageIcon("./data/sprites/buildings/trash.png").getImage();
-        icoMine = new ImageIcon("./data/sprites/buildings/miner.png").getImage();
-        icoHub = new ImageIcon("./data/sprites/buildings/hub.png").getImage();
-        icoDecoupeuse = new ImageIcon("./data/sprites/buildings/cutter.png").getImage();
-        icoDecoupeuse4 = new ImageIcon("./data/sprites/buildings/cutter-quad.png").getImage();
-        icoBalancer = new ImageIcon("./data/sprites/buildings/balancer.png").getImage();
-        icoMixer = new ImageIcon("./data/sprites/buildings/mixer.png").getImage();
-        icoBleu = new ImageIcon("./data/sprites/colors/blue.png").getImage();
-        icoCyan = new ImageIcon("./data/sprites/colors/cyan.png").getImage();
-        icoVert = new ImageIcon("./data/sprites/colors/green.png").getImage();
-        icoViolet = new ImageIcon("./data/sprites/colors/purple.png").getImage();
-        icoRouge = new ImageIcon("./data/sprites/colors/red.png").getImage();
-        icoGris = new ImageIcon("./data/sprites/colors/uncolored.png").getImage();
-        icoBlanc = new ImageIcon("./data/sprites/colors/white.png").getImage();
-        icoJaune = new ImageIcon("./data/sprites/colors/yellow.png").getImage();
-        icoRotater=new ImageIcon("./data/sprites/buildings/rotater.png").getImage();
-        icoRotater2=new ImageIcon("./data/sprites/buildings/rotater-ccw.png").getImage();
-        icoPainter=new ImageIcon("./data/sprites/buildings/painter.png").getImage();
+        icoTapisHaut = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_top.png")).getImage();
+        icoTapisGauche = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/belt_left.png")).getImage();
+        icoPoubelle = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/trash.png")).getImage();
+        icoMine = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/miner.png")).getImage();
+        icoHub = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/hub.png")).getImage();
+        icoDecoupeuse = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/cutter.png")).getImage();
+        icoDecoupeuse4 = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/cutter-quad.png")).getImage();
+        icoBalancer = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/balancer.png")).getImage();
+        icoMixer = new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/mixer.png")).getImage();
+        icoBleu = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/blue.png")).getImage();
+        icoCyan = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/cyan.png")).getImage();
+        icoVert = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/green.png")).getImage();
+        icoViolet = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/purple.png")).getImage();
+        icoRouge = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/red.png")).getImage();
+        icoGris = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/uncolored.png")).getImage();
+        icoBlanc = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/white.png")).getImage();
+        icoJaune = new ImageIcon(VueControleur.class.getResource("/data/sprites/colors/yellow.png")).getImage();
+        icoRotater=new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/rotater.png")).getImage();
+        icoRotater2=new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/rotater-ccw.png")).getImage();
+        icoPainter=new ImageIcon(VueControleur.class.getResource("/data/sprites/buildings/painter.png")).getImage();
     }
 
 

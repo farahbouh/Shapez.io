@@ -77,29 +77,30 @@ git clone https://github.com/farahbouh/Shapez.io.git
 
 **Avec IntelliJ IDEA :**
 
-1. Ouvrez le dossier `ShapeCraft/ShapeCraft`.
+1. Ouvrez le dossier du projet (la racine du dépôt).
 2. Ouvrez la classe `src/Main.java`.
 3. Cliquez sur **Run** (ou `Shift + F10`) : le jeu s'ouvre dans une nouvelle fenêtre.
 
 **En ligne de commande (Linux / macOS) :**
 
 ```bash
-cd Shapez.io/ShapeCraft/ShapeCraft
-javac -d out $(find src -name '*.java')
+cd Shapez.io
+javac -d out $(find src -name '*.java') && cp -r src/data out/
 java -cp out Main
 ```
 
-Lancez toujours le jeu depuis le dossier `ShapeCraft/ShapeCraft` : les sprites sont chargés depuis le chemin relatif `./data/sprites`.
+Les sprites sont embarqués dans le projet (`src/data`) : le jeu se lance depuis n'importe quel dossier.
 
 <details>
 <summary>Structure du projet</summary>
 
 ```bash
-ShapeCraft/ShapeCraft
-├── data
-│   └── sprites            # images des machines et des items
+Shapez.io
+├── images                 # captures d'écran du README
 └── src
     ├── Main.java
+    ├── data
+    │   └── sprites        # images des machines et des items
     ├── modele
     │   ├── item           # formes et couleurs
     │   ├── jeu            # boucle de jeu
@@ -112,7 +113,7 @@ ShapeCraft/ShapeCraft
 <details>
 <summary>Un problème au lancement ?</summary>
 
-- **Les images n'apparaissent pas** : lancez le jeu depuis le dossier `ShapeCraft/ShapeCraft`, et non depuis la racine du dépôt.
+- **Les fichiers `.java` ont une icône de tasse** : clic droit sur le dossier `src` > *Mark Directory as* > *Sources Root*.
 - **Version de Java** : si IntelliJ signale un JDK introuvable, choisissez-en un autre dans *File -> Project Structure -> SDK*.
 
 </details>
